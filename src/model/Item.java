@@ -1,7 +1,5 @@
 package model;
 
-import java.sql.Struct;
-
 /**
  * Models an Item in the maze.
  */
