@@ -1,6 +1,6 @@
 package controller;
 
-public interface GameController {
+public interface GameListener {
 
    abstract void startGame();
 }
