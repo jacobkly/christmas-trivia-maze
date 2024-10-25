@@ -1,12 +1,13 @@
 package view;
 
+import controller.GameListener;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class MainMenuPanel extends JPanel {
 
-    private final ImageIcon myIcon;
-    private final Image myImage;
+
 
     public MainMenuPanel() {
 
@@ -15,15 +16,19 @@ public class MainMenuPanel extends JPanel {
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
-        myIcon = new ImageIcon("C:\\Users\\mathe\\IdeaProjects\\" +
-                "tcss360-group-project\\QuiltedSnowflakes-HQ-01.jpg");
-        myImage = new ImageIcon(String.valueOf(myIcon)).getImage();
 
+        addButtons(c);
+
+
+    }
+
+    private void addButtons(GridBagConstraints c) {
         JButton startButton = new JButton("Start");
         c.gridx = 1;
         c.gridy = 0;
         c.insets = new Insets(0, 100, 0, 50);
         add(startButton, c);
+        //startButton.addActionListener(e -> {myGameListener.startGame();});
         startButton.setVisible(true);
 
 
@@ -34,12 +39,14 @@ public class MainMenuPanel extends JPanel {
         add(exitButton, c);
         exitButton.setVisible(true);
         exitButton.addActionListener(e -> System.exit(0));
-
-
     }
 
     @Override
     protected void paintComponent(Graphics g) {
+
+        ImageIcon myIcon = new ImageIcon("C:\\Users\\mathe\\IdeaProjects\\" +
+                "tcss360-group-project\\QuiltedSnowflakes-HQ-01.jpg");
+        Image myImage = new ImageIcon(String.valueOf(myIcon)).getImage();
         super.paintComponent(g);
 
         if (myImage != null) {

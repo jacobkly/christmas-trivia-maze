@@ -1,9 +1,13 @@
 package view;
 
+import controller.GameListener;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class MazeViewFrame extends JFrame {
+
+
 
     public MazeViewFrame() {
 
@@ -17,16 +21,14 @@ public class MazeViewFrame extends JFrame {
 
         MainMenuPanel myMainMenu = new MainMenuPanel();
         MazeScreenPanel myMazeScreen = new MazeScreenPanel();
-        QuestionPanel myQuestionPanel = new QuestionPanel();
-        ResultScreenPanel myResultScreenPanel = new ResultScreenPanel();
-        HintPanel myHintPanel = new HintPanel();
+
         JMenuBar myMenuBar = new JMenuBar();
-        JMenu myFileMenu = new JMenu("More...");
+        JMenu myFileMenu = new JMenu("Help...");
 
         add(myMenuBar, BorderLayout.NORTH);
         setJMenuBar(myMenuBar);
         myMenuBar.add(myFileMenu);
-        JMenuItem helpMenuItem = new JMenuItem("Help");
+        JMenuItem helpMenuItem = new JMenuItem("How to Play");
         myFileMenu.add(helpMenuItem);
         helpMenuItem.addActionListener(e -> JOptionPane.showMessageDialog(this,
                 "This is where we can put information" +
@@ -45,14 +47,13 @@ public class MazeViewFrame extends JFrame {
                 "When this is selected debug mode is enabled"));
 
 
+        this.add(myMazeScreen, BorderLayout.CENTER);
+        //this.add(myMainMenu, BorderLayout.CENTER);
 
-
-
-
-        this.add(myMainMenu, BorderLayout.CENTER);
 
 
 
     }
+
 
 }
