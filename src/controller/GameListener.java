@@ -2,5 +2,5 @@ package controller;
 
 public interface GameListener {
 
-   abstract void startGame();
+   void startGame();
 }
