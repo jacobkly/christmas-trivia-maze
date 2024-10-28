@@ -19,7 +19,9 @@ public class MazeScreenPanel extends JPanel {
         GridBagConstraints c = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
         GridBagConstraints c3 = new GridBagConstraints();
+        GridBagConstraints c4 = new GridBagConstraints();
 
+        GamePanel myGamePanel = new GamePanel(myGameListener);
         QuestionPanel myQuestionPanel = new QuestionPanel(myGameListener);
         ResultScreenPanel myResultScreenPanel = new ResultScreenPanel();
         HintPanel myHintPanel = new HintPanel(myGameListener);
@@ -55,6 +57,18 @@ public class MazeScreenPanel extends JPanel {
         c3.ipadx = 1000;
         c3.ipady = 200;
         add(myKeyPanel, c3);
+
+        c4.gridx = 0;
+        c4.gridy = 0;
+        c4.anchor = NORTHWEST;
+        c4.insets = new Insets(10, 10, 10, 10);
+        c4.weightx = 1.0;
+        c4.weighty = 1.0;
+        c4.ipadx = 780;
+        c4.ipady = 660;
+        add(myGamePanel, c4);
+
+
 
 
     }

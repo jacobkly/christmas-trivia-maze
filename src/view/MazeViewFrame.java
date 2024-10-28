@@ -15,6 +15,7 @@ public class MazeViewFrame extends JFrame {
     private ResultScreenPanel myResultScreenPanel;
     private KeyPanel myKeyPanel;
     private QuestionPanel myQuestionPanel;
+    private GamePanel myGamePanel;
 
 
     public MazeViewFrame(GameListener myGameListener) {
@@ -28,9 +29,11 @@ public class MazeViewFrame extends JFrame {
         setLayout(new BorderLayout());
         setVisible(true);
 
+        myGamePanel = new GamePanel(myGameListener);
         myMainMenuPanel = new MainMenuPanel(myGameListener);
         myHintPanel = new HintPanel(myGameListener);
         myMazeScreenPanel = new MazeScreenPanel(myGameListener);
+        myQuestionPanel = new QuestionPanel(myGameListener);
 
 
         JMenuBar myMenuBar = new JMenuBar();
