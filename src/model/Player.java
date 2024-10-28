@@ -10,8 +10,6 @@ public class Player {
 
     private int myHealthCount;
 
-    private int myHintsCollected;
-
     private int myHintsUsed;
 
     private int myRoomsAnswered;
@@ -34,22 +32,10 @@ public class Player {
     }
 
     public void setHealthCount(final int theHealthCount) {
-        if (theHealthCount < 0 && theHealthCount > myMaxHealth) {
+        if (theHealthCount < 0 || theHealthCount > myMaxHealth) {
             throw new IllegalArgumentException("Player health must be between 0 and " + myMaxHealth);
         } else {
             myHealthCount = theHealthCount;
-        }
-    }
-
-    public int getHintsCollected() {
-        return myHintsCollected;
-    }
-
-    public void setHintsCollected(final int theHintsCollected) {
-        if (theHintsCollected < 0) {
-            throw new IllegalArgumentException("Player cannot collect negative hints");
-        } else {
-            myHintsCollected = theHintsCollected;
         }
     }
 
@@ -58,12 +44,17 @@ public class Player {
     }
 
     public void setHintsUsed(final int theHintsUsed) {
-        myHintsUsed = theHintsUsed;
+        if (theHintsUsed < 0 || theHintsUsed > HINT_COUNT) {
+            throw new IllegalArgumentException("Hints used must be between 0 and " + HINT_COUNT);
+        } else {
+            myHintsUsed = theHintsUsed;
+        }
     }
 
     public int getRoomsAnswered() {
         return myRoomsAnswered;
     }
+
 
     public void setRoomsAnswered(final int theRoomsAnswered) {
         myRoomsAnswered = theRoomsAnswered;
@@ -81,8 +72,7 @@ public class Player {
 
         sb.append("Player name : ").append(myName).append("\n");
         sb.append("Health: ").append(myHealthCount).append(" out of ").append(myMaxHealth).append("\n");
-        sb.append("Hints used: ").append(myHintsUsed).append(" out of ").append(myHintsCollected)
-                .append(" collected").append("\n");
+        sb.append("Hints used: ").append(myHintsUsed).append(" out of ").append(HINT_COUNT).append("\n");
         sb.append("Rooms answered: ").append(myRoomsAnswered).append("\n");
 
         return sb.toString();
