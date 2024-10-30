@@ -19,8 +19,8 @@ public class StatusBarPanel extends JPanel {
         BufferedImage hintImage;
 
         try {
-            healthImage = ImageIO.read(getClass().getResource("/resources/heart.png"));
-            hintImage = ImageIO.read(getClass().getResource("/resources/lightbulb.png"));
+            healthImage = ImageIO.read(getClass().getResource("/resources/statusBarFiles/heart.png"));
+            hintImage = ImageIO.read(getClass().getResource("/resources/statusBarFiles/lightbulb.png"));
         } catch (final Exception theError) {
             throw new RuntimeException("Problem with image initialization; " + theError);
         }
