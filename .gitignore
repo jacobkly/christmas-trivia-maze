@@ -47,3 +47,6 @@ replay_pid*
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
+
+# out/
+out/

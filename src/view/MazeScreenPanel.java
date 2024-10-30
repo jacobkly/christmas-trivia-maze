@@ -23,8 +23,7 @@ public class MazeScreenPanel extends JPanel {
 
         GamePanel myGamePanel = new GamePanel(myGameListener);
         QuestionPanel myQuestionPanel = new QuestionPanel(myGameListener);
-        ResultScreenPanel myResultScreenPanel = new ResultScreenPanel();
-        HintPanel myHintPanel = new HintPanel(myGameListener);
+        StatusBarPanel myStatusBarPanel = new StatusBarPanel(myGameListener, 5, 3);
         KeyPanel myKeyPanel = new KeyPanel(myGameListener);
 
 
@@ -46,7 +45,7 @@ public class MazeScreenPanel extends JPanel {
         c2.weighty = 1.0;
         c2.ipadx = 600;
         c2.ipady = 400;
-        add(myHintPanel, c2);
+        add(myStatusBarPanel, c2);
 
         c3.gridx = 0;
         c3.gridy = 1;
