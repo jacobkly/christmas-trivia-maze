@@ -6,21 +6,23 @@ import view.MazeViewFrame;
 
 public class GameController implements GameListener{
 
-    private final MazeViewFrame myFrame;
-    private final MazeScreenPanel myScreenPanel;
-    private final MainMenuPanel myMainMenuPanel;
+    private MazeViewFrame myFrame;
 
-    public GameController(MazeViewFrame myFrame, MazeScreenPanel myScreenPanel, MainMenuPanel myMainMenuPanel) {
+    public GameController() {
 
+
+    }
+
+    public void setView(MazeViewFrame myFrame) {
 
         this.myFrame = myFrame;
-        this.myScreenPanel = myScreenPanel;
-        this.myMainMenuPanel = myMainMenuPanel;
     }
+
 
     @Override
     public void startGame() {
-        myMainMenuPanel.setVisible(false);
-        myScreenPanel.setVisible(true);
+        myFrame.setMaze();
+
     }
+
 }

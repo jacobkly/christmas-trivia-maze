@@ -8,8 +8,10 @@ import java.awt.*;
 public class MainMenuPanel extends JPanel {
 
 
+    private final GameListener myGameListener;
 
-    public MainMenuPanel() {
+    public MainMenuPanel(GameListener myGameListener) {
+        this.myGameListener = myGameListener;
 
         setMinimumSize(new Dimension(500,500));
         setBackground(Color.LIGHT_GRAY);
@@ -28,7 +30,7 @@ public class MainMenuPanel extends JPanel {
         c.gridy = 0;
         c.insets = new Insets(0, 100, 0, 50);
         add(startButton, c);
-        //startButton.addActionListener(e -> {myGameListener.startGame();});
+        startButton.addActionListener(e -> {myGameListener.startGame();});
         startButton.setVisible(true);
 
 

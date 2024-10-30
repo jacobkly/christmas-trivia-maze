@@ -1,8 +1,11 @@
+import controller.GameController;
+import controller.GameListener;
 import view.MazeViewFrame;
 
 import javax.swing.*;
 
 public class MazeApplication {
+
 
 
     public static void main(final String[] theArgs) {
@@ -17,9 +20,10 @@ public class MazeApplication {
 
         }
 
-
-        MazeViewFrame view = new MazeViewFrame();
-        view.setResizable(true);
+        GameController controller = new GameController();
+        MazeViewFrame view = new MazeViewFrame(controller);
+        controller.setView(view);
+        view.setResizable(false);
         view.setVisible(true);
 
     }

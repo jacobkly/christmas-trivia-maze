@@ -1,5 +1,6 @@
 package view;
 
+
 import controller.GameListener;
 
 import javax.swing.*;
@@ -7,20 +8,33 @@ import java.awt.*;
 
 public class MazeViewFrame extends JFrame {
 
+    private GameListener myGameListener;
+    private MainMenuPanel myMainMenuPanel;
+    private MazeScreenPanel myMazeScreenPanel;
+    private HintPanel myHintPanel;
+    private ResultScreenPanel myResultScreenPanel;
+    private KeyPanel myKeyPanel;
+    private QuestionPanel myQuestionPanel;
+    private GamePanel myGamePanel;
 
 
-    public MazeViewFrame() {
+    public MazeViewFrame(GameListener myGameListener) {
+
+        this.myGameListener = myGameListener;
 
         setTitle("Christmas Trivia Maze");
-        setSize(500, 500);
+        setSize(1214, 760);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         setVisible(true);
 
+        myGamePanel = new GamePanel(myGameListener);
+        myMainMenuPanel = new MainMenuPanel(myGameListener);
+        myHintPanel = new HintPanel(myGameListener);
+        myMazeScreenPanel = new MazeScreenPanel(myGameListener);
+        myQuestionPanel = new QuestionPanel(myGameListener);
 
-        MainMenuPanel myMainMenu = new MainMenuPanel();
-        MazeScreenPanel myMazeScreen = new MazeScreenPanel();
 
         JMenuBar myMenuBar = new JMenuBar();
         JMenu myFileMenu = new JMenu("Help...");
@@ -47,12 +61,17 @@ public class MazeViewFrame extends JFrame {
                 "When this is selected debug mode is enabled"));
 
 
-        this.add(myMazeScreen, BorderLayout.CENTER);
-        //this.add(myMainMenu, BorderLayout.CENTER);
+        this.add(myMazeScreenPanel, BorderLayout.CENTER);
+        this.add(myMainMenuPanel, BorderLayout.CENTER);
 
 
 
 
+    }
+
+    public void setMaze(){
+      myMainMenuPanel.setVisible(false);
+      myMazeScreenPanel.setVisible(true);
     }
 
 
