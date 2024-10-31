@@ -10,8 +10,7 @@ public class Room {
     /** The letters corrosponding to an array. */
     private static final char[] NESW_NUMS = new char[]{'n', 'e', 's', 'w'};
 
-    /** The boolean array for the precense/abcense of
-     *  doors.  */
+    /** The boolean array for the precense/abcense of doors. */
     private final boolean[] myNESWDoors;
 
     /** The question that locks this room. */
@@ -26,19 +25,23 @@ public class Room {
     /** The ImageMerger that will help create the room image. */
     private final RoomImageMerger myRoomImageMerger;
 
+    /** Tracks whether the image properties have changed between the last image compilation. */
+    private boolean myHasChangedFromLastComp;
+
     /**
      * Creates a Room object with default values
      */
     public Room() {
         myRoomImageMerger = new RoomImageMerger();
 
-        myNESWDoors = new boolean[]{false, true, true, true};
+        myNESWDoors = new boolean[]{false, false, false, false};
         myQuestion = new Question();
         myItem = new Item(0);
+        myHasChangedFromLastComp = true;
 
-        myNESWRoom = new Image[3];
+        myNESWRoom = new Image[5];
         for(int i = 0; i < 4; i++) {
-            setDoor(i, true);
+            setDoor(i, false);
         }
         updateRoomImages();
     }
@@ -50,9 +53,9 @@ public class Room {
      */
     private void updateRoomImages() {
         if(this.isVisible()) {
-            myNESWRoom[4] = new ImageIcon("./imageFiles/roomFiles/fillDoor/lndsFillRoom.png").getImage();
+            myNESWRoom[4] = new ImageIcon("./imageFiles/roomFiles/fillRoom/lndscFillRoom.png").getImage();
         } else {
-            myNESWRoom[4] = new ImageIcon("./imageFiles/roomFiles/fillDoor/lockFillRoom.png").getImage();
+            myNESWRoom[4] = new ImageIcon("./imageFiles/roomFiles/fillRoom/lockFillRoom.png").getImage();
         }
     }
 
@@ -69,13 +72,20 @@ public class Room {
             throw new IllegalArgumentException("NESW must be between 0 and 3");
         }
         if(myNESWDoors[theNESW] != theDoor) {
+            String result;
             myNESWDoors[theNESW] = theDoor;
             if (theDoor) {
-                myNESWRoom[theNESW] = new ImageIcon("./imageFiles/roomFiles/wiDoor/" + NESW_NUMS[theNESW] +"WiDoor.png").getImage();
+                result = "./imageFiles/roomFiles/wiDoor/"
+                        + NESW_NUMS[theNESW] +"WiDoor.png";
+                myNESWRoom[theNESW] = new ImageIcon("./imageFiles/roomFiles/wiDoor/"
+                        + NESW_NUMS[theNESW] +"WiDoor.png").getImage();
             } else {
-                myNESWRoom[theNESW] = new ImageIcon("./imageFiles/roomFiles/noDoor/" + NESW_NUMS[theNESW] + "NoDoor.png").getImage();
+                result = "./imageFiles/roomFiles/noDoor/"
+                        + NESW_NUMS[theNESW] + "NoDoor.png";
             }
+            myNESWRoom[theNESW] = new ImageIcon(result).getImage();
         }
+        myHasChangedFromLastComp = true;
     }
 
 
@@ -120,9 +130,7 @@ public class Room {
      *
      * @return the question.
      */
-    public Question getQuestion() {
-        return myQuestion;
-    }
+    public Question getQuestion() { return myQuestion; }
 
     /**
      * Gets whether this room is visible.
@@ -130,9 +138,7 @@ public class Room {
      *
      * @return whether this room is visible.
      */
-    public boolean isVisible() {
-        return myQuestion.isAnswered();
-    }
+    public boolean isVisible() { return myQuestion.isAnswered(); }
 
     /**
      * Returns the image that represent the room.
@@ -140,8 +146,35 @@ public class Room {
      * @return the merged image.
      */
     public Image getRoomImage() {
-        updateRoomImages();
+        if(myHasChangedFromLastComp) {
+            updateRoomImages();
+            myHasChangedFromLastComp = false;
+        }
         return myRoomImageMerger.MergeImage(myNESWRoom);
     }
+
+    /**
+     * Returns the question of this room.
+     *
+     */
+    public String getQuestionText() { return myQuestion.getMyQuestion(); }
+
+    /**
+     * Returns the possible answers for the question of this room.
+     *
+     * @return the possible answers for this question.
+     */
+    public String[] getPossibleAnswers() { return myQuestion.getMyChoices(); }
+
+    /**
+     * Tries a possible answer to the question
+     * This will also answer the question if it is correct.
+     * If correct, it will return true.
+     *
+     * @param thePossibleAnswer the answer the user is trying.
+     * @return whether the answer is correct or not.
+     */
+    public boolean tryAnswer(String thePossibleAnswer) { return myQuestion.checkAnswer(thePossibleAnswer); }
+
 
 }
