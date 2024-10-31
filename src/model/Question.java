@@ -27,6 +27,21 @@ public class Question {
     }
 
     /**
+     * Creates a question with the set parameters.
+     *
+     * @param theQuestion the question to be asked.
+     * @param theAnswer the correct answer.
+     * @param theChoices the possible answers to the question.
+     * @param theIsAnswered whether the room starts answered or not.
+     */
+    public Question(String theQuestion, String theAnswer, String[] theChoices, boolean theIsAnswered ) {
+        myQuestion = theQuestion;
+        myAnswer = theAnswer;
+        myChoices = theChoices.clone();
+        myIsAnswered = theIsAnswered;
+    }
+
+    /**
      * Gets the question to be asked.
      *
      * @return the question to be asked.

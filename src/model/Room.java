@@ -34,16 +34,39 @@ public class Room {
     public Room() {
         myRoomImageMerger = new RoomImageMerger();
 
-        myNESWDoors = new boolean[]{false, false, false, false};
+        myNESWDoors = new boolean[]{true, false, true, false};
         myQuestion = new Question();
         myItem = new Item(0);
         myHasChangedFromLastComp = true;
 
         myNESWRoom = new Image[5];
         for(int i = 0; i < 4; i++) {
-            setDoor(i, false);
+            setDoor(i, !myNESWDoors[i]);
         }
         updateRoomImages();
+    }
+
+    /**
+     * Creates a Room with custom values.
+     *
+     * @param theNESWDoors the doors to exist.
+     * @param theQuestion the question to be asked.
+     */
+    public Room(boolean[] theNESWDoors, Question theQuestion) {
+        myRoomImageMerger = new RoomImageMerger();
+        myNESWDoors = theNESWDoors.clone();
+        myQuestion = theQuestion;
+        myItem = new Item(0);
+        myHasChangedFromLastComp = true;
+
+        myNESWRoom = new Image[5];
+        for(int i = 0; i < 4; i++) {
+            myNESWDoors[i] = !myNESWDoors[i];
+            setDoor(i, !myNESWDoors[i]);
+        }
+
+        updateRoomImages();
+
     }
 
 
@@ -52,10 +75,10 @@ public class Room {
      *
      */
     private void updateRoomImages() {
-        if(this.isVisible()) {
-            myNESWRoom[4] = new ImageIcon("./imageFiles/roomFiles/fillRoom/lndscFillRoom.png").getImage();
+        if(!this.isVisible()) {
+            myNESWRoom[4] = new ImageIcon("./src/resources/roomFiles/fillRoom/lndscFillRoom.png").getImage();
         } else {
-            myNESWRoom[4] = new ImageIcon("./imageFiles/roomFiles/fillRoom/lockFillRoom.png").getImage();
+            myNESWRoom[4] = new ImageIcon("./src/resources/roomFiles/fillRoom/lockFillRoom.png").getImage();
         }
     }
 
@@ -72,18 +95,15 @@ public class Room {
             throw new IllegalArgumentException("NESW must be between 0 and 3");
         }
         if(myNESWDoors[theNESW] != theDoor) {
-            String result;
             myNESWDoors[theNESW] = theDoor;
+            String result = "./src/resources/roomFiles/";
             if (theDoor) {
-                result = "./imageFiles/roomFiles/wiDoor/"
-                        + NESW_NUMS[theNESW] +"WiDoor.png";
-                myNESWRoom[theNESW] = new ImageIcon("./imageFiles/roomFiles/wiDoor/"
-                        + NESW_NUMS[theNESW] +"WiDoor.png").getImage();
+                result += "noDoor/" + NESW_NUMS[theNESW] + "NoDoor.png";
             } else {
-                result = "./imageFiles/roomFiles/noDoor/"
-                        + NESW_NUMS[theNESW] + "NoDoor.png";
+                result += "wiDoor/" + NESW_NUMS[theNESW] + "WiDoor.png";
             }
             myNESWRoom[theNESW] = new ImageIcon(result).getImage();
+            System.out.println(theNESW);
         }
         myHasChangedFromLastComp = true;
     }

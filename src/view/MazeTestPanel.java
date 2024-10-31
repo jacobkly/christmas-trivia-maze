@@ -29,6 +29,10 @@ public class MazeTestPanel extends JFrame {
             System.out.println("Error loading image: " + ex.getMessage());
         }
 
+        this.pack();
+
+        this.setLocationRelativeTo(null);
+
         setVisible(true);
     }
 
