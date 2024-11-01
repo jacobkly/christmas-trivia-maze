@@ -25,9 +25,6 @@ public class MazeScreenPanel extends JPanel {
         QuestionPanel myQuestionPanel = new QuestionPanel(myGameListener);
         StatusBarPanel myStatusBarPanel = new StatusBarPanel(myGameListener, 5, 3);
         KeyPanel myKeyPanel = new KeyPanel(myGameListener);
-        int myHealth = 5;
-        int myHints = 3;
-        StatusBarPanel myStatusBarPanel = new StatusBarPanel(myGameListener, myHealth, myHints);
 
 
         c.gridx = 1;
