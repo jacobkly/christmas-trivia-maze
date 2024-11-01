@@ -13,7 +13,7 @@ public class MazeScreenPanel extends JPanel {
 
         setSize(1200, 700 );
         setLayout(new GridBagLayout());
-        setBackground(Color.RED);
+        setBackground(Color.BLACK);
         setVisible(false);
 
         GridBagConstraints c = new GridBagConstraints();
@@ -25,22 +25,25 @@ public class MazeScreenPanel extends JPanel {
         QuestionPanel myQuestionPanel = new QuestionPanel(myGameListener);
         StatusBarPanel myStatusBarPanel = new StatusBarPanel(myGameListener, 5, 3);
         KeyPanel myKeyPanel = new KeyPanel(myGameListener);
+        int myHealth = 5;
+        int myHints = 3;
+        StatusBarPanel myStatusBarPanel = new StatusBarPanel(myGameListener, myHealth, myHints);
 
 
         c.gridx = 1;
         c.gridy = 0;
         c.anchor = NORTHEAST;
-        c.insets = new Insets(10, 0, 0, 10);
+        c.insets = new Insets(10, 0, 10, 10);
         c.weightx = 1.0;
         c.weighty = 1.0;
         c.ipadx = 600;
-        c.ipady = 700;
+        c.ipady = 800;
         add(myQuestionPanel, c);
 
         c2.gridx = 1;
         c2.gridy = 1;
         c2.anchor = SOUTHEAST;
-        c2.insets = new Insets(10, 0, 10, 10);
+        c2.insets = new Insets(0, 0, 10, 10);
         c2.weightx = 1.0;
         c2.weighty = 1.0;
         c2.ipadx = 600;
@@ -53,8 +56,8 @@ public class MazeScreenPanel extends JPanel {
         c3.insets = new Insets(0, 10, 10, 10);
         c3.weightx = 1.0;
         c3.weighty = 1.0;
-        c3.ipadx = 1000;
-        c3.ipady = 200;
+        c3.ipadx = 700;
+        c3.ipady = 105;
         add(myKeyPanel, c3);
 
         c4.gridx = 0;
@@ -64,7 +67,7 @@ public class MazeScreenPanel extends JPanel {
         c4.weightx = 1.0;
         c4.weighty = 1.0;
         c4.ipadx = 780;
-        c4.ipady = 660;
+        c4.ipady = 800;
         add(myGamePanel, c4);
 
 

@@ -10,8 +10,8 @@ public class GamePanel extends JPanel {
 
     public GamePanel(GameListener myGameListener) {
 
-        setBackground(Color.ORANGE);
-        setSize(660,660);
+        setBackground(Color.BLACK);
+        setBorder(new RoundedBorder(40));
         setVisible(true);
 
 

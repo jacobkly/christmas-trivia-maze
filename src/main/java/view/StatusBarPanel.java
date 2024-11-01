@@ -6,52 +6,77 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class StatusBarPanel extends JPanel {
 
     public StatusBarPanel(final GameListener theGameListener, final int theHealthCount, final int theHintCount) {
-//        setPreferredSize(new Dimension(500, 160));
-        setBackground(Color.DARK_GRAY);
-        setVisible(true);
+
+        setBackground(Color.BLACK);
+        setBorder(new RoundedBorder(40));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setMinimumSize(new Dimension(520, 150));
+        setVisible(true);
 
         BufferedImage healthImage;
         BufferedImage hintImage;
 
         try {
-            healthImage = ImageIO.read(getClass().getResource("/resources/statusBarFiles/heart.png"));
-            hintImage = ImageIO.read(getClass().getResource("/resources/statusBarFiles/lightbulb.png"));
+            healthImage = ImageIO.read(getClass().getResource("/statusBarFiles/heart.png"));
+            hintImage = ImageIO.read(getClass().getResource("/statusBarFiles/lightbulb.png"));
         } catch (final Exception theError) {
             throw new RuntimeException("Problem with image initialization; " + theError);
         }
 
-        JPanel healthPanel = setupPanel("Attempts: ", healthImage, theHealthCount);
+        add(Box.createVerticalGlue());
+
+        JPanel healthPanel = setupPanel("Life: ", healthImage, theHealthCount);
         add(healthPanel);
+
+        add(Box.createVerticalGlue());
 
         JPanel hintPanel = setupPanel("Hints: ", hintImage, theHintCount);
         add(hintPanel);
+
+        add(Box.createVerticalGlue());
+
+        JButton getHint = new JButton("Get Hint");
+        getHint.setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(getHint);
+
+        add(Box.createVerticalGlue());
     }
 
-    private JPanel setupPanel(final String theText, final BufferedImage theImage, final int theNumImages) {
+    private JPanel setupPanel(
+            final String theText,
+            final BufferedImage theImage,
+            final int theNumImages
+    ) {
         JPanel panel = new JPanel();
-        panel.setBackground(Color.WHITE);
+        panel.setBackground(Color.BLACK);
+        panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         panel.setLayout(new GridBagLayout());
-//        panel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // testing panel size
 
         GridBagConstraints constraint = new GridBagConstraints();
-        constraint.gridx = GridBagConstraints.CENTER;
-        constraint.gridy = GridBagConstraints.CENTER;
+        constraint.gridx = 0;
+        constraint.gridy = 0;
+
+
+
 
         JTextArea textArea = new JTextArea(theText);
         textArea.setEditable(false);
-        textArea.setFont(new Font("Monospaced", Font.BOLD, 25));
+        textArea.setBackground(Color.BLACK);
+        textArea.setForeground(Color.WHITE);
+        textArea.setFont(Fonts.getPixelFont(16));
         panel.add(textArea, constraint);
         constraint.gridx++;
 
         for (int i = 0; i < theNumImages; i++) {
             JLabel imageLabel = new JLabel(new ImageIcon(
-                    theImage.getScaledInstance(50, 50, Image.SCALE_DEFAULT)));
-//            imageLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK)); // testing image size
+                    theImage.getScaledInstance(40, 40, Image.SCALE_DEFAULT)));
+
             panel.add(imageLabel, constraint);
 
             constraint.gridx++; // move to next pos for next image

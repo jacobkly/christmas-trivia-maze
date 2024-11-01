@@ -4,6 +4,7 @@ import controller.GameListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class MainMenuPanel extends JPanel {
 
@@ -46,8 +47,8 @@ public class MainMenuPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
 
-        ImageIcon myIcon = new ImageIcon("C:\\Users\\mathe\\IdeaProjects\\" +
-                "tcss360-group-project\\QuiltedSnowflakes-HQ-01.jpg");
+        ImageIcon myIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(
+                "/startScreenImage/Gemini_Generated_Image_e85ajqe85ajqe85a.jpg")));
         Image myImage = new ImageIcon(String.valueOf(myIcon)).getImage();
         super.paintComponent(g);
 
