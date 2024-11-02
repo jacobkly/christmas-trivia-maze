@@ -2,6 +2,7 @@ package model;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -101,8 +102,10 @@ public class Room {
      * pulls the possible highlight images from the files and stores them.
      */
     private void pullHigLigImages() {
-        myHigLig[0] = new ImageIcon("./src/resources/roomFiles/roomHigLig/roomNoHigLig.png").getImage();
-        myHigLig[1] = new ImageIcon("./src/resources/roomFiles/roomHigLig/roomWiHigLig.png").getImage();
+        myHigLig[0] = new ImageIcon(Objects.requireNonNull(getClass().
+                getResource("/resources/roomFiles/roomHigLig/roomNoHigLig.png"))).getImage();
+        myHigLig[1] = new ImageIcon(Objects.requireNonNull(getClass().
+                getResource("/resources/roomFiles/roomHigLig/roomWiHigLig.png"))).getImage();
     }
 
     /**
@@ -127,10 +130,12 @@ public class Room {
     private void updateRoomImages() {
         // add an ! to test landscape images, remove the ! for correct functionality.
         if(this.getIsVisible()) {
-            myNESWRoom[4] = new ImageIcon("./src/resources/roomFiles/fillRoom/"
-                    + FILL_Strings[myFillNum] + "FillRoom.png").getImage();
+            myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
+                    getResource("/resources/roomFiles/fillRoom/"
+                            + FILL_Strings[myFillNum] + "FillRoom.png"))).getImage();
         } else {
-            myNESWRoom[4] = new ImageIcon("./src/resources/roomFiles/fillRoom/lockFillRoom.png").getImage();
+            myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
+                    getResource("/resources/roomFiles/fillRoom/lockFillRoom.png"))).getImage();
         }
     }
 
@@ -138,7 +143,8 @@ public class Room {
      * Sets the visual to show no information.
      */
     private void setMystRoom() {
-        myNESWRoom[4] = new ImageIcon("./src/resources/roomFiles/fillRoom/mystFillRoom.png").getImage();
+        myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
+                getResource("/resources/roomFiles/fillRoom/mystFillRoom.png"))).getImage();
     }
 
 
@@ -169,13 +175,13 @@ public class Room {
         if(theNESW > 3 || theNESW < 0) {
             throw new IllegalArgumentException("NESW must be between 0 and 3");
         }
-        String result = "./src/resources/roomFiles/";
+        String result = "/resources/roomFiles/";
         if (theDoor) {
             result += "noDoor/" + NESW_NUMS[theNESW] + "NoDoor.png";
         } else {
             result += "wiDoor/" + NESW_NUMS[theNESW] + "WiDoor.png";
         }
-        myNESWRoom[theNESW] = new ImageIcon(result).getImage();
+        myNESWRoom[theNESW] = new ImageIcon(Objects.requireNonNull(getClass().getResource(result))).getImage();
         // myHasChangedFromLastComp = true;
     }
 

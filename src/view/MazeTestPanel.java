@@ -76,7 +76,7 @@ public class MazeTestPanel extends JFrame {
      * Tells the maze to update the highlighting of the images.
      *
      * @param theRow the row that was clicked.
-     * @param theCol the col that was clicked. 
+     * @param theCol the col that was clicked.
      */
     private void informRoomWasClicked(final int theRow, final int theCol) {
         myMaze.setRoomHigLig(theRow, theCol);
