@@ -16,6 +16,7 @@ public class MazeViewFrame extends JFrame {
     private KeyPanel myKeyPanel;
     private QuestionPanel myQuestionPanel;
     private GamePanel myGamePanel;
+    private StatusBarPanel myStatusBarPanel;
 
 
     public MazeViewFrame(GameListener myGameListener) {
