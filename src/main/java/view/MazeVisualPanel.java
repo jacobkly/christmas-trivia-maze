@@ -3,25 +3,22 @@ package view;
 import model.Maze;
 import model.Room;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
-public class MazeTestPanel extends JPanel {
+public class MazeVisualPanel extends JPanel {
 
     private Maze myMaze;
-    private MazeVisualButton mySelectedButton = null;
 
 
-    public MazeTestPanel(final int theNumRows, final int theNumCols) {
+    public MazeVisualPanel(final int theNumRows, final int theNumCols) {
 
 
         // here make start/end
-        int startRow = 2;
-        int startCol = 3;
+        int startRow = 1;
+        int startCol = 1;
         int endRow = 3;
         int endCol = 4;
 
@@ -33,20 +30,11 @@ public class MazeTestPanel extends JPanel {
             for(int j = 0; j < theNumCols; j++) {
                 MazeVisualButton button = new MazeVisualButton(myMaze.getRoom(i, j), i, j);
 
-
-                if(i == startRow && j == startCol) {
-                    mySelectedButton = button;
-                }
-
                 button.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         informRoomWasClicked(button.getRow(), button.getCol());
-                        mySelectedButton.updateVisualImage();
-
-                        button.updateVisualImage();
-
-                        mySelectedButton = button;
+                        updateVisualInfo();
                     }
                 });
 
@@ -55,6 +43,7 @@ public class MazeTestPanel extends JPanel {
             }
         }
 
+        updateVisualInfo();
 
         setVisible(true);
     }
@@ -73,8 +62,10 @@ public class MazeTestPanel extends JPanel {
 
     /**
      * Updates the visuals of all components.
+     * Must be called when any visual change occurs in the maze.
      */
     private void updateVisualInfo() {
+        myMaze.updateRoomVisibility();
         Component[] components = this.getComponents();
         for (Component component : components) {
             if (component instanceof MazeVisualButton) {
@@ -82,5 +73,14 @@ public class MazeTestPanel extends JPanel {
                 button.updateVisualImage();
             }
         }
+    }
+
+    /**
+     * Gets the currently selected room.
+     *
+     * @return the currently selected room.
+     */
+    public Room getCurrentlySelectedRoom() {
+        return myMaze.getCurrentlySelectedRoom();
     }
 }

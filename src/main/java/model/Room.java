@@ -53,14 +53,15 @@ public class Room {
     /** a int that tracks the correct fill of this room.  */
     private final int myFillNum;
 
-    /** Tracks if this room is fully visible. */
-    private boolean myIsFullyVisible;
+    /** Tracks the visibility status of this room, 0 is fully visible, 1 is partially visible, 2 is not visible. */
+    private int myVisibility;
+
 
     /**
      * Creates a Room object with default values
      */
     public Room() {
-        myIsFullyVisible = false;
+        myVisibility = 2;
         Random random = new Random();
         myFillNum = random.nextInt(3);
 
@@ -70,7 +71,7 @@ public class Room {
         pullHigLigImages();
         setHigLig(false);
 
-        myNESWDoors = new boolean[]{false, false, false, false};
+        myNESWDoors = new boolean[]{true, true, true, true};
         myQuestion = new Question();
         myItem = new Item(0);
         // myHasChangedFromLastComp = true;
@@ -85,10 +86,9 @@ public class Room {
      * Creates a Room with custom values.
      *
      * @param theQuestion the question to be asked.
-     * @param theIsFullyVisible whether this room starts visible, regardless of the question status.
      */
-    public Room(final Question theQuestion, final boolean theIsFullyVisible) {
-        myIsFullyVisible = theIsFullyVisible;
+    public Room(final Question theQuestion) {
+        myVisibility = 2;
         Random random = new Random();
         myFillNum = random.nextInt(3);
 
@@ -143,13 +143,16 @@ public class Room {
      */
     private void updateRoomImages() {
         // add an ! to test landscape images, remove the ! for correct functionality.
-        if(this.getIsVisible()) {
+        if(myVisibility == 0) {
             myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
                     getResource("/roomFiles/fillRoom/"
                             + FILL_Strings[myFillNum] + "FillRoom.png"))).getImage();
-        } else {
+        } else if(myVisibility == 1) {
             myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
                     getResource("/roomFiles/fillRoom/lockFillRoom.png"))).getImage();
+        } else {
+            myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
+                    getResource("/roomFiles/fillRoom/mystFillRoom.png"))).getImage();
         }
     }
 
@@ -215,11 +218,15 @@ public class Room {
 
     /**
      * returns whether there is a door at a given direction.
-     * goes in order of North, East, South, West.
+     * uses an int to represent the direction.
+     * 0 = north, 1 = east
+     * 2 = south, 3 = west
      *
-     * @return teh values of if there is a door.
+     * @return the value of if there is a door.
      */
-    public boolean[] getHasNESWDoors() { return myNESWDoors.clone(); }
+    public boolean getHasNESWDoor(int theNESW) {
+        return myNESWDoors[theNESW];
+    }
 
     /**
      * Gets whether this room is visible.
@@ -227,7 +234,9 @@ public class Room {
      *
      * @return whether this room is visible.
      */
-    public boolean getIsVisible() { return myIsFullyVisible; }
+    public boolean getIsFullyVisible() {
+        return myVisibility == 0;
+    }
 
     /**
      * Returns the image that represent the room.
@@ -249,14 +258,18 @@ public class Room {
      * Returns the question of this room.
      *
      */
-    public String getQuestionText() { return myQuestion.getMyQuestion(); }
+    public String getQuestionText() {
+        return myQuestion.getMyQuestion();
+    }
 
     /**
      * Returns the possible answers for the question of this room.
      *
      * @return the possible answers for this question.
      */
-    public String[] getPossibleAnswers() { return myQuestion.getMyChoices(); }
+    public String[] getPossibleAnswers() {
+        return myQuestion.getMyChoices();
+    }
 
     /**
      * Tries a possible answer to the question
@@ -267,8 +280,10 @@ public class Room {
      * @return whether the answer is correct or not.
      */
     public boolean tryAnswer(final String thePossibleAnswer) {
-        myIsFullyVisible = myQuestion.checkAnswer(thePossibleAnswer);
-        return myIsFullyVisible;
+        if(myQuestion.checkAnswer(thePossibleAnswer)) {
+            myVisibility = 0;
+        }
+        return getIsFullyVisible();
     }
 
     /**
@@ -280,8 +295,19 @@ public class Room {
         myItem = theItem;
     }
 
-    public void setIsFullyVisible(final boolean theIsFullyVisible) {
-        myIsFullyVisible = theIsFullyVisible;
+    /**
+     * Sets the visibility of the room.
+     * 0 = fully visible
+     * 1 = partially visible
+     * 2 = not visible.
+     *
+     * @param theVisibility the visibility level.
+     */
+    public void setVisibility(final int theVisibility) {
+        if(theVisibility > 2 || theVisibility < 0) {
+            throw new IllegalArgumentException("Visibility must be between 0 and 2");
+        }
+        myVisibility = theVisibility;
     }
 
 
