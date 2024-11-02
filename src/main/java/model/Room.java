@@ -6,6 +6,20 @@ import java.util.Objects;
 import java.util.Random;
 
 /**
+ * Room
+ *  isSelected
+ *  isLocked
+ *  isAnswered
+ *  isExit
+ *  getQuestion
+ *
+ * RoomButton
+ *   setRoom
+ */
+
+
+
+/**
  * Models the rooms of the maze.
  */
 public class Room {
@@ -103,9 +117,9 @@ public class Room {
      */
     private void pullHigLigImages() {
         myHigLig[0] = new ImageIcon(Objects.requireNonNull(getClass().
-                getResource("/resources/roomFiles/roomHigLig/roomNoHigLig.png"))).getImage();
+                getResource("/roomFiles/roomHigLig/roomNoHigLig.png"))).getImage();
         myHigLig[1] = new ImageIcon(Objects.requireNonNull(getClass().
-                getResource("/resources/roomFiles/roomHigLig/roomWiHigLig.png"))).getImage();
+                getResource("/roomFiles/roomHigLig/roomWiHigLig.png"))).getImage();
     }
 
     /**
@@ -131,11 +145,11 @@ public class Room {
         // add an ! to test landscape images, remove the ! for correct functionality.
         if(this.getIsVisible()) {
             myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
-                    getResource("/resources/roomFiles/fillRoom/"
+                    getResource("/roomFiles/fillRoom/"
                             + FILL_Strings[myFillNum] + "FillRoom.png"))).getImage();
         } else {
             myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
-                    getResource("/resources/roomFiles/fillRoom/lockFillRoom.png"))).getImage();
+                    getResource("/roomFiles/fillRoom/lockFillRoom.png"))).getImage();
         }
     }
 
@@ -144,7 +158,7 @@ public class Room {
      */
     private void setMystRoom() {
         myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
-                getResource("/resources/roomFiles/fillRoom/mystFillRoom.png"))).getImage();
+                getResource("/roomFiles/fillRoom/mystFillRoom.png"))).getImage();
     }
 
 
@@ -175,7 +189,7 @@ public class Room {
         if(theNESW > 3 || theNESW < 0) {
             throw new IllegalArgumentException("NESW must be between 0 and 3");
         }
-        String result = "/resources/roomFiles/";
+        String result = "/roomFiles/";
         if (theDoor) {
             result += "noDoor/" + NESW_NUMS[theNESW] + "NoDoor.png";
         } else {

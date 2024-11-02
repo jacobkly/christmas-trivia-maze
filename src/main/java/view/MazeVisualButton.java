@@ -27,7 +27,6 @@ public class MazeVisualButton extends JButton {
         myRoom = room;
         myRow = theRow;
         myCol = theCol;
-
         updateVisualImage();
 
         setBorder(null);
@@ -38,7 +37,8 @@ public class MazeVisualButton extends JButton {
      * Updates the visual image of this button.
      */
     public void updateVisualImage() {
-        setIcon(new ImageIcon(myRoom.getRoomImage()));
+
+        setIcon(new ImageIcon(myRoom.getRoomImage().getScaledInstance( 90, 90, Image.SCALE_SMOOTH)));
     }
 
     /**

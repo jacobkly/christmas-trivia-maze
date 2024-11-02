@@ -19,8 +19,17 @@ public class Maze {
      * @param theStartingRow the row for the starting room of the maze.
      * @param theStartingCol the col for the starting room of the maze.
      */
-    public Maze(final Room[][] theRooms, final int theStartingRow, final int theStartingCol,
+    public Maze(final int theRows, final int theColumns, final int theStartingRow, final int theStartingCol,
                 final int theEndingRow, final int theEndingCol) {
+        Room[][] theRooms = new Room[theRows][theColumns];
+        for(int i = 0; i < theRows; i++) {
+            for(int j = 0; j < theColumns; j++) {
+                // would use a room factory here
+                Room room = new Room();
+                theRooms[i][j] = room;
+            }
+        }
+
         myRooms = theRooms;
 
         myStartingRowCol = new int[] {theStartingRow, theStartingCol};
