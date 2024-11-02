@@ -9,9 +9,7 @@ public class Question {
     /** The Correct answer to the question. */
     final private String myAnswer;
     /** The different possible answers to the question. */
-    final private String myChoices[];
-    /** Whether the question has been answered correctly */
-    private boolean myIsAnswered;
+    final private String[] myChoices;
 
     /**
      * A Question object with default values.
@@ -22,8 +20,6 @@ public class Question {
 
         myChoices = new String[]{ "The first option to choose", "A choice that could be correct",
                 "A choice that is probably wrong", "An option that looks suspicously correct" };
-
-        myIsAnswered = false;
     }
 
     /**
@@ -32,13 +28,11 @@ public class Question {
      * @param theQuestion the question to be asked.
      * @param theAnswer the correct answer.
      * @param theChoices the possible answers to the question.
-     * @param theIsAnswered whether the room starts answered or not.
      */
-    public Question(String theQuestion, String theAnswer, String[] theChoices, boolean theIsAnswered ) {
+    public Question(final String theQuestion, final String theAnswer, final String[] theChoices ) {
         myQuestion = theQuestion;
         myAnswer = theAnswer;
         myChoices = theChoices.clone();
-        myIsAnswered = theIsAnswered;
     }
 
     /**
@@ -56,28 +50,14 @@ public class Question {
     public String[] getMyChoices() { return myChoices; }
 
     /**
-     * Returns whether this question has been answered correctly.
-     *
-     * @return whether the question has been answered correctly.
-     */
-    public boolean isAnswered() {
-        return myIsAnswered;
-    }
-
-    /**
      * Checks if the inputted answer is correct.
      * If it is, this updates the object accordingly.
      *
      * @param theAnswer the answer that is given
      * @return whether the answer was correct.
      */
-    public boolean checkAnswer(String theAnswer) {
-        if (theAnswer.equals(myAnswer)) {
-            myIsAnswered = true;
-            return true;
-        } else {
-            return false;
-        }
+    public boolean checkAnswer(final String theAnswer) {
+        return theAnswer.equals(myAnswer);
     }
 
 }
