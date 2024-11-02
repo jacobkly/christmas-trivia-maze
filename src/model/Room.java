@@ -2,6 +2,8 @@ package model;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
+import java.util.Random;
 
 /**
  * Models the rooms of the maze.
@@ -9,6 +11,12 @@ import java.awt.*;
 public class Room {
     /** The letters corrosponding to an array. */
     private static final char[] NESW_NUMS = new char[]{'n', 'e', 's', 'w'};
+
+    /** The strings corrosponding to possible room fills. */
+    private static final String[] FILL_Strings = new String[]{"lndsc", "santa", "tree"};
+
+    /** The images used for highlighting. */
+    private final Image[] myHigLig;
 
     /** The boolean array for the precense/abcense of doors. */
     private final boolean[] myNESWDoors;
@@ -26,24 +34,92 @@ public class Room {
     private final RoomImageMerger myRoomImageMerger;
 
     /** Tracks whether the image properties have changed between the last image compilation. */
-    private boolean myHasChangedFromLastComp;
+    // private boolean myHasChangedFromLastComp;
+
+    /** a int that tracks the correct fill of this room.  */
+    private final int myFillNum;
+
+    /** Tracks if this room is fully visible. */
+    private boolean myIsFullyVisible;
 
     /**
      * Creates a Room object with default values
      */
     public Room() {
+        myIsFullyVisible = false;
+        Random random = new Random();
+        myFillNum = random.nextInt(3);
+
         myRoomImageMerger = new RoomImageMerger();
+        myNESWRoom = new Image[6];
+        myHigLig = new Image[2];
+        pullHigLigImages();
+        setHigLig(false);
 
         myNESWDoors = new boolean[]{false, false, false, false};
         myQuestion = new Question();
         myItem = new Item(0);
-        myHasChangedFromLastComp = true;
+        // myHasChangedFromLastComp = true;
 
-        myNESWRoom = new Image[5];
         for(int i = 0; i < 4; i++) {
-            setDoor(i, false);
+            setDoor(i, !myNESWDoors[i]);
         }
         updateRoomImages();
+    }
+
+    /**
+     * Creates a Room with custom values.
+     *
+     * @param theQuestion the question to be asked.
+     * @param theIsFullyVisible whether this room starts visible, regardless of the question status.
+     */
+    public Room(final Question theQuestion, final boolean theIsFullyVisible) {
+        myIsFullyVisible = theIsFullyVisible;
+        Random random = new Random();
+        myFillNum = random.nextInt(3);
+
+        myRoomImageMerger = new RoomImageMerger();
+        myNESWRoom = new Image[6];
+        myHigLig = new Image[2];
+        pullHigLigImages();
+        setHigLig(false);
+
+        myNESWDoors = new boolean[]{false, false, false, false};
+        myQuestion = theQuestion;
+        myItem = new Item(0);
+        // myHasChangedFromLastComp = true;
+
+        for(int i = 0; i < 4; i++) {
+            myNESWDoors[i] = !myNESWDoors[i];
+            setDoor(i, !myNESWDoors[i]);
+        }
+
+        updateRoomImages();
+
+    }
+
+    /**
+     * pulls the possible highlight images from the files and stores them.
+     */
+    private void pullHigLigImages() {
+        myHigLig[0] = new ImageIcon(Objects.requireNonNull(getClass().
+                getResource("/resources/roomFiles/roomHigLig/roomNoHigLig.png"))).getImage();
+        myHigLig[1] = new ImageIcon(Objects.requireNonNull(getClass().
+                getResource("/resources/roomFiles/roomHigLig/roomWiHigLig.png"))).getImage();
+    }
+
+    /**
+     * Sets the highlight status of this room.
+     *
+     * @param theHigLigStatus whether the room is highlighted or not.
+     */
+    public void setHigLig(final boolean theHigLigStatus) {
+        if(theHigLigStatus) {
+            myNESWRoom[5] = myHigLig[1];
+        } else {
+            myNESWRoom[5] = myHigLig[0];
+        }
+        // myHasChangedFromLastComp = true;
     }
 
 
@@ -52,11 +128,23 @@ public class Room {
      *
      */
     private void updateRoomImages() {
-        if(this.isVisible()) {
-            myNESWRoom[4] = new ImageIcon("./imageFiles/roomFiles/fillRoom/lndscFillRoom.png").getImage();
+        // add an ! to test landscape images, remove the ! for correct functionality.
+        if(this.getIsVisible()) {
+            myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
+                    getResource("/resources/roomFiles/fillRoom/"
+                            + FILL_Strings[myFillNum] + "FillRoom.png"))).getImage();
         } else {
-            myNESWRoom[4] = new ImageIcon("./imageFiles/roomFiles/fillRoom/lockFillRoom.png").getImage();
+            myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
+                    getResource("/resources/roomFiles/fillRoom/lockFillRoom.png"))).getImage();
         }
+    }
+
+    /**
+     * Sets the visual to show no information.
+     */
+    private void setMystRoom() {
+        myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
+                getResource("/resources/roomFiles/fillRoom/mystFillRoom.png"))).getImage();
     }
 
 
@@ -67,25 +155,34 @@ public class Room {
      * @param theNESW the direction, represented by an int.
      * @param theDoor the state of the door.
      */
-    public void setDoor(int theNESW, boolean theDoor) {
+    public void setDoor(final int theNESW, final boolean theDoor) {
         if(theNESW > 3 || theNESW < 0) {
             throw new IllegalArgumentException("NESW must be between 0 and 3");
         }
         if(myNESWDoors[theNESW] != theDoor) {
-            String result;
             myNESWDoors[theNESW] = theDoor;
-            if (theDoor) {
-                result = "./imageFiles/roomFiles/wiDoor/"
-                        + NESW_NUMS[theNESW] +"WiDoor.png";
-                myNESWRoom[theNESW] = new ImageIcon("./imageFiles/roomFiles/wiDoor/"
-                        + NESW_NUMS[theNESW] +"WiDoor.png").getImage();
-            } else {
-                result = "./imageFiles/roomFiles/noDoor/"
-                        + NESW_NUMS[theNESW] + "NoDoor.png";
-            }
-            myNESWRoom[theNESW] = new ImageIcon(result).getImage();
+            setDoorVisual(theNESW, theDoor);
         }
-        myHasChangedFromLastComp = true;
+    }
+
+    /**
+     * Sets the visual status of the doors.
+     *
+     * @param theNESW the direction, represented by an int.
+     * @param theDoor the state of the door visual. .
+     */
+    private void setDoorVisual(final int theNESW, final boolean theDoor) {
+        if(theNESW > 3 || theNESW < 0) {
+            throw new IllegalArgumentException("NESW must be between 0 and 3");
+        }
+        String result = "/resources/roomFiles/";
+        if (theDoor) {
+            result += "noDoor/" + NESW_NUMS[theNESW] + "NoDoor.png";
+        } else {
+            result += "wiDoor/" + NESW_NUMS[theNESW] + "WiDoor.png";
+        }
+        myNESWRoom[theNESW] = new ImageIcon(Objects.requireNonNull(getClass().getResource(result))).getImage();
+        // myHasChangedFromLastComp = true;
     }
 
 
@@ -111,34 +208,12 @@ public class Room {
     public boolean[] getHasNESWDoors() { return myNESWDoors.clone(); }
 
     /**
-     * Returns whether this room has an eastern door.
-     *
-     * @return whether this has an east door.
-     */
-    public boolean getHasDoorEast() { return myNESWDoors[1]; }
-
-    /**
-     * Returns whether this room has a southern door.
-     *
-     * @return whether this has a south door.
-     */
-    public boolean getHasDoorSouth() { return myNESWDoors[2]; }
-
-    // get this of this, maze should query room which queries image
-    /**
-     * Returns the question associated with this room.
-     *
-     * @return the question.
-     */
-    public Question getQuestion() { return myQuestion; }
-
-    /**
      * Gets whether this room is visible.
      * This room is visible if it's question has been answered.
      *
      * @return whether this room is visible.
      */
-    public boolean isVisible() { return myQuestion.isAnswered(); }
+    public boolean getIsVisible() { return myIsFullyVisible; }
 
     /**
      * Returns the image that represent the room.
@@ -146,10 +221,13 @@ public class Room {
      * @return the merged image.
      */
     public Image getRoomImage() {
+        /*
         if(myHasChangedFromLastComp) {
             updateRoomImages();
             myHasChangedFromLastComp = false;
         }
+         */
+        updateRoomImages();
         return myRoomImageMerger.MergeImage(myNESWRoom);
     }
 
@@ -174,7 +252,23 @@ public class Room {
      * @param thePossibleAnswer the answer the user is trying.
      * @return whether the answer is correct or not.
      */
-    public boolean tryAnswer(String thePossibleAnswer) { return myQuestion.checkAnswer(thePossibleAnswer); }
+    public boolean tryAnswer(final String thePossibleAnswer) {
+        myIsFullyVisible = myQuestion.checkAnswer(thePossibleAnswer);
+        return myIsFullyVisible;
+    }
+
+    /**
+     * Sets the item held in the room to a custom item.
+     *
+     * @param theItem the item to be held.
+     */
+    public void setItem(final Item theItem) {
+        myItem = theItem;
+    }
+
+    public void setIsFullyVisible(final boolean theIsFullyVisible) {
+        myIsFullyVisible = theIsFullyVisible;
+    }
 
 
 }

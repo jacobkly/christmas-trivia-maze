@@ -3,8 +3,14 @@ package model;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * A class that merges 128x128 images together
+ */
 public class RoomImageMerger {
 
+    /**
+     * Creates the RoomImageMerger.
+     */
     public RoomImageMerger() {
 
     }
@@ -16,7 +22,7 @@ public class RoomImageMerger {
      * @param theImages the images to be merged, in render order.
      * @return the merged image.
      */
-    public Image MergeImage(Image[] theImages) {
+    public Image MergeImage(final Image[] theImages) {
         int width = 128;
         int height = 128;
 
