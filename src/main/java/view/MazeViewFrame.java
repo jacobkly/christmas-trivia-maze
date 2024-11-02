@@ -2,6 +2,7 @@ package view;
 
 
 import controller.GameListener;
+import model.Maze;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,12 +12,12 @@ public class MazeViewFrame extends JFrame {
     private GameListener myGameListener;
     private MainMenuPanel myMainMenuPanel;
     private MazeScreenPanel myMazeScreenPanel;
-    private StatusBarPanel myHintPanel;
     private ResultScreenPanel myResultScreenPanel;
     private KeyPanel myKeyPanel;
     private QuestionPanel myQuestionPanel;
     private GamePanel myGamePanel;
     private StatusBarPanel myStatusBarPanel;
+    private Maze myMaze;
 
 
     public MazeViewFrame(GameListener myGameListener) {
@@ -32,7 +33,7 @@ public class MazeViewFrame extends JFrame {
 
         myGamePanel = new GamePanel(myGameListener);
         myMainMenuPanel = new MainMenuPanel(myGameListener);
-        myHintPanel = new StatusBarPanel(myGameListener, 5, 3);
+        myStatusBarPanel = new StatusBarPanel(myGameListener, 5, 3);
         myMazeScreenPanel = new MazeScreenPanel(myGameListener);
         myQuestionPanel = new QuestionPanel(myGameListener);
 
