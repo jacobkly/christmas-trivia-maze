@@ -36,7 +36,7 @@ public class Room {
     private final boolean[] myNESWDoors;
 
     /** The question that locks this room. */
-    final private Question myQuestion;
+    private Question myQuestion;
 
     /** The item contained in this room. */
     private Item myItem;
@@ -72,7 +72,7 @@ public class Room {
         setHigLig(false);
 
         myNESWDoors = new boolean[]{true, true, true, true};
-        myQuestion = new Question();
+//        myQuestion = new Question();
         myItem = new Item(0);
         // myHasChangedFromLastComp = true;
 
@@ -258,18 +258,8 @@ public class Room {
      * Returns the question of this room.
      *
      */
-    public String getQuestionText() {
-        return myQuestion.getMyQuestion();
-    }
+    public Question getQuestion() { return myQuestion; }
 
-    /**
-     * Returns the possible answers for the question of this room.
-     *
-     * @return the possible answers for this question.
-     */
-    public String[] getPossibleAnswers() {
-        return myQuestion.getMyChoices();
-    }
 
     /**
      * Tries a possible answer to the question
@@ -279,12 +269,12 @@ public class Room {
      * @param thePossibleAnswer the answer the user is trying.
      * @return whether the answer is correct or not.
      */
-    public boolean tryAnswer(final String thePossibleAnswer) {
-        if(myQuestion.checkAnswer(thePossibleAnswer)) {
-            myVisibility = 0;
-        }
-        return getIsFullyVisible();
-    }
+//    public boolean tryAnswer(final String thePossibleAnswer) {
+//        if(myQuestion.checkAnswer(thePossibleAnswer)) {
+//            myVisibility = 0;
+//        }
+//        return getIsFullyVisible();
+//    }
 
     /**
      * Sets the item held in the room to a custom item.
