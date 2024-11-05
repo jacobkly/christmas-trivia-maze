@@ -11,13 +11,6 @@ import java.util.Objects;
 
 public class MainMenuPanel extends JPanel {
 
-    private final static String[] LORE = {
-            "So I see you wish to see Santa Claus!",
-            "What is your name?",
-            "Choose your journey difficulty:",
-            "Hahaha... Are you sure about this?"
-    };
-
     private final GameListener myGameListener;
 
     public MainMenuPanel(GameListener myGameListener) {
@@ -37,7 +30,7 @@ public class MainMenuPanel extends JPanel {
         c.gridy = 0;
         c.insets = new Insets(0, 100, 0, 50);
         add(startButton, c);
-        startButton.addActionListener(e -> {new PreparationPanel(myGameListener);});
+        startButton.addActionListener(e -> {myGameListener.startPreparation();});
         startButton.setVisible(true);
 
         JButton exitButton = new JButton("Exit");

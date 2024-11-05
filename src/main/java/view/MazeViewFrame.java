@@ -1,6 +1,5 @@
 package view;
 
-
 import controller.GameListener;
 import model.Maze;
 
@@ -11,6 +10,7 @@ public class MazeViewFrame extends JFrame {
 
     private GameListener myGameListener;
     private MainMenuPanel myMainMenuPanel;
+    private PreparationPanel myPreparationPanel;
     private MazeScreenPanel myMazeScreenPanel;
     private ResultScreenPanel myResultScreenPanel;
     private KeyPanel myKeyPanel;
@@ -20,9 +20,8 @@ public class MazeViewFrame extends JFrame {
     private Maze myMaze;
 
 
-    public MazeViewFrame(GameListener myGameListener) {
-
-        this.myGameListener = myGameListener;
+    public MazeViewFrame(GameListener theGameListener) {
+        myGameListener = theGameListener;
 
         setTitle("Christmas Trivia Maze");
         setSize(1214, 760);
@@ -33,6 +32,7 @@ public class MazeViewFrame extends JFrame {
 
         myGamePanel = new GamePanel(myGameListener);
         myMainMenuPanel = new MainMenuPanel(myGameListener);
+        myPreparationPanel = new PreparationPanel(myGameListener);
         myStatusBarPanel = new StatusBarPanel(myGameListener, 5, 3);
         myMazeScreenPanel = new MazeScreenPanel(myGameListener);
         myQuestionPanel = new QuestionPanel(myGameListener);
@@ -40,9 +40,8 @@ public class MazeViewFrame extends JFrame {
 
         JMenuBar myMenuBar = new JMenuBar();
         JMenu myFileMenu = new JMenu("Help...");
-
-        add(myMenuBar, BorderLayout.NORTH);
         setJMenuBar(myMenuBar);
+
         myMenuBar.add(myFileMenu);
         JMenuItem helpMenuItem = new JMenuItem("How to Play");
         myFileMenu.add(helpMenuItem);
@@ -64,17 +63,25 @@ public class MazeViewFrame extends JFrame {
 
 
         this.add(myMazeScreenPanel, BorderLayout.CENTER);
+        this.add(myPreparationPanel, BorderLayout.CENTER);
         this.add(myMainMenuPanel, BorderLayout.CENTER);
-
-
-
-
     }
 
-    public void setMaze(){
-      myMainMenuPanel.setVisible(false);
-      myMazeScreenPanel.setVisible(true);
+    public void setPreparation() {
+        myMainMenuPanel.setVisible(false);
+        myMazeScreenPanel.setVisible(false);
+        myPreparationPanel.setVisible(true);
     }
 
+    public void setMaze() {
+        myMainMenuPanel.setVisible(false);
+        myPreparationPanel.setVisible(false);
+        myMazeScreenPanel.setVisible(true);
+    }
 
+    public void setMainMenu() {
+        myMazeScreenPanel.setVisible(false);
+        myPreparationPanel.setVisible(false);
+        myMainMenuPanel.setVisible(true);
+    }
 }
