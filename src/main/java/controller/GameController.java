@@ -14,6 +14,11 @@ public class GameController implements GameListener{
 
     public void setView(MazeViewFrame theFrame) {
         this.myFrame = theFrame;
+        startMainMenu();
+    }
+
+    @Override
+    public void startMainMenu() {
         myFrame.setMainMenu();
     }
 

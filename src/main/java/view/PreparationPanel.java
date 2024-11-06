@@ -75,10 +75,7 @@ public class PreparationPanel extends JPanel { // Extend JPanel
 
         addYesNoButtons(theConstraints);
 
-        boolean isUserReady = processUserDecision(nameField);
-        if (isUserReady) {
-            myGameListener.startGame(); // player name can be param since player object creation is not view's responsibility
-        }
+        processUserDecision(nameField);
     }
 
     private JLabel[] formatLoreLabels() {
@@ -163,19 +160,18 @@ public class PreparationPanel extends JPanel { // Extend JPanel
         theConstraints.gridy++;
     }
 
-    private boolean processUserDecision(final JTextField theNameField) {
-        final boolean[] result = {false}; // Use an array to hold the result, allowing mutation
-
+    private void processUserDecision(final JTextField theNameField) {
         myYesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String playerName = theNameField.getText().trim();
                 if (playerName.isEmpty()) {
-                    JOptionPane.showMessageDialog(PreparationPanel.this,
+                    JOptionPane.showMessageDialog(
+                            PreparationPanel.this,
                             "Please enter a name to continue.",
                             "Missing Name", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    result[0] = true;
+                    myGameListener.startGame(); // send player and game difficult information through here
                 }
             }
         });
@@ -183,38 +179,20 @@ public class PreparationPanel extends JPanel { // Extend JPanel
         myNoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(PreparationPanel.this,
-                        "That's okay! Take your time.",
-                        "Fear is Normal", JOptionPane.INFORMATION_MESSAGE);
+                int choice = JOptionPane.showConfirmDialog(
+                        PreparationPanel.this,
+                        "That's okay! Take your time.\nShall you be taken back to Main Menu?",
+                        "Fear is Normal",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+
+                if (choice == JOptionPane.YES_OPTION) {
+                    myGameListener.startMainMenu();
+                } else {
+                    myGameListener.startPreparation();
+                }
             }
         });
-
-        return result[0]; // Return the result; will always be false at this point
     }
-
-//    private boolean processUserDecision(final JTextField theNameField) {
-//        boolean result = false;
-//
-//        String[] customButtons = {"Yes, I'm ready!", "No, I'm scared..."};
-//        JOptionPane optionPane = new JOptionPane(this, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION,
-//                null, customButtons, customButtons[0]);
-//        JDialog dialog = optionPane.createDialog("Journey Preparation");
-//        dialog.setLocationRelativeTo(null);
-//        dialog.setVisible(true);
-//
-//        Object selectedButton = optionPane.getValue();
-//        if (selectedButton != null && selectedButton.equals(customButtons[0])) {
-//            String playerName = theNameField.getText().trim();
-//            if (playerName.isEmpty()) {
-//                JOptionPane.showMessageDialog(this, "Please enter a name to continue.",
-//                        "Missing Name", JOptionPane.WARNING_MESSAGE);
-//            } else {
-//                result = true;
-//            }
-//        } else if (selectedButton != null && selectedButton.equals(customButtons[1])) {
-//            JOptionPane.showMessageDialog(this, "That's okay! Take your time.",
-//                    "Fear is Normal", JOptionPane.INFORMATION_MESSAGE);
-//        }
-//        return result;
-//    }
 }
