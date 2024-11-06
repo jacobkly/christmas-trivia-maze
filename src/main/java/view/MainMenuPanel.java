@@ -1,13 +1,15 @@
 package view;
 
 import controller.GameListener;
+import model.Player;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Objects;
 
 public class MainMenuPanel extends JPanel {
-
 
     private final GameListener myGameListener;
 
@@ -19,10 +21,7 @@ public class MainMenuPanel extends JPanel {
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
-
         addButtons(c);
-
-
     }
 
     private void addButtons(GridBagConstraints c) {
@@ -31,9 +30,8 @@ public class MainMenuPanel extends JPanel {
         c.gridy = 0;
         c.insets = new Insets(0, 100, 0, 50);
         add(startButton, c);
-        startButton.addActionListener(e -> {myGameListener.startGame();});
+        startButton.addActionListener(e -> {myGameListener.startPreparation();});
         startButton.setVisible(true);
-
 
         JButton exitButton = new JButton("Exit");
         c.gridx = 2;
@@ -46,7 +44,6 @@ public class MainMenuPanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-
         ImageIcon myIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(
                 "/startScreenImage/Gemini_Generated_Image_e85ajqe85ajqe85a.jpg")));
         Image myImage = new ImageIcon(String.valueOf(myIcon)).getImage();
