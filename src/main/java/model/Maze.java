@@ -1,5 +1,10 @@
 package model;
 
+import controller.QuestionFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Maze {
 
     private static final int[] NESW_INVERSE = new int[] {2, 3, 0, 1};
@@ -14,6 +19,7 @@ public class Maze {
 
     /** The current room that is highlighted.  */
     private final int[] myCurrentRoomHigLig = new int[] {0, 0};
+
 
     /**
      * Creates a maze with the set parameters.

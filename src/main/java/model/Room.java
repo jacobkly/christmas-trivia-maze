@@ -2,8 +2,14 @@ package model;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
+import java.util.List;
+
+import controller.QuestionFactory;
+import model.Question;
+import model.BooleanQuestion;
+import model.TextInputQuestion;
+import model.MultipleChoiceQuestion;
 
 /**
  * Room
@@ -48,13 +54,15 @@ public class Room {
     private final RoomImageMerger myRoomImageMerger;
 
     /** Tracks whether the image properties have changed between the last image compilation. */
-    // private boolean myHasChangedFromLastComp;
+     //private boolean myHasChangedFromLastComp;
 
     /** a int that tracks the correct fill of this room.  */
     private final int myFillNum;
 
     /** Tracks the visibility status of this room, 0 is fully visible, 1 is partially visible, 2 is not visible. */
     private int myVisibility;
+
+    private List<Question> myQuestionList = new ArrayList<>(QuestionFactory.getQuestionsFromDatabase());
 
 
     /**
@@ -72,9 +80,9 @@ public class Room {
         setHigLig(false);
 
         myNESWDoors = new boolean[]{true, true, true, true};
-//        myQuestion = new Question();
+        myQuestion = getQuestion(myQuestionList);
         myItem = new Item(0);
-        // myHasChangedFromLastComp = true;
+        //myHasChangedFromLastComp = true;
 
         for(int i = 0; i < 4; i++) {
             setDoor(i, !myNESWDoors[i]);
@@ -101,7 +109,7 @@ public class Room {
         myNESWDoors = new boolean[]{false, false, false, false};
         myQuestion = theQuestion;
         myItem = new Item(0);
-        // myHasChangedFromLastComp = true;
+        //myHasChangedFromLastComp = true;
 
         for(int i = 0; i < 4; i++) {
             myNESWDoors[i] = !myNESWDoors[i];
@@ -244,12 +252,12 @@ public class Room {
      * @return the merged image.
      */
     public Image getRoomImage() {
-        /*
-        if(myHasChangedFromLastComp) {
-            updateRoomImages();
-            myHasChangedFromLastComp = false;
-        }
-         */
+
+//        if(myHasChangedFromLastComp) {
+//            updateRoomImages();
+//            myHasChangedFromLastComp = false;
+//        }
+
         updateRoomImages();
         return myRoomImageMerger.MergeImage(myNESWRoom);
     }
@@ -258,7 +266,13 @@ public class Room {
      * Returns the question of this room.
      *
      */
-    public Question getQuestion() { return myQuestion; }
+    public Question getQuestion(List<Question> theQuestionList) {
+        Collections.shuffle(theQuestionList);
+        myQuestion = theQuestionList.removeFirst();
+
+        return myQuestion;
+
+    }
 
 
     /**
