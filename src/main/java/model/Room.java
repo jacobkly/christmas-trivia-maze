@@ -2,8 +2,14 @@ package model;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
+import java.util.List;
+
+import controller.QuestionFactory;
+import model.Question;
+import model.BooleanQuestion;
+import model.TextInputQuestion;
+import model.MultipleChoiceQuestion;
 
 /**
  * Room
@@ -36,7 +42,7 @@ public class Room {
     private final boolean[] myNESWDoors;
 
     /** The question that locks this room. */
-    final private Question myQuestion;
+    private Question myQuestion;
 
     /** The item contained in this room. */
     private Item myItem;
@@ -48,7 +54,7 @@ public class Room {
     private final RoomImageMerger myRoomImageMerger;
 
     /** Tracks whether the image properties have changed between the last image compilation. */
-    // private boolean myHasChangedFromLastComp;
+     //private boolean myHasChangedFromLastComp;
 
     /** a int that tracks the correct fill of this room.  */
     private final int myFillNum;
@@ -57,30 +63,32 @@ public class Room {
     private int myVisibility;
 
 
-    /**
-     * Creates a Room object with default values
-     */
-    public Room() {
-        myVisibility = 2;
-        Random random = new Random();
-        myFillNum = random.nextInt(3);
 
-        myRoomImageMerger = new RoomImageMerger();
-        myNESWRoom = new Image[6];
-        myHigLig = new Image[2];
-        pullHigLigImages();
-        setHigLig(false);
 
-        myNESWDoors = new boolean[]{true, true, true, true};
-        myQuestion = new Question();
-        myItem = new Item(0);
-        // myHasChangedFromLastComp = true;
-
-        for(int i = 0; i < 4; i++) {
-            setDoor(i, !myNESWDoors[i]);
-        }
-        updateRoomImages();
-    }
+//    /**
+//     * Creates a Room object with default values
+//     */
+//    public Room() {
+//        myVisibility = 2;
+//        Random random = new Random();
+//        myFillNum = random.nextInt(3);
+//
+//        myRoomImageMerger = new RoomImageMerger();
+//        myNESWRoom = new Image[6];
+//        myHigLig = new Image[2];
+//        pullHigLigImages();
+//        setHigLig(false);
+//
+//        myNESWDoors = new boolean[]{true, true, true, true};
+//        myQuestion = getQuestion(myQuestionList);
+//        myItem = new Item(0);
+//        //myHasChangedFromLastComp = true;
+//
+//        for(int i = 0; i < 4; i++) {
+//            setDoor(i, !myNESWDoors[i]);
+//        }
+//        updateRoomImages();
+//    }
 
     /**
      * Creates a Room with custom values.
@@ -101,7 +109,7 @@ public class Room {
         myNESWDoors = new boolean[]{false, false, false, false};
         myQuestion = theQuestion;
         myItem = new Item(0);
-        // myHasChangedFromLastComp = true;
+        //myHasChangedFromLastComp = true;
 
         for(int i = 0; i < 4; i++) {
             myNESWDoors[i] = !myNESWDoors[i];
@@ -244,31 +252,14 @@ public class Room {
      * @return the merged image.
      */
     public Image getRoomImage() {
-        /*
-        if(myHasChangedFromLastComp) {
-            updateRoomImages();
-            myHasChangedFromLastComp = false;
-        }
-         */
+
+//        if(myHasChangedFromLastComp) {
+//            updateRoomImages();
+//            myHasChangedFromLastComp = false;
+//        }
+
         updateRoomImages();
         return myRoomImageMerger.MergeImage(myNESWRoom);
-    }
-
-    /**
-     * Returns the question of this room.
-     *
-     */
-    public String getQuestionText() {
-        return myQuestion.getMyQuestion();
-    }
-
-    /**
-     * Returns the possible answers for the question of this room.
-     *
-     * @return the possible answers for this question.
-     */
-    public String[] getPossibleAnswers() {
-        return myQuestion.getMyChoices();
     }
 
     /**
@@ -279,12 +270,12 @@ public class Room {
      * @param thePossibleAnswer the answer the user is trying.
      * @return whether the answer is correct or not.
      */
-    public boolean tryAnswer(final String thePossibleAnswer) {
-        if(myQuestion.checkAnswer(thePossibleAnswer)) {
-            myVisibility = 0;
-        }
-        return getIsFullyVisible();
-    }
+//    public boolean tryAnswer(final String thePossibleAnswer) {
+//        if(myQuestion.checkAnswer(thePossibleAnswer)) {
+//            myVisibility = 0;
+//        }
+//        return getIsFullyVisible();
+//    }
 
     /**
      * Sets the item held in the room to a custom item.

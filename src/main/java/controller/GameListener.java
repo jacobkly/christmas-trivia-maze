@@ -6,5 +6,5 @@ public interface GameListener {
 
    void startPreparation();
 
-   void startGame();
+   void startGame(int theNumRows, int theNumCols);
 }

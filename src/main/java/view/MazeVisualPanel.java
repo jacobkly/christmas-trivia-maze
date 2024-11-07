@@ -10,31 +10,22 @@ import java.awt.event.ActionListener;
 
 public class MazeVisualPanel extends JPanel {
 
-    private Maze myMaze;
+    public MazeVisualPanel(Maze theMaze) {
 
 
-    public MazeVisualPanel(final int theNumRows, final int theNumCols) {
+        setLayout(new GridLayout(theMaze.getRows(), theMaze.getCols()));
 
+        for (int i = 0; i < theMaze.getRows(); i++) {
+            for (int j = 0; j < theMaze.getCols(); j++) {
+                var room = theMaze.getRoom(i, j);
 
-        // here make start/end
-        int startRow = 1;
-        int startCol = 1;
-        int endRow = 3;
-        int endCol = 4;
-
-        myMaze = new Maze(theNumRows, theNumCols, startRow, startCol, endRow, endCol);
-
-        setLayout(new GridLayout(theNumRows, theNumCols));
-
-        for(int i = 0; i < theNumRows; i++) {
-            for(int j = 0; j < theNumCols; j++) {
-                MazeVisualButton button = new MazeVisualButton(myMaze.getRoom(i, j), i, j);
+                MazeVisualButton button = new MazeVisualButton(room, i, j);
 
                 button.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        informRoomWasClicked(button.getRow(), button.getCol());
-                        updateVisualInfo();
+                        informRoomWasClicked(theMaze, button.getRow(), button.getCol());
+                        updateVisualInfo(theMaze);
                     }
                 });
 
@@ -43,11 +34,10 @@ public class MazeVisualPanel extends JPanel {
             }
         }
 
-        updateVisualInfo();
+        updateVisualInfo(theMaze);
 
         setVisible(true);
     }
-
 
 
     /**
@@ -56,16 +46,16 @@ public class MazeVisualPanel extends JPanel {
      * @param theRow the row that was clicked.
      * @param theCol the col that was clicked.
      */
-    private void informRoomWasClicked(final int theRow, final int theCol) {
-        myMaze.setRoomHigLig(theRow, theCol);
+    private void informRoomWasClicked(final Maze theMaze, final int theRow, final int theCol) {
+        theMaze.setRoomHigLig(theRow, theCol);
     }
 
     /**
      * Updates the visuals of all components.
      * Must be called when any visual change occurs in the maze.
      */
-    private void updateVisualInfo() {
-        myMaze.updateRoomVisibility();
+    private void updateVisualInfo(Maze theMaze) {
+        theMaze.updateRoomVisibility();
         Component[] components = this.getComponents();
         for (Component component : components) {
             if (component instanceof MazeVisualButton) {
@@ -74,13 +64,13 @@ public class MazeVisualPanel extends JPanel {
             }
         }
     }
-
-    /**
-     * Gets the currently selected room.
-     *
-     * @return the currently selected room.
-     */
-    public Room getCurrentlySelectedRoom() {
-        return myMaze.getCurrentlySelectedRoom();
-    }
+//
+//    /**
+//     * Gets the currently selected room.
+//     *
+//     * @return the currently selected room.
+//     */
+//    public Room getCurrentlySelectedRoom() {
+//        return myMaze.getCurrentlySelectedRoom();
+//    }
 }

@@ -12,12 +12,6 @@ public class MazeViewFrame extends JFrame {
     private MainMenuPanel myMainMenuPanel;
     private PreparationPanel myPreparationPanel;
     private MazeScreenPanel myMazeScreenPanel;
-    private ResultScreenPanel myResultScreenPanel;
-    private KeyPanel myKeyPanel;
-    private QuestionPanel myQuestionPanel;
-    private GamePanel myGamePanel;
-    private StatusBarPanel myStatusBarPanel;
-    private Maze myMaze;
 
 
     public MazeViewFrame(GameListener theGameListener) {
@@ -30,12 +24,9 @@ public class MazeViewFrame extends JFrame {
         setLayout(new BorderLayout());
         setVisible(true);
 
-        myGamePanel = new GamePanel(myGameListener);
         myMainMenuPanel = new MainMenuPanel(myGameListener);
         myPreparationPanel = new PreparationPanel(myGameListener);
-        myStatusBarPanel = new StatusBarPanel(myGameListener, 5, 3);
         myMazeScreenPanel = new MazeScreenPanel(myGameListener);
-        myQuestionPanel = new QuestionPanel(myGameListener);
 
 
         JMenuBar myMenuBar = new JMenuBar();
@@ -73,10 +64,11 @@ public class MazeViewFrame extends JFrame {
         myPreparationPanel.setVisible(true);
     }
 
-    public void setMaze() {
+    public void setMaze(Maze theMaze) {
         myMainMenuPanel.setVisible(false);
-        myPreparationPanel.setVisible(false);
         myMazeScreenPanel.setVisible(true);
+        myMazeScreenPanel.setMaze(theMaze);
+        myPreparationPanel.setVisible(false);
     }
 
     public void setMainMenu() {

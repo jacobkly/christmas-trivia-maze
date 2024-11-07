@@ -1,6 +1,9 @@
 package view;
 
+import model.BooleanQuestion;
+import model.MultipleChoiceQuestion;
 import model.Room;
+import model.TextInputQuestion;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +40,6 @@ public class MazeVisualButton extends JButton {
      * Updates the visual image of this button.
      */
     public void updateVisualImage() {
-
         setIcon(new ImageIcon(myRoom.getRoomImage().getScaledInstance( 90, 90, Image.SCALE_SMOOTH)));
     }
 
