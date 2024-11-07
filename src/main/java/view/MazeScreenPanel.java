@@ -1,6 +1,7 @@
 package view;
 
 import controller.GameListener;
+import model.Maze;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +9,11 @@ import java.awt.*;
 import static java.awt.GridBagConstraints.*;
 
 public class MazeScreenPanel extends JPanel {
+
+    private final GamePanel myGamePanel;
+    private final QuestionPanel myQuestionPanel;
+    private final StatusBarPanel myStatusBarPanel;
+    private final KeyPanel myKeyPanel;
 
     public MazeScreenPanel(GameListener myGameListener) {
 
@@ -21,10 +27,10 @@ public class MazeScreenPanel extends JPanel {
         GridBagConstraints c3 = new GridBagConstraints();
         GridBagConstraints c4 = new GridBagConstraints();
 
-        GamePanel myGamePanel = new GamePanel(myGameListener);
-        QuestionPanel myQuestionPanel = new QuestionPanel(myGameListener);
-        StatusBarPanel myStatusBarPanel = new StatusBarPanel(myGameListener, 5, 3);
-        KeyPanel myKeyPanel = new KeyPanel(myGameListener);
+        myGamePanel = new GamePanel(myGameListener);
+        myQuestionPanel = new QuestionPanel(myGameListener);
+        myStatusBarPanel = new StatusBarPanel(myGameListener, 5, 3);
+        myKeyPanel = new KeyPanel(myGameListener);
 
 
         c.gridx = 1;
@@ -66,5 +72,9 @@ public class MazeScreenPanel extends JPanel {
 
 
 
+    }
+
+    public void setMaze(final Maze theMaze) {
+        myGamePanel.setMaze(theMaze);
     }
 }

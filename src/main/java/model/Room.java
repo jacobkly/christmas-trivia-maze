@@ -62,33 +62,33 @@ public class Room {
     /** Tracks the visibility status of this room, 0 is fully visible, 1 is partially visible, 2 is not visible. */
     private int myVisibility;
 
-    private List<Question> myQuestionList = new ArrayList<>(QuestionFactory.getQuestionsFromDatabase());
 
 
-    /**
-     * Creates a Room object with default values
-     */
-    public Room() {
-        myVisibility = 2;
-        Random random = new Random();
-        myFillNum = random.nextInt(3);
 
-        myRoomImageMerger = new RoomImageMerger();
-        myNESWRoom = new Image[6];
-        myHigLig = new Image[2];
-        pullHigLigImages();
-        setHigLig(false);
-
-        myNESWDoors = new boolean[]{true, true, true, true};
-        myQuestion = getQuestion(myQuestionList);
-        myItem = new Item(0);
-        //myHasChangedFromLastComp = true;
-
-        for(int i = 0; i < 4; i++) {
-            setDoor(i, !myNESWDoors[i]);
-        }
-        updateRoomImages();
-    }
+//    /**
+//     * Creates a Room object with default values
+//     */
+//    public Room() {
+//        myVisibility = 2;
+//        Random random = new Random();
+//        myFillNum = random.nextInt(3);
+//
+//        myRoomImageMerger = new RoomImageMerger();
+//        myNESWRoom = new Image[6];
+//        myHigLig = new Image[2];
+//        pullHigLigImages();
+//        setHigLig(false);
+//
+//        myNESWDoors = new boolean[]{true, true, true, true};
+//        myQuestion = getQuestion(myQuestionList);
+//        myItem = new Item(0);
+//        //myHasChangedFromLastComp = true;
+//
+//        for(int i = 0; i < 4; i++) {
+//            setDoor(i, !myNESWDoors[i]);
+//        }
+//        updateRoomImages();
+//    }
 
     /**
      * Creates a Room with custom values.
@@ -261,19 +261,6 @@ public class Room {
         updateRoomImages();
         return myRoomImageMerger.MergeImage(myNESWRoom);
     }
-
-    /**
-     * Returns the question of this room.
-     *
-     */
-    public Question getQuestion(List<Question> theQuestionList) {
-        Collections.shuffle(theQuestionList);
-        myQuestion = theQuestionList.removeFirst();
-
-        return myQuestion;
-
-    }
-
 
     /**
      * Tries a possible answer to the question

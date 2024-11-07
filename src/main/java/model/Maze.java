@@ -1,8 +1,6 @@
 package model;
 
-import controller.QuestionFactory;
-
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Maze {
@@ -24,20 +22,23 @@ public class Maze {
     /**
      * Creates a maze with the set parameters.
      *
-     * @param theRows the number of rows in the maze.
-     * @param theColumns the number of columns in the maze.
-     * @param theStartingRow the row of the starting room of the maze.
-     * @param theStartingCol the column of the starting room of the maze.
-     * @param theEndingRow the row of the ending room of the maze.
-     * @param theEndingCol the column of the ending room of the maze.
+     * @param theQuestions
+     * @param theRows         the number of rows in the maze.
+     * @param theColumns      the number of columns in the maze.
+     * @param theStartingRow  the row of the starting room of the maze.
+     * @param theStartingCol  the column of the starting room of the maze.
+     * @param theEndingRow    the row of the ending room of the maze.
+     * @param theEndingCol    the column of the ending room of the maze.
      */
-    public Maze(final int theRows, final int theColumns, final int theStartingRow, final int theStartingCol,
+    public Maze(final List<Question> theQuestions, final int theRows, final int theColumns, final int theStartingRow, final int theStartingCol,
                 final int theEndingRow, final int theEndingCol) {
+
         Room[][] theRooms = new Room[theRows][theColumns];
         for(int i = 0; i < theRows; i++) {
             for(int j = 0; j < theColumns; j++) {
                 // would use a room factory here
-                Room room = new Room();
+                Question question = theQuestions.removeFirst();
+                Room room = new Room(question);
                 theRooms[i][j] = room;
             }
         }
@@ -220,4 +221,11 @@ public class Maze {
     }
 
 
+    public int getRows() {
+        return myRooms.length;
+    }
+
+    public int getCols() {
+        return myRooms[0].length;
+    }
 }
