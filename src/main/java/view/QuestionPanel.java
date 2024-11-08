@@ -36,10 +36,10 @@ public class QuestionPanel extends JPanel {
 
         setQuestion(new MultipleChoiceQuestion(
                 "Who sang the hit Christmas single 'Last Christmas'?",
-                "Bitch you know what",
-                List.of("Yall Ugly",
-                        "Sommin",
-                        "Sommin Else")));
+                "Wham!",
+                List.of("Mariah Carey",
+                        "Frank Sinatra",
+                        "Harry Connick Jr.")));
     }
 
     public void setQuestion(Question theQuestion) {
