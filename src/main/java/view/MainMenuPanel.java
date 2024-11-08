@@ -13,44 +13,111 @@ public class MainMenuPanel extends JPanel {
 
     private final GameListener myGameListener;
 
-    public MainMenuPanel(GameListener myGameListener) {
-        this.myGameListener = myGameListener;
+    private final JPanel myInnerPanel;
 
-        setMinimumSize(new Dimension(500,500));
-        setBackground(Color.LIGHT_GRAY);
-        setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
+    private final JButton[] myButtons = {
+            new JButton("New Game"),
+            new JButton("Load Game"),
+            new JButton("Settings"),
+            new JButton("Exit")
+    };
 
-        addButtons(c);
+    public MainMenuPanel(final GameListener theGameListener) {
+        myGameListener = theGameListener;
+
+        setLayout(new BorderLayout());
+
+        myInnerPanel = new JPanel();
+        myInnerPanel.setBackground(new Color(0, 0, 0, 0));
+        myInnerPanel.setLayout(new GridBagLayout());
+
+        GridBagConstraints innerConstraints = new GridBagConstraints();
+        innerConstraints.insets = new Insets(50, 10, 10, 10);
+        innerConstraints.anchor = GridBagConstraints.WEST;
+        innerConstraints.gridx = 0;
+        innerConstraints.gridy = 0;
+        setupMainPanel(innerConstraints);
+
+        add(myInnerPanel, BorderLayout.WEST);
     }
 
-    private void addButtons(GridBagConstraints c) {
-        JButton startButton = new JButton("Start");
-        c.gridx = 1;
-        c.gridy = 0;
-        c.insets = new Insets(0, 100, 0, 50);
-        add(startButton, c);
-        startButton.addActionListener(e -> {myGameListener.startPreparation();});
-        startButton.setVisible(true);
+    private void setupMainPanel(final GridBagConstraints theConstraints) {
+        addTitle(theConstraints);
+        theConstraints.gridy++;
 
-        JButton exitButton = new JButton("Exit");
-        c.gridx = 2;
-        c.gridy = 0;
-        c.insets = new Insets(0, 50, 0, 100);
-        add(exitButton, c);
-        exitButton.setVisible(true);
-        exitButton.addActionListener(e -> System.exit(0));
+        formatButtons();
+        addButtons(theConstraints);
+    }
+
+    private void addTitle(final GridBagConstraints theConstraints) {
+        final String[] title = new String[] {"Christmas", "Trivia Maze"};
+        JPanel titlePanel = new JPanel();
+        titlePanel.setLayout(new GridBagLayout());
+        titlePanel.setBackground(new Color(0, 0, 0, 0));
+
+        GridBagConstraints titleConstraints = new GridBagConstraints();
+        titleConstraints.insets = new Insets(10, 10, 10, 10);
+        titleConstraints.anchor = GridBagConstraints.WEST;
+
+        for (String s : title) {
+            JLabel titleLabel = new JLabel(s);
+            titleLabel.setForeground(Color.WHITE);
+            titleLabel.setFont(Fonts.getPixelFont(55));
+            titleLabel.setBackground(new Color(0, 0, 0, 0));
+            titlePanel.add(titleLabel, titleConstraints);
+            titleConstraints.gridx++;
+        }
+
+        myInnerPanel.add(titlePanel, theConstraints);
+    }
+
+    private void formatButtons() {
+        for (JButton button : myButtons) {
+            button.setBackground(new Color(241, 241, 241, 175));
+            button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+            button.setForeground(Color.BLACK);
+            button.setFont(Fonts.getPixelFont(15));
+            button.setFocusable(false);
+            button.setRolloverEnabled(false);
+        }
+    }
+
+
+    private void addButtons(final GridBagConstraints theConstraints) {
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(new Color(0, 0, 0, 0));
+        buttonPanel.setLayout(new GridBagLayout());
+
+        GridBagConstraints buttonConstraints = new GridBagConstraints();
+        buttonConstraints.anchor = GridBagConstraints.WEST;
+        buttonConstraints.insets = new Insets(3, 10, 3, 10);
+        buttonConstraints.gridx = 0;
+        buttonConstraints.gridy = 0;
+
+        for (int i = 0; i < myButtons.length; i++) {
+            myButtons[i].setPreferredSize(new Dimension(400, 50));
+            buttonPanel.add(myButtons[i], buttonConstraints);
+            buttonConstraints.gridy++;
+
+            if (i == 0) {
+                myButtons[i].addActionListener(e -> myGameListener.startPreparation());
+            } else if (i == 3) {
+                myButtons[i].addActionListener(e -> System.exit(0));
+            }
+        }
+
+        myInnerPanel.add(buttonPanel, theConstraints);
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(final Graphics theGraphics) {
         ImageIcon myIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(
-                "/startScreenImage/Gemini_Generated_Image_e85ajqe85ajqe85a.jpg")));
+                "/startScreenImage/mainMenu_96x54.png")));
         Image myImage = new ImageIcon(String.valueOf(myIcon)).getImage();
-        super.paintComponent(g);
+        super.paintComponent(theGraphics);
 
         if (myImage != null) {
-            g.drawImage(myIcon.getImage(), 0, 0, getWidth(), getHeight(), this);
+            theGraphics.drawImage(myIcon.getImage(), 0, 0, getWidth(), getHeight(), this);
         }
     }
 
