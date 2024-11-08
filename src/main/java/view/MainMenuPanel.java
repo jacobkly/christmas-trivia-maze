@@ -32,7 +32,7 @@ public class MainMenuPanel extends JPanel {
         myInnerPanel.setLayout(new GridBagLayout());
 
         GridBagConstraints innerConstraints = new GridBagConstraints();
-        innerConstraints.insets = new Insets(100, 10, 10, 10);
+        innerConstraints.insets = new Insets(50, 10, 10, 10);
         innerConstraints.anchor = GridBagConstraints.WEST;
         innerConstraints.gridx = 0;
         innerConstraints.gridy = 0;
@@ -73,13 +73,15 @@ public class MainMenuPanel extends JPanel {
 
     private void formatButtons() {
         for (JButton button : myButtons) {
-            button.setBackground(new Color(241, 241, 241));
+            button.setBackground(new Color(241, 241, 241, 175));
             button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
             button.setForeground(Color.BLACK);
             button.setFont(Fonts.getPixelFont(15));
             button.setFocusable(false);
+            button.setRolloverEnabled(false);
         }
     }
+
 
     private void addButtons(final GridBagConstraints theConstraints) {
         JPanel buttonPanel = new JPanel();
