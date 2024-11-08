@@ -171,7 +171,7 @@ public class PreparationPanel extends JPanel { // Extend JPanel
                             "Please enter a name to continue.",
                             "Missing Name", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    myGameListener.startGame(5, 7); // send player and game difficult information through here
+                    myGameListener.startGame(playerName, 5, 7); // send player and game difficult information through here
                 }
             }
         });

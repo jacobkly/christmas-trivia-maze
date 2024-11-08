@@ -8,6 +8,8 @@ import model.TextInputQuestion;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class QuestionPanel extends JPanel {
@@ -64,6 +66,29 @@ public class QuestionPanel extends JPanel {
     private class MultipleChoiceQuestionPanel extends JPanel {
         public MultipleChoiceQuestionPanel(GameListener theGameListener, MultipleChoiceQuestion theQuestion) {
             setBackground(Color.BLACK);
+            List<String> answers = new ArrayList<>();
+            answers.add(theQuestion.getAnswer());
+            answers.addAll(theQuestion.getWrongAnswers());
+            Collections.shuffle(answers);
+
+            ButtonGroup bg = new ButtonGroup();
+
+            for (String answer : answers) {
+                JRadioButton radioButton = new JRadioButton(answer);
+                bg.add(radioButton);
+                add(radioButton);
+            }
+
+            JButton confirmButton = new JButton("Confirm");
+            confirmButton.setBackground(Color.BLACK);
+            confirmButton.setForeground(Color.WHITE);
+            confirmButton.setBorder(new RoundedBorder(20));
+            confirmButton.addActionListener(e -> {});
+            add(confirmButton);
+
+
+
+
         }
     }
 }
