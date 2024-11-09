@@ -101,6 +101,7 @@ public class MainMenuPanel extends JPanel {
 
             if (i == 0) {
                 myButtons[i].addActionListener(e -> myGameListener.startPreparation());
+//                myButtons[i].addActionListener(e -> myGameListener.startResult()); // for testing the result screen
             } else if (i == 3) {
                 myButtons[i].addActionListener(e -> System.exit(0));
             }

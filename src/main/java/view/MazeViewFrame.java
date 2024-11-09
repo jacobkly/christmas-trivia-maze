@@ -13,6 +13,7 @@ public class MazeViewFrame extends JFrame {
     private PreparationPanel myPreparationPanel;
     private MazeScreenPanel myMazeScreenPanel;
 
+    private final ResultScreenPanel myResultScreenPanel;
 
     public MazeViewFrame(GameListener theGameListener) {
         myGameListener = theGameListener;
@@ -27,7 +28,8 @@ public class MazeViewFrame extends JFrame {
         myMainMenuPanel = new MainMenuPanel(myGameListener);
         myPreparationPanel = new PreparationPanel(myGameListener);
         myMazeScreenPanel = new MazeScreenPanel(myGameListener);
-
+        // will need to set up some system in controller for knowing when player wins/loses
+        myResultScreenPanel = new ResultScreenPanel(myGameListener, false);
 
         JMenuBar myMenuBar = new JMenuBar();
         JMenu myFileMenu = new JMenu("Help...");
@@ -52,28 +54,38 @@ public class MazeViewFrame extends JFrame {
         debugMenuItem.addActionListener(e -> JOptionPane.showMessageDialog(this,
                 "When this is selected debug mode is enabled"));
 
-
+        this.add(myResultScreenPanel, BorderLayout.CENTER);
         this.add(myMazeScreenPanel, BorderLayout.CENTER);
         this.add(myPreparationPanel, BorderLayout.CENTER);
         this.add(myMainMenuPanel, BorderLayout.CENTER);
     }
 
+    public void setMaze(Maze theMaze) {
+        myMainMenuPanel.setVisible(false);
+        myResultScreenPanel.setVisible(false);
+        myPreparationPanel.setVisible(false);
+        myMazeScreenPanel.setVisible(true);
+        myMazeScreenPanel.setMaze(theMaze);
+    }
+
     public void setPreparation() {
         myMainMenuPanel.setVisible(false);
         myMazeScreenPanel.setVisible(false);
+        myResultScreenPanel.setVisible(false);
         myPreparationPanel.setVisible(true);
-    }
-
-    public void setMaze(Maze theMaze) {
-        myMainMenuPanel.setVisible(false);
-        myMazeScreenPanel.setVisible(true);
-        myMazeScreenPanel.setMaze(theMaze);
-        myPreparationPanel.setVisible(false);
     }
 
     public void setMainMenu() {
         myMazeScreenPanel.setVisible(false);
         myPreparationPanel.setVisible(false);
+        myResultScreenPanel.setVisible(false);
         myMainMenuPanel.setVisible(true);
+    }
+
+    public void setResultScreen() {
+        myMainMenuPanel.setVisible(false);
+        myPreparationPanel.setVisible(false);
+        myMazeScreenPanel.setVisible(false);
+        myResultScreenPanel.setVisible(true);
     }
 }
