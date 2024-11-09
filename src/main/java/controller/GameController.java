@@ -45,9 +45,8 @@ public class GameController implements GameListener{
         Collections.shuffle(questions);
         myMaze = new Maze(questions, theNumRows, theNumCols, startRow, startCol, endRow, endCol);
         myFrame.setMaze(myMaze);
-
     }
 
-
-
+    @Override
+    public void startResult() { myFrame.setResultScreen(); }
 }
