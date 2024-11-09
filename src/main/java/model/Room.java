@@ -3,13 +3,6 @@ package model;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
-import java.util.List;
-
-import controller.QuestionFactory;
-import model.Question;
-import model.BooleanQuestion;
-import model.TextInputQuestion;
-import model.MultipleChoiceQuestion;
 
 /**
  * Room
@@ -38,14 +31,11 @@ public class Room {
     /** The images used for highlighting. */
     private final Image[] myHigLig;
 
-    /** The boolean array for the precense/abcense of doors. */
+    /** The boolean array for the precense(true)/abcense(false) of doors. */
     private final boolean[] myNESWDoors;
 
     /** The question that locks this room. */
     private Question myQuestion;
-
-    /** The item contained in this room. */
-    private Item myItem;
 
     /** The image representation of this room, stored in render order. */
     private final Image[] myNESWRoom;
@@ -53,42 +43,15 @@ public class Room {
     /** The ImageMerger that will help create the room image. */
     private final RoomImageMerger myRoomImageMerger;
 
-    /** Tracks whether the image properties have changed between the last image compilation. */
-     //private boolean myHasChangedFromLastComp;
-
     /** a int that tracks the correct fill of this room.  */
     private final int myFillNum;
 
     /** Tracks the visibility status of this room, 0 is fully visible, 1 is partially visible, 2 is not visible. */
     private int myVisibility;
 
+    /** Holds whether this room is an endpoint.  */
+    private boolean myIsEndpoint = false;
 
-
-
-//    /**
-//     * Creates a Room object with default values
-//     */
-//    public Room() {
-//        myVisibility = 2;
-//        Random random = new Random();
-//        myFillNum = random.nextInt(3);
-//
-//        myRoomImageMerger = new RoomImageMerger();
-//        myNESWRoom = new Image[6];
-//        myHigLig = new Image[2];
-//        pullHigLigImages();
-//        setHigLig(false);
-//
-//        myNESWDoors = new boolean[]{true, true, true, true};
-//        myQuestion = getQuestion(myQuestionList);
-//        myItem = new Item(0);
-//        //myHasChangedFromLastComp = true;
-//
-//        for(int i = 0; i < 4; i++) {
-//            setDoor(i, !myNESWDoors[i]);
-//        }
-//        updateRoomImages();
-//    }
 
     /**
      * Creates a Room with custom values.
@@ -106,14 +69,11 @@ public class Room {
         pullHigLigImages();
         setHigLig(false);
 
-        myNESWDoors = new boolean[]{false, false, false, false};
         myQuestion = theQuestion;
-        myItem = new Item(0);
-        //myHasChangedFromLastComp = true;
 
+        myNESWDoors = new boolean[]{true, true, true, true};
         for(int i = 0; i < 4; i++) {
-            myNESWDoors[i] = !myNESWDoors[i];
-            setDoor(i, !myNESWDoors[i]);
+            setDoor(i, myNESWDoors[i]);
         }
 
         updateRoomImages();
@@ -141,7 +101,6 @@ public class Room {
         } else {
             myNESWRoom[5] = myHigLig[0];
         }
-        // myHasChangedFromLastComp = true;
     }
 
 
@@ -150,7 +109,6 @@ public class Room {
      *
      */
     private void updateRoomImages() {
-        // add an ! to test landscape images, remove the ! for correct functionality.
         if(myVisibility == 0) {
             myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
                     getResource("/roomFiles/fillRoom/"
@@ -165,15 +123,6 @@ public class Room {
     }
 
     /**
-     * Sets the visual to show no information.
-     */
-    private void setMystRoom() {
-        myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
-                getResource("/roomFiles/fillRoom/mystFillRoom.png"))).getImage();
-    }
-
-
-    /**
      * Sets the door according to the values.
      * throws an exception if theNESW is not 0, 1, 2, or 3.
      *
@@ -183,8 +132,7 @@ public class Room {
     public void setDoor(final int theNESW, final boolean theDoor) {
         if(theNESW > 3 || theNESW < 0) {
             throw new IllegalArgumentException("NESW must be between 0 and 3");
-        }
-        if(myNESWDoors[theNESW] != theDoor) {
+        } else {
             myNESWDoors[theNESW] = theDoor;
             setDoorVisual(theNESW, theDoor);
         }
@@ -202,26 +150,11 @@ public class Room {
         }
         String result = "/roomFiles/";
         if (theDoor) {
-            result += "noDoor/" + NESW_NUMS[theNESW] + "NoDoor.png";
-        } else {
             result += "wiDoor/" + NESW_NUMS[theNESW] + "WiDoor.png";
+        } else {
+            result += "noDoor/" + NESW_NUMS[theNESW] + "NoDoor.png";
         }
         myNESWRoom[theNESW] = new ImageIcon(Objects.requireNonNull(getClass().getResource(result))).getImage();
-        // myHasChangedFromLastComp = true;
-    }
-
-
-    /**
-     * Picks up the item, removing it from the room.
-     *
-     * @return the item in the room.
-     */
-    public Item pickUpItem(){
-        Item result = myItem;
-        if(myItem.getItemType() > 0){
-            myItem = new Item(0);
-        }
-        return result;
     }
 
     /**
@@ -252,12 +185,6 @@ public class Room {
      * @return the merged image.
      */
     public Image getRoomImage() {
-
-//        if(myHasChangedFromLastComp) {
-//            updateRoomImages();
-//            myHasChangedFromLastComp = false;
-//        }
-
         updateRoomImages();
         return myRoomImageMerger.MergeImage(myNESWRoom);
     }
@@ -278,12 +205,10 @@ public class Room {
 //    }
 
     /**
-     * Sets the item held in the room to a custom item.
-     *
-     * @param theItem the item to be held.
+     * Sets this room to be an endpoint.
      */
-    public void setItem(final Item theItem) {
-        myItem = theItem;
+    public void setAsEndpoint() {
+        myIsEndpoint = true;
     }
 
     /**
@@ -299,6 +224,15 @@ public class Room {
             throw new IllegalArgumentException("Visibility must be between 0 and 2");
         }
         myVisibility = theVisibility;
+    }
+
+    /**
+     * Returns if this is an endpoint or not.
+     *
+     * @return whether this room is an endpoint.
+     */
+    public boolean isEndpoint() {
+        return myIsEndpoint;
     }
 
 
