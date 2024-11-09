@@ -38,20 +38,20 @@ public class QuestionPanel extends JPanel {
         add(myQuestionPrompt, BorderLayout.NORTH);
 
 
-        setQuestion(new MultipleChoiceQuestion(
-                "Who sang the hit Christmas single 'Last Christmas'?",
-                "Wham!",
-                List.of("Mariah Carey",
-                        "Frank Sinatra",
-                        "Harry Connick Jr.")));
+//        setQuestion(new MultipleChoiceQuestion(
+//                "Who sang the hit Christmas single 'Last Christmas'?",
+//                "Wham!",
+//                List.of("Mariah Carey",
+//                        "Frank Sinatra",
+//                        "Harry Connick Jr.")));
 
 //        setQuestion(new BooleanQuestion(
 //                "Christmas in celebrated on December 25th in every country?",
 //                true));
 
-//        setQuestion(new TextInputQuestion(
-//                "What is the first name of 'Frosty the snowman?'",
-//                "Frosty"));
+        setQuestion(new TextInputQuestion(
+                "What is the first name of 'Frosty the snowman?'",
+                "Frosty"));
 
 
     }
