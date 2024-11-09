@@ -4,10 +4,16 @@ import javax.swing.border.Border;
 import java.awt.*;
 
 public class RoundedBorder implements Border {
-    private final int radius;
+    private final int myRadius;
+    private Insets myAdditionalMargin = new Insets(0, 0, 0, 0);
 
     public RoundedBorder(int radius) {
-        this.radius = radius;
+        this.myRadius = radius;
+    }
+
+    public RoundedBorder(int radius, Insets additionalMargin) {
+        this(radius);
+        myAdditionalMargin = additionalMargin;
     }
 
     @Override
@@ -16,13 +22,16 @@ public class RoundedBorder implements Border {
         g2.setColor(Color.white);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setStroke(new BasicStroke(6));
-        g2.drawRoundRect(x + 3, y + 3, width -6, height - 6, radius, radius);
+        g2.drawRoundRect(x + 3, y + 3, width - 6, height - 6, myRadius, myRadius);
 //        g2.drawRoundRect(x - 10, y - 10, width + 20, height+20, radius, radius);
     }
 
     @Override
     public Insets getBorderInsets(Component c) {
-        return new Insets(this.radius / 2, this.radius /2 , this.radius /2 , this.radius / 2);
+        return new Insets(this.myRadius / 2 + myAdditionalMargin.top,
+                this.myRadius / 2 + myAdditionalMargin.left,
+                this.myRadius / 2 + myAdditionalMargin.bottom,
+                this.myRadius / 2 + myAdditionalMargin.right);
     }
 
     @Override

@@ -197,12 +197,12 @@ public class Room {
      * @param thePossibleAnswer the answer the user is trying.
      * @return whether the answer is correct or not.
      */
-//    public boolean tryAnswer(final String thePossibleAnswer) {
-//        if(myQuestion.checkAnswer(thePossibleAnswer)) {
-//            myVisibility = 0;
-//        }
-//        return getIsFullyVisible();
-//    }
+    public boolean tryAnswer(final String thePossibleAnswer) {
+        if(myQuestion.checkAnswer(thePossibleAnswer)) {
+            myVisibility = 0;
+        }
+        return getIsFullyVisible();
+    }
 
     /**
      * Sets this room to be an endpoint.

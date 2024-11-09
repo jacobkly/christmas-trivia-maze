@@ -34,7 +34,7 @@ public class GameController implements GameListener{
     }
 
     @Override
-    public void startGame(int theNumRows, int theNumCols) {
+    public void startGame(String theName, int theNumRows, int theNumCols) {
         List<Question> questions = new ArrayList<>(myQuestionList);
         Collections.shuffle(questions);
         myMaze = new Maze(questions, theNumRows, theNumCols);
