@@ -35,15 +35,9 @@ public class GameController implements GameListener{
 
     @Override
     public void startGame(int theNumRows, int theNumCols) {
-        // here make start/end
-        int startRow = 1;
-        int startCol = 1;
-        int endRow = 3;
-        int endCol = 4;
-
         List<Question> questions = new ArrayList<>(myQuestionList);
         Collections.shuffle(questions);
-        myMaze = new Maze(questions, theNumRows, theNumCols, startRow, startCol, endRow, endCol);
+        myMaze = new Maze(questions, theNumRows, theNumCols);
         myFrame.setMaze(myMaze);
     }
 

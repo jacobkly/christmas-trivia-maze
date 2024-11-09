@@ -1,7 +1,7 @@
 package model;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class Maze {
 
@@ -10,10 +10,10 @@ public class Maze {
     private final Room[][] myRooms;
 
     /** The position of the starting row and starting col. */
-    private final int[] myStartingRowCol;
+    private int[] myStartingRowCol;
 
     /** The position of the ending row and ending col. */
-    private final int[] myEndingRowCol;
+    private int[] myEndingRowCol;
 
     /** The current room that is highlighted.  */
     private final int[] myCurrentRoomHigLig = new int[] {0, 0};
@@ -22,36 +22,76 @@ public class Maze {
     /**
      * Creates a maze with the set parameters.
      *
-     * @param theQuestions
-     * @param theRows         the number of rows in the maze.
-     * @param theColumns      the number of columns in the maze.
-     * @param theStartingRow  the row of the starting room of the maze.
-     * @param theStartingCol  the column of the starting room of the maze.
-     * @param theEndingRow    the row of the ending room of the maze.
-     * @param theEndingCol    the column of the ending room of the maze.
+     * @param theQuestions the questions to be entered into rooms.
+     * @param theRows the number of rows in the maze.
+     * @param theColumns the number of columns in the maze.
      */
-    public Maze(final List<Question> theQuestions, final int theRows, final int theColumns, final int theStartingRow, final int theStartingCol,
-                final int theEndingRow, final int theEndingCol) {
+    public Maze(final List<Question> theQuestions, final int theRows, final int theColumns) {
 
         Room[][] theRooms = new Room[theRows][theColumns];
         for(int i = 0; i < theRows; i++) {
             for(int j = 0; j < theColumns; j++) {
-                // would use a room factory here
                 Question question = theQuestions.removeFirst();
                 Room room = new Room(question);
                 theRooms[i][j] = room;
             }
         }
-
         myRooms = theRooms;
 
-        myStartingRowCol = new int[] {theStartingRow, theStartingCol};
-
-        myEndingRowCol = new int[] {theEndingRow, theEndingCol};
-
+        setStartAndEndPosition();
         mazeFirstSetup();
-
         setRoomHigLig(myStartingRowCol[0], myStartingRowCol[1]);
+        mazeBorderCreation();
+    }
+
+    /**
+     * Sets the starting and ending position of the maze.
+     * The start and end positions are random.
+     * The end position is set to be some distance from the start position.
+     * This should only be called in the constructor.
+     */
+    private void setStartAndEndPosition() {
+        Random random = new Random();
+        int randomRow1 = random.nextInt(myRooms.length);
+        int randomCol1 = random.nextInt(myRooms[randomRow1].length);
+        myStartingRowCol = new int[] {randomRow1, randomCol1};
+
+        // Pick the second random element far away from the first
+        // the min distance is manhattan distance of half the row and col lengths.
+        int minDistance1 = myRooms.length / 2;
+        int minDistance2 = myRooms[0].length / 2; // Define your desired minimum distance
+        int minDistance = minDistance1 + minDistance2;
+
+        int randomRow2;
+        int randomCol2;
+        do {
+            randomRow2 = random.nextInt(myRooms.length);
+            randomCol2 = random.nextInt(myRooms[randomRow1].length);
+        } while (Math.abs(randomRow1 - randomRow2) + Math.abs(randomCol1 - randomCol2) < minDistance);
+        myEndingRowCol = new int[] {randomRow2, randomCol2};
+        System.out.println("Endpoint is: [" + randomRow2 + ", " + randomCol2 + "]");
+    }
+
+    /**
+     * Creates the border wall of the maze.
+     */
+    private void mazeBorderCreation() {
+        // top row rooms, north wall
+        for(int i = 0; i < myRooms[0].length; i++) {
+            myRooms[0][i].setDoor(0, false);
+        }
+        // bottom row rooms, south wall
+        for(int i = 0; i < myRooms[0].length; i++) {
+            myRooms[myRooms.length - 1][i].setDoor(2, false);
+        }
+        // first colomn rooms, west wall
+        for(int i = 0; i < myRooms.length; i++) {
+            myRooms[i][0].setDoor(3, false);
+        }
+        // last clumn rooms, east wall
+        for(int i = 0; i < myRooms.length; i++) {
+            myRooms[i][myRooms[0].length - 1].setDoor(1, false);
+        }
     }
 
     /**
@@ -59,8 +99,7 @@ public class Maze {
      */
     private void mazeFirstSetup() {
         getRoom(myStartingRowCol[0], myStartingRowCol[1]).setVisibility(0);
-        Item item = new Item(2);
-        getRoom(myEndingRowCol[0], myEndingRowCol[1]).setItem(item);
+        getRoom(myEndingRowCol[0], myEndingRowCol[1]).setAsEndpoint();
     }
 
     /**
@@ -116,7 +155,6 @@ public class Maze {
         return adjacentRooms;
     }
 
-    // major bug that needs to be fixed, the returned boolean is inverted from what it shoul be.
     /**
      * Returns if there is a passage between the two rooms.
      *
@@ -131,7 +169,7 @@ public class Maze {
         Room room2 = getRoom(theRow2, theCol2);
 
         if(room1 == null || room2 == null) {
-            return false;
+            return true;
         }
         int[][] adjacentRooms = getAdjacentRooms(theRow1, theCol1);
         for(int i = 0; i < adjacentRooms.length; i++) {
@@ -139,12 +177,12 @@ public class Maze {
             if(adjRoom != null) {
                 if(theRow2 == adjacentRooms[i][0] && theCol2 == adjacentRooms[i][1]) {
                     if (room1.getHasNESWDoor(i) && adjRoom.getHasNESWDoor(NESW_INVERSE[i])) {
-                        return false;
+                        return true;
                     }
                 }
             }
         }
-        return true;
+        return false;
     }
 
     /**
