@@ -16,8 +16,8 @@ public class Maze {
     private int[] myEndingRowCol;
 
     /** The current room that is highlighted.  */
-    private final int[] myCurrentRoomHigLig = new int[] {0, 0};
-
+//    private final int[] myCurrentRoomHigLig = new int[] {0, 0};
+    private Room mySelectedRoom = null;
 
     /**
      * Creates a maze with the set parameters.
@@ -40,7 +40,6 @@ public class Maze {
 
         setStartAndEndPosition();
         mazeFirstSetup();
-        setRoomHigLig(myStartingRowCol[0], myStartingRowCol[1]);
         mazeBorderCreation();
     }
 
@@ -99,6 +98,7 @@ public class Maze {
      */
     private void mazeFirstSetup() {
         getRoom(myStartingRowCol[0], myStartingRowCol[1]).setVisibility(0);
+        getRoom(myStartingRowCol[0], myStartingRowCol[1]).setAsStart();
         getRoom(myEndingRowCol[0], myEndingRowCol[1]).setAsEndpoint();
     }
 
@@ -207,10 +207,11 @@ public class Maze {
      * @param theCol the col of the room.
      */
     public void setRoomHigLig(final int theRow, final int theCol) {
-        this.getRoom(myCurrentRoomHigLig[0], myCurrentRoomHigLig[1]).setHigLig(false);
-        this.getRoom(theRow, theCol).setHigLig(true);
-        myCurrentRoomHigLig[0] = theRow;
-        myCurrentRoomHigLig[1] = theCol;
+        if (mySelectedRoom != null) {
+            mySelectedRoom.setHigLig(false);
+        }
+        mySelectedRoom = this.getRoom(theRow, theCol);
+        mySelectedRoom.setHigLig(true);
     }
 
     /**
@@ -219,7 +220,7 @@ public class Maze {
      * @return the currently selected room.
      */
     public Room getCurrentlySelectedRoom() {
-        return getRoom(myCurrentRoomHigLig[0], myCurrentRoomHigLig[1]);
+        return mySelectedRoom;
     }
 
     /**

@@ -1,5 +1,6 @@
 package view;
 
+import controller.GameListener;
 import model.Maze;
 import model.Room;
 
@@ -10,8 +11,10 @@ import java.awt.event.ActionListener;
 
 public class MazeVisualPanel extends JPanel {
 
-    public MazeVisualPanel(Maze theMaze) {
+    private final GameListener myGameListener;
 
+    public MazeVisualPanel(final GameListener theGameListener, Maze theMaze) {
+        myGameListener = theGameListener;
 
         setLayout(new GridLayout(theMaze.getRows(), theMaze.getCols()));
 
@@ -25,6 +28,7 @@ public class MazeVisualPanel extends JPanel {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         informRoomWasClicked(theMaze, button.getRow(), button.getCol());
+                        myGameListener.onRoomClicked(room);
                         updateVisualInfo(theMaze);
                     }
                 });

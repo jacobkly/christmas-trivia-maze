@@ -2,6 +2,7 @@ package view;
 
 import controller.GameListener;
 import model.Maze;
+import model.Room;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +18,7 @@ public class MazeScreenPanel extends JPanel {
 
     public MazeScreenPanel(GameListener myGameListener) {
 
-        setSize(1200, 700 );
+        setSize(1200, 700);
         setLayout(new GridBagLayout());
         setBackground(Color.BLACK);
         setVisible(false);
@@ -70,11 +71,19 @@ public class MazeScreenPanel extends JPanel {
         add(myGamePanel, c4);
 
 
-
-
     }
 
     public void setMaze(final Maze theMaze) {
+        Room selectedRoom = theMaze.getCurrentlySelectedRoom();
+        if (selectedRoom != null) {
+            myQuestionPanel.setQuestion(selectedRoom.getQuestion());
+            if (selectedRoom.isAnswered()) {
+                myQuestionPanel.setQuestion(null);
+            }
+        } else {
+            myQuestionPanel.setQuestion(null);
+        }
+
         myGamePanel.setMaze(theMaze);
     }
 }

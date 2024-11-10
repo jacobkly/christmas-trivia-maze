@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 
 public class QuestionPanel extends JPanel {
@@ -38,32 +39,20 @@ public class QuestionPanel extends JPanel {
         add(myQuestionPrompt, BorderLayout.NORTH);
 
 
-//        setQuestion(new MultipleChoiceQuestion(
-//                "Who sang the hit Christmas single 'Last Christmas'?",
-//                "Wham!",
-//                List.of("Mariah Carey",
-//                        "Frank Sinatra",
-//                        "Harry Connick Jr.")));
-
-//        setQuestion(new BooleanQuestion(
-//                "Christmas in celebrated on December 25th in every country?",
-//                true));
-
-        setQuestion(new TextInputQuestion(
-                "What is the first name of 'Frosty the snowman?'",
-                "Frosty"));
-
 
     }
 
-    public void setQuestion(Question theQuestion) {
-        myQuestionPrompt.setText(theQuestion.getPrompt());
-        // Clear existing inputs
-        // Update panel visibility
+    public void setQuestion(final Question theQuestion) {
 
         if (myAnswerPanel != null) {
             remove(myAnswerPanel);
         }
+
+        if (theQuestion == null) {
+            return;
+        }
+
+        myQuestionPrompt.setText(theQuestion.getPrompt());
 
         switch (theQuestion) {
             case MultipleChoiceQuestion m -> myAnswerPanel = new MultipleChoiceQuestionPanel(myGameListener, m);
@@ -114,6 +103,14 @@ public class QuestionPanel extends JPanel {
             confirmButton.setBorder(new RoundedBorder(20, new Insets(10, 0, 10, 0)));
             confirmButton.setPreferredSize(new Dimension(150, 100));
             confirmButton.addActionListener(e -> {
+                var elements = bg.getElements();
+                elements.asIterator().forEachRemaining(element -> {
+                    JRadioButton button = (JRadioButton) element;
+                    if (button.isSelected()) {
+                        theGameListener.checkAnswer(button.getText());
+
+                    }
+                });
             });
             wrapper = Box.createHorizontalBox();
             wrapper.add(Box.createHorizontalGlue());
@@ -172,6 +169,14 @@ public class QuestionPanel extends JPanel {
             confirmButton.setBorder(new RoundedBorder(20, new Insets(10, 0, 10, 0)));
             confirmButton.setPreferredSize(new Dimension(150, 100));
             confirmButton.addActionListener(e -> {
+                var elements = bg.getElements();
+                elements.asIterator().forEachRemaining(element -> {
+                    JRadioButton button = (JRadioButton) element;
+                    if (button.isSelected()) {
+                        theGameListener.checkAnswer(button.getText());
+
+                    }
+                });
             });
             wrapper = Box.createHorizontalBox();
             wrapper.add(Box.createHorizontalGlue());
@@ -215,6 +220,8 @@ public class QuestionPanel extends JPanel {
             confirmButton.setBorder(new RoundedBorder(20, new Insets(10, 0, 10, 0)));
             confirmButton.setPreferredSize(new Dimension(150, 100));
             confirmButton.addActionListener(e -> {
+                theGameListener.checkAnswer(input.getText());
+
             });
 
             wrapper = Box.createHorizontalBox();
