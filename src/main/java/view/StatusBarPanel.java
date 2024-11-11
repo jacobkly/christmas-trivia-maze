@@ -41,7 +41,11 @@ public class StatusBarPanel extends JPanel {
 
         add(Box.createVerticalGlue());
 
-        JButton getHint = new JButton("Get Hint");
+        JButton getHint = new JButton("Hint");
+        getHint.setBackground(Color.BLACK);
+        getHint.setFont(Fonts.getPixelFont(12));
+        getHint.setForeground(Color.WHITE);
+        getHint.setBorder(new RoundedBorder(20, new Insets(5,5,5,5)));
         getHint.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(getHint);
 

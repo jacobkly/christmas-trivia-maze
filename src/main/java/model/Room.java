@@ -189,7 +189,7 @@ public class Room {
     }
 
     public boolean isAnswerable() {
-        return myVisibility == 2 && !myStart;
+        return myVisibility == 1 && !myStart;
     }
 
     /**

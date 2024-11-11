@@ -59,8 +59,7 @@ public class GameController implements GameListener{
             // Right answer, mark the room complete
             selectedRoom.setVisibility(0);
         } else {
-            // Wrong answer, lock the room
-            selectedRoom.setVisibility(1);
+            // Wrong answer, remove 1 life
         }
 
 
