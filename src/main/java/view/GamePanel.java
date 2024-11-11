@@ -8,9 +8,11 @@ import java.awt.*;
 
 public class GamePanel extends JPanel {
 
+    private final GameListener myGameListener;
     private MazeVisualPanel myMazeVisualPanel;
-    public GamePanel(GameListener myGameListener) {
 
+    public GamePanel(GameListener theGameListener) {
+        myGameListener = theGameListener;
         setBackground(Color.BLACK);
         setBorder(new RoundedBorder(40));
         //add(new MazeVisualPanel(5, 8));
@@ -21,7 +23,11 @@ public class GamePanel extends JPanel {
 
 
     public void setMaze(final Maze theMaze) {
-        myMazeVisualPanel = new MazeVisualPanel(theMaze);
-        this.add(myMazeVisualPanel);
+        if (myMazeVisualPanel != null) {
+            remove(myMazeVisualPanel);
+        }
+
+        myMazeVisualPanel = new MazeVisualPanel(myGameListener, theMaze);
+        add(myMazeVisualPanel);
     }
 }

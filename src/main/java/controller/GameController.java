@@ -1,8 +1,9 @@
 package controller;
 
-import model.Maze;
-import model.Question;
+import model.*;
+import view.GamePanel;
 import view.MazeViewFrame;
+import view.QuestionPanel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +14,6 @@ public class GameController implements GameListener{
     private MazeViewFrame myFrame;
     private Maze myMaze;
     private List<Question> myQuestionList = new ArrayList<>(QuestionFactory.getQuestionsFromDatabase());
-
     public GameController() {
 
     }
@@ -42,5 +42,44 @@ public class GameController implements GameListener{
     }
 
     @Override
+    public boolean checkAnswer(final String theAnswer) {
+        Room selectedRoom = myMaze.getCurrentlySelectedRoom();
+        Question question = selectedRoom.getQuestion();
+
+
+        boolean correct;
+        switch (question) {
+            case MultipleChoiceQuestion m -> correct = m.getAnswer().equals(theAnswer);
+            case TextInputQuestion tiq -> correct = tiq.getAnswer().equalsIgnoreCase(theAnswer);
+            case BooleanQuestion bq -> correct = bq.isAnswer() == Boolean.parseBoolean(theAnswer);
+            default -> throw new IllegalStateException("Unexpected question type");
+        }
+
+        if (correct) {
+            // Right answer, mark the room complete
+            selectedRoom.setVisibility(0);
+        } else {
+            // Wrong answer, remove 1 life
+        }
+
+
+        myFrame.setMaze(myMaze);
+        return correct;
+    }
+
+    @Override
     public void startResult() { myFrame.setResultScreen(); }
+
+    @Override
+    public void onRoomClicked(final Room theRoom) {
+        Room selectedRoom = myMaze.getCurrentlySelectedRoom();
+        if (selectedRoom != null) {
+            selectedRoom.setHigLig(false);
+        }
+
+        theRoom.setHigLig(true);
+        myFrame.setMaze(myMaze);
+    }
+
+
 }

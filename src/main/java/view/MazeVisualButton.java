@@ -41,6 +41,8 @@ public class MazeVisualButton extends JButton {
      */
     public void updateVisualImage() {
         setIcon(new ImageIcon(myRoom.getRoomImage().getScaledInstance( 90, 90, Image.SCALE_SMOOTH)));
+        setDisabledIcon(new ImageIcon(myRoom.getRoomImage().getScaledInstance( 90, 90, Image.SCALE_SMOOTH)));
+        setEnabled(myRoom.isAnswerable());
     }
 
     /**

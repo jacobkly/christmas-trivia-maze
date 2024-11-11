@@ -51,6 +51,7 @@ public class Room {
 
     /** Holds whether this room is an endpoint.  */
     private boolean myIsEndpoint = false;
+    private boolean myStart = false;
 
 
     /**
@@ -179,6 +180,18 @@ public class Room {
         return myVisibility == 0;
     }
 
+    public boolean isLocked() {
+        return myVisibility == 1;
+    }
+
+    public boolean isAnswered() {
+        return myVisibility == 0;
+    }
+
+    public boolean isAnswerable() {
+        return myVisibility == 1 && !myStart;
+    }
+
     /**
      * Returns the image that represent the room.
      *
@@ -189,26 +202,36 @@ public class Room {
         return myRoomImageMerger.MergeImage(myNESWRoom);
     }
 
-    /**
-     * Tries a possible answer to the question
-     * This will also answer the question if it is correct.
-     * If correct, it will return true.
-     *
-     * @param thePossibleAnswer the answer the user is trying.
-     * @return whether the answer is correct or not.
-     */
-    public boolean tryAnswer(final String thePossibleAnswer) {
-        if(myQuestion.checkAnswer(thePossibleAnswer)) {
-            myVisibility = 0;
-        }
-        return getIsFullyVisible();
-    }
+//    /**
+//     * Tries a possible answer to the question
+//     * This will also answer the question if it is correct.
+//     * If correct, it will return true.
+//     *
+//     * @param thePossibleAnswer the answer the user is trying.
+//     * @return whether the answer is correct or not.
+//     */
+//    public boolean tryAnswer(final String thePossibleAnswer) {
+//        if(myQuestion.checkAnswer(thePossibleAnswer)) {
+//            myVisibility = 0;
+//        }
+//        return getIsFullyVisible();
+//    }
+
+
 
     /**
      * Sets this room to be an endpoint.
      */
     public void setAsEndpoint() {
         myIsEndpoint = true;
+    }
+
+    public void setAsStart() {
+        myStart = true;
+    }
+
+    public boolean isStart() {
+        return myStart;
     }
 
     /**
@@ -235,5 +258,7 @@ public class Room {
         return myIsEndpoint;
     }
 
-
+    public Question getQuestion() {
+        return myQuestion;
+    }
 }

@@ -2,6 +2,7 @@ package view;
 
 import controller.GameListener;
 import model.Maze;
+import model.Room;
 
 import javax.swing.*;
 import java.awt.*;
