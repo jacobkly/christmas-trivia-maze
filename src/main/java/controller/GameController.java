@@ -1,9 +1,7 @@
 package controller;
 
 import model.*;
-import view.GamePanel;
 import view.MazeViewFrame;
-import view.QuestionPanel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,12 +9,15 @@ import java.util.List;
 
 public class GameController implements GameListener{
 
-    private MazeViewFrame myFrame;
-    private Maze myMaze;
-    private List<Question> myQuestionList = new ArrayList<>(QuestionFactory.getQuestionsFromDatabase());
-    public GameController() {
+    private final List<Question> myQuestionList = new ArrayList<>(QuestionFactory.getQuestionsFromDatabase());
 
-    }
+    private MazeViewFrame myFrame;
+
+    private Maze myMaze;
+
+    private Player myPlayer;
+
+    public GameController() { /* do nothing */ }
 
     public void setView(MazeViewFrame theFrame) {
         this.myFrame = theFrame;
@@ -34,18 +35,22 @@ public class GameController implements GameListener{
     }
 
     @Override
-    public void startGame(String theName, int theNumRows, int theNumCols) {
+    public void startGame(int theNumRows, int theNumCols, final String thePlayerName, final int thePlayerMaxHealth) {
         List<Question> questions = new ArrayList<>(myQuestionList);
         Collections.shuffle(questions);
         myMaze = new Maze(questions, theNumRows, theNumCols);
         myFrame.setMaze(myMaze);
+
+        myPlayer = new Player(thePlayerName, thePlayerMaxHealth);
+        System.out.println("Player name: " + myPlayer.getName());
+        System.out.println("Player health given: " + thePlayerMaxHealth);
+        System.out.println("Player health received: " + myPlayer.getHealthCount());
     }
 
     @Override
     public boolean checkAnswer(final String theAnswer) {
         Room selectedRoom = myMaze.getCurrentlySelectedRoom();
         Question question = selectedRoom.getQuestion();
-
 
         boolean correct;
         switch (question) {
@@ -56,12 +61,21 @@ public class GameController implements GameListener{
         }
 
         if (correct) {
-            // Right answer, mark the room complete
+            if (selectedRoom.isEndpoint()) {
+                System.out.println("--- PLAYER REACHED END POINT ---");
+                myFrame.updatePlayerResult(true);
+                startResult();
+                return true;
+            }
             selectedRoom.setVisibility(0);
         } else {
             // Wrong answer, remove 1 life
+            if (myPlayer.getHealthCount() == 0) {
+                myFrame.updatePlayerResult(false);
+                startResult();
+                return false;
+            }
         }
-
 
         myFrame.setMaze(myMaze);
         return correct;
@@ -80,6 +94,4 @@ public class GameController implements GameListener{
         theRoom.setHigLig(true);
         myFrame.setMaze(myMaze);
     }
-
-
 }

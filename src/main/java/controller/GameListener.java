@@ -8,7 +8,7 @@ public interface GameListener {
 
    void startPreparation();
 
-   void startGame(String theName, int theNumRows, int theNumCols);
+   void startGame(int theNumRows, int theNumCols, final String thePlayerName, final int thePlayerMaxHealth);
 
    boolean checkAnswer(String theAnswer);
 

@@ -9,10 +9,13 @@ import java.awt.*;
 
 public class MazeViewFrame extends JFrame {
 
-    private GameListener myGameListener;
-    private MainMenuPanel myMainMenuPanel;
-    private PreparationPanel myPreparationPanel;
-    private MazeScreenPanel myMazeScreenPanel;
+    private final GameListener myGameListener;
+
+    private final MainMenuPanel myMainMenuPanel;
+
+    private final PreparationPanel myPreparationPanel;
+
+    private final MazeScreenPanel myMazeScreenPanel;
 
     private final ResultScreenPanel myResultScreenPanel;
 
@@ -29,8 +32,7 @@ public class MazeViewFrame extends JFrame {
         myMainMenuPanel = new MainMenuPanel(myGameListener);
         myPreparationPanel = new PreparationPanel(myGameListener);
         myMazeScreenPanel = new MazeScreenPanel(myGameListener);
-        // will need to set up some system in controller for knowing when player wins/loses
-        myResultScreenPanel = new ResultScreenPanel(myGameListener, false);
+        myResultScreenPanel = new ResultScreenPanel(myGameListener);
 
         JMenuBar myMenuBar = new JMenuBar();
         JMenu myFileMenu = new JMenu("Help...");
@@ -88,5 +90,9 @@ public class MazeViewFrame extends JFrame {
         myPreparationPanel.setVisible(false);
         myMazeScreenPanel.setVisible(false);
         myResultScreenPanel.setVisible(true);
+    }
+
+    public void updatePlayerResult(final boolean theResult) {
+        myResultScreenPanel.updatePanel(theResult);
     }
 }

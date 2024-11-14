@@ -6,19 +6,26 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Enumeration;
 
 public class PreparationPanel extends JPanel { // Extend JPanel
 
-    private final static String[] LORE = {
+    private final static String[] DIALOGUE = {
             "So I see you wish to see Santa Claus!",
             "What is your name?",
             "Choose your journey difficulty below...",
             "Hahaha... Are you sure about this?"
     };
 
+    private final static String[] DIFFICULTY_NAMES = new String[] {
+            " Frosty (Easy)", " Blizzard (Medium)", " Naughty List (Hard)"
+    };
+
     private final GameListener myGameListener;
 
     private final JPanel myInnerPanel;
+
+    private ButtonGroup myDifficultyGroup;
 
     private JButton myYesButton;
 
@@ -79,10 +86,10 @@ public class PreparationPanel extends JPanel { // Extend JPanel
     }
 
     private JLabel[] formatLoreLabels() {
-        JLabel[] labels = new JLabel[LORE.length];
+        JLabel[] labels = new JLabel[DIALOGUE.length];
 
-        for (int i = 0; i < LORE.length; i++) {
-            labels[i] = new JLabel(LORE[i]);
+        for (int i = 0; i < DIALOGUE.length; i++) {
+            labels[i] = new JLabel(DIALOGUE[i]);
             labels[i].setBackground(Color.BLACK);
             labels[i].setForeground(Color.WHITE);
             labels[i].setFont(Fonts.getPixelFont(12));
@@ -120,21 +127,20 @@ public class PreparationPanel extends JPanel { // Extend JPanel
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         buttonPanel.setBackground(Color.BLACK);
 
-        String[] difficulties = {" Frosty (Easy)", " Blizzard (Medium)", " Naughty List (Hard)"};
-        ButtonGroup difficultyGroup = new ButtonGroup();
-        for (int i = 0; i < difficulties.length; i++) {
-            JRadioButton difficultyButton = new JRadioButton(difficulties[i]);
+        myDifficultyGroup = new ButtonGroup();
+        for (int i = 0; i < DIFFICULTY_NAMES.length; i++) {
+            JRadioButton difficultyButton = new JRadioButton(DIFFICULTY_NAMES[i]);
             difficultyButton.setForeground(Color.WHITE);
             difficultyButton.setFont(Fonts.getPixelFont(10));
             difficultyButton.setOpaque(false);
             difficultyButton.setBackground(Color.DARK_GRAY);
             difficultyButton.setFocusable(false);
-            difficultyGroup.add(difficultyButton);
+            myDifficultyGroup.add(difficultyButton);
             if (i == 0) {
                 difficultyButton.setSelected(true);
             }
             buttonPanel.add(difficultyButton);
-            if (i < difficulties.length - 1) { // gaps in between the buttons
+            if (i < DIFFICULTY_NAMES.length - 1) { // gaps in between the buttons
                 buttonPanel.add(Box.createVerticalStrut(15));
             }
         }
@@ -171,7 +177,8 @@ public class PreparationPanel extends JPanel { // Extend JPanel
                             "Please enter a name to continue.",
                             "Missing Name", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    myGameListener.startGame(playerName, 5, 7); // send player and game difficult information through here
+                    int playerMaxHealth = getChosenDifficulty();
+                    myGameListener.startGame(5, 7, playerName, playerMaxHealth);
                 }
             }
         });
@@ -194,5 +201,25 @@ public class PreparationPanel extends JPanel { // Extend JPanel
                 }
             }
         });
+    }
+
+    private int getChosenDifficulty() {
+        int difficulty = 8;
+        int buttonCount = 0;
+
+        // iterate over each button
+        for (Enumeration<AbstractButton> buttons = myDifficultyGroup.getElements(); buttons.hasMoreElements();) {
+            AbstractButton button = buttons.nextElement();
+            if (button.isSelected() && button.getText().equals(DIFFICULTY_NAMES[buttonCount])) {
+                difficulty = switch (buttonCount) {
+                    case 0 -> 8;
+                    case 1 -> 6;
+                    case 2 -> 4;
+                    default -> difficulty;
+                };
+            }
+            buttonCount++;
+        }
+        return difficulty;
     }
 }
