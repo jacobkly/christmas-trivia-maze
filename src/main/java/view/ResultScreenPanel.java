@@ -4,12 +4,13 @@ import controller.GameListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 public class ResultScreenPanel extends JPanel {
 
     private final static String[] myVictoryText = new String[] {
             "Ho ho ho!",
-            "You've reached the North Pole!",
+            "You've reached the North Pole.",
             "Welcome to my workshop!"
     };
 
@@ -19,76 +20,80 @@ public class ResultScreenPanel extends JPanel {
     };
 
     private final static String[] myDefeatText = new String[] {
-            "Bah! Humbag!",
-            "You couldn't even answer a simple question about Christmas?",
-            "What a Christmas Crook."
+            "Woah...",
+            "Looks like something went wrong.",
+            "Better luck next time!"
     };
 
     private final static String[] myDefeatStatsText = new String[] {
-            "Well, these stats are a Christmas catastrophe.",
-            "Time to hit the books and level up your holiday IQ.",
-            "Or maybe just stick to easier games..."
+            "Oh dear, these stats look frosty!",
+            "It's time to brush up your trivia."
     };
 
     private final GameListener myGameListener;
 
-    private final boolean myIsVictory;
-
     private final JPanel myInnerPanel;
 
+    private final GridBagConstraints myInnerPanelConstraints;
+
     private final JButton[] myButtons = {
-            new JButton("New Game"),
             new JButton("Main Menu"),
             new JButton("Settings"),
             new JButton("Exit")
     };
 
-    public ResultScreenPanel(final GameListener theGameListener, final boolean theIsVictory) {
+    /** True is victory and false is defeat. */
+    private boolean myResult;
+
+    public ResultScreenPanel(final GameListener theGameListener) {
         myGameListener = theGameListener;
-        myIsVictory = theIsVictory;
+        myResult = false;
 
         setSize(1214, 760);
         setLayout(new BorderLayout());
-        selectBackground();
 
         myInnerPanel = new JPanel(new GridBagLayout());
         myInnerPanel.setBackground(new Color(0,0,0,0));
         myInnerPanel.setLayout(new GridBagLayout());
 
-        GridBagConstraints innerConstraints = new GridBagConstraints();
-        innerConstraints.insets = new Insets(10,10,10,10);
-        innerConstraints.anchor = GridBagConstraints.CENTER;
-        innerConstraints.gridx = 0;
-        innerConstraints.gridy = 0;
-        setupInnerPanel(innerConstraints);
+        myInnerPanelConstraints = new GridBagConstraints();
+        myInnerPanelConstraints.insets = new Insets(10,10,10,80);
+        myInnerPanelConstraints.anchor = GridBagConstraints.CENTER;
+        myInnerPanelConstraints.gridx = 0;
+        myInnerPanelConstraints.gridy = 0;
 
         add(myInnerPanel, BorderLayout.EAST);
     }
 
-    private void selectBackground() {
-        if (myIsVictory) {
-            setBackground(Color.BLACK); // change to victory background
-        } else {
-            setBackground(Color.BLACK); // change to defeat background
-        }
+    public void updatePanel(final boolean theResult) {
+        myResult = theResult;
+
+        myInnerPanel.removeAll();
+        myInnerPanel.revalidate();
+        myInnerPanel.repaint();
+
+        setupInnerPanel();
     }
 
-    private void setupInnerPanel(final GridBagConstraints theConstraints) {
-        if (myIsVictory) {
-            addText(new String[] {"Victory!"}, 55, theConstraints);
-            addText(myVictoryText, 12, theConstraints);
-            addText(myVictoryStatsText, 12, theConstraints);
+    private void setupInnerPanel() {
+        String[] playerStats = myGameListener.getPlayerStatistics();
+        if (myResult) {
+            addText(new String[] {"Victory!"}, 55);
+            addText(myVictoryText, 15);
+            addText(playerStats, 12);
+            addText(myVictoryStatsText, 15);
         } else {
-            addText(new String[] {"Defeat"}, 55, theConstraints);
-            addText(myDefeatText, 12, theConstraints);
-            addText(myDefeatStatsText, 12, theConstraints);
+            addText(new String[] {"Defeat"}, 55);
+            addText(myDefeatText, 15);
+            addText(playerStats, 12);
+            addText(myDefeatStatsText, 15);
         }
 
         formatButtons();
-        addButtons(theConstraints);
+        addButtons();
     }
 
-    private void addText(final String[] theText, final int theFontSize, GridBagConstraints theConstraints) {
+    private void addText(final String[] theText, final int theFontSize) {
         JPanel textPanel = new JPanel(new GridBagLayout());
         textPanel.setBackground(new Color(0,0,0,0));
 
@@ -108,9 +113,8 @@ public class ResultScreenPanel extends JPanel {
             textPanel.add(textLabel, textConstraints);
             textConstraints.gridy++;
         }
-
-        myInnerPanel.add(textPanel, theConstraints);
-        theConstraints.gridy++;
+        myInnerPanel.add(textPanel, myInnerPanelConstraints);
+        myInnerPanelConstraints.gridy++;
     }
 
     private void formatButtons() {
@@ -124,7 +128,7 @@ public class ResultScreenPanel extends JPanel {
         }
     }
 
-    private void addButtons(final GridBagConstraints theConstraints) {
+    private void addButtons() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(new Color(0, 0, 0, 0));
         buttonPanel.setLayout(new GridBagLayout());
@@ -141,16 +145,32 @@ public class ResultScreenPanel extends JPanel {
             buttonConstraints.gridy++;
 
             if (i == 0) {
-                myButtons[i].addActionListener(e -> myGameListener.startPreparation());
-            } else if (i == 1) {
                 myButtons[i].addActionListener(e -> myGameListener.startMainMenu());
-            } else if (i == 2) {
+            } else if (i == 1) {
                 myButtons[i].addActionListener(e -> {});
             } else {
                 myButtons[i].addActionListener(e -> System.exit(0));
             }
         }
+        myInnerPanel.add(buttonPanel, myInnerPanelConstraints);
+    }
 
-        myInnerPanel.add(buttonPanel, theConstraints);
+    @Override
+    protected void paintComponent(final Graphics theGraphics) {
+        ImageIcon icon;
+        if (myResult) {
+            icon = new ImageIcon(Objects.requireNonNull(
+                    getClass().getResource("/menuScreens/winScreen96x54.png")));
+        } else {
+            icon = new ImageIcon(Objects.requireNonNull(
+                    getClass().getResource("/menuScreens/lossScreen_96x54.png")));
+        }
+
+        Image myImage = new ImageIcon(String.valueOf(icon)).getImage();
+        super.paintComponent(theGraphics);
+
+        if (myImage != null) {
+            theGraphics.drawImage(icon.getImage(), 0, 0, getWidth(), getHeight(), this);
+        }
     }
 }

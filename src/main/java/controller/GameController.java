@@ -1,9 +1,7 @@
 package controller;
 
 import model.*;
-import view.GamePanel;
 import view.MazeViewFrame;
-import view.QuestionPanel;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,12 +11,15 @@ import java.util.Objects;
 
 public class GameController implements GameListener{
 
-    private MazeViewFrame myFrame;
-    private Maze myMaze;
-    private List<Question> myQuestionList = new ArrayList<>(QuestionFactory.getQuestionsFromDatabase());
-    public GameController() {
+    private final List<Question> myQuestionList = new ArrayList<>(QuestionFactory.getQuestionsFromDatabase());
 
-    }
+    private MazeViewFrame myFrame;
+
+    private Maze myMaze;
+
+    private Player myPlayer;
+
+    public GameController() { /* do nothing */ }
 
     public void setView(MazeViewFrame theFrame) {
         this.myFrame = theFrame;
@@ -36,11 +37,16 @@ public class GameController implements GameListener{
     }
 
     @Override
-    public void startGame(String theName, int theNumRows, int theNumCols) {
+    public void startGame(int theNumRows, int theNumCols, final String thePlayerName, final int thePlayerMaxHealth) {
         List<Question> questions = new ArrayList<>(myQuestionList);
         Collections.shuffle(questions);
         myMaze = new Maze(questions, theNumRows, theNumCols);
         myFrame.setMaze(myMaze);
+
+        myPlayer = new Player(thePlayerName, thePlayerMaxHealth);
+        System.out.println("Player name: " + myPlayer.getName());
+        System.out.println("Player health given: " + thePlayerMaxHealth);
+        System.out.println("Player health received: " + myPlayer.getHealthCount());
     }
 
     @Override
@@ -93,7 +99,6 @@ public class GameController implements GameListener{
         Room selectedRoom = myMaze.getCurrentlySelectedRoom();
         Question question = selectedRoom.getQuestion();
 
-
         boolean correct;
         switch (question) {
             case MultipleChoiceQuestion m -> correct = m.getAnswer().equals(theAnswer);
@@ -103,19 +108,34 @@ public class GameController implements GameListener{
         }
 
         if (correct) {
-            // Right answer, mark the room complete
+            if (selectedRoom.isEndpoint()) {
+                System.out.println("--- PLAYER REACHED END POINT ---");
+                myFrame.updatePlayerResult(true);
+                startResult();
+                return true;
+            }
             selectedRoom.setVisibility(0);
         } else {
             // Wrong answer, remove 1 life
+            if (myPlayer.getHealthCount() == 0) {
+                myFrame.updatePlayerResult(false);
+                startResult();
+                return false;
+            }
         }
-
 
         myFrame.setMaze(myMaze);
         return correct;
     }
 
     @Override
-    public void startResult() { myFrame.setResultScreen(); }
+    public void startResult() {
+        /* to test result screens */
+//        myFrame.updatePlayerResult(true);
+//        myFrame.updatePlayerResult(false);
+        /* ---------------------- */
+        myFrame.setResultScreen();
+    }
 
     @Override
     public void onRoomClicked(final Room theRoom) {
@@ -128,5 +148,15 @@ public class GameController implements GameListener{
         myFrame.setMaze(myMaze);
     }
 
-
+    @Override
+    public String[] getPlayerStatistics() {
+        String[] playerStats = new String[4]; // four main stats
+        playerStats[0] = "Player name: " + myPlayer.getName();
+        playerStats[1] = "Health left: " + myPlayer.getHealthCount() + " out of " + myPlayer.getMaxHealthCount();
+        /* last two elements won't be used, they are just an example */
+        playerStats[2] = "Hints left: " + myPlayer.getHintsUsed() + " out of " + myPlayer.getMaxHintCount();
+        playerStats[3] = "Rooms discovered: " + myPlayer.getRoomsDiscovered();
+        /* --------------------------------------------------------- */
+        return playerStats;
+    }
 }
