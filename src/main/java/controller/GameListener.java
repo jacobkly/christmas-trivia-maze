@@ -15,4 +15,6 @@ public interface GameListener {
    void startResult();
 
    void onRoomClicked(Room theRoom);
+
+   String[] getPlayerStatistics();
 }

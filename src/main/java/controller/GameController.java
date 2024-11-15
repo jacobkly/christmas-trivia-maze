@@ -82,7 +82,13 @@ public class GameController implements GameListener{
     }
 
     @Override
-    public void startResult() { myFrame.setResultScreen(); }
+    public void startResult() {
+        /* to test result screens */
+//        myFrame.updatePlayerResult(true);
+//        myFrame.updatePlayerResult(false);
+        /* ---------------------- */
+        myFrame.setResultScreen();
+    }
 
     @Override
     public void onRoomClicked(final Room theRoom) {
@@ -93,5 +99,17 @@ public class GameController implements GameListener{
 
         theRoom.setHigLig(true);
         myFrame.setMaze(myMaze);
+    }
+
+    @Override
+    public String[] getPlayerStatistics() {
+        String[] playerStats = new String[4]; // four main stats
+        playerStats[0] = "Player name: " + myPlayer.getName();
+        playerStats[1] = "Health left: " + myPlayer.getHealthCount() + " out of " + myPlayer.getMaxHealthCount();
+        /* last two elements won't be used, they are just an example */
+        playerStats[2] = "Hints left: " + myPlayer.getHintsUsed() + " out of " + myPlayer.getMaxHintCount();
+        playerStats[3] = "Rooms discovered: " + myPlayer.getRoomsDiscovered();
+        /* --------------------------------------------------------- */
+        return playerStats;
     }
 }
