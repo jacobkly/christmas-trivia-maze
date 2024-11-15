@@ -17,6 +17,7 @@ public class Player {
     public Player(final String theName, final int theMaxHealth) {
         myName = theName;
         myMaxHealth = theMaxHealth;
+        myHealthCount = theMaxHealth;
     }
 
     public String getName() {

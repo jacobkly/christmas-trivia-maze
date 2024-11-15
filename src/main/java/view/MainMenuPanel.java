@@ -1,12 +1,9 @@
 package view;
 
 import controller.GameListener;
-import model.Player;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Objects;
 
 public class MainMenuPanel extends JPanel {
@@ -82,7 +79,6 @@ public class MainMenuPanel extends JPanel {
         }
     }
 
-
     private void addButtons(final GridBagConstraints theConstraints) {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(new Color(0, 0, 0, 0));
@@ -101,7 +97,6 @@ public class MainMenuPanel extends JPanel {
 
             if (i == 0) {
                 myButtons[i].addActionListener(e -> myGameListener.startPreparation());
-//                myButtons[i].addActionListener(e -> myGameListener.startResult()); // for testing the result screen
             } else if (i == 3) {
                 myButtons[i].addActionListener(e -> System.exit(0));
             }
@@ -113,7 +108,7 @@ public class MainMenuPanel extends JPanel {
     @Override
     protected void paintComponent(final Graphics theGraphics) {
         ImageIcon myIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(
-                "/startScreenImage/mainMenu_96x54.png")));
+                "/menuScreens/mainMenu_96x54.png")));
         Image myImage = new ImageIcon(String.valueOf(myIcon)).getImage();
         super.paintComponent(theGraphics);
 
@@ -121,5 +116,4 @@ public class MainMenuPanel extends JPanel {
             theGraphics.drawImage(myIcon.getImage(), 0, 0, getWidth(), getHeight(), this);
         }
     }
-
 }
