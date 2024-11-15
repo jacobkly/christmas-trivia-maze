@@ -1,10 +1,19 @@
 package model;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Maze {
+public class Maze implements Serializable {
+    /**
+     * The serialVersionUID for this object.
+     */
+    private static final long serialVersionUID = 1L;
 
+    /**
+     * The inverse directions for North, East, South and West for room doors.
+     */
     private static final int[] NESW_INVERSE = new int[]{2, 3, 0, 1};
+
     /**
      * The 2D array of rooms in the maze.
      */

@@ -2,6 +2,7 @@ package model;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -21,15 +22,19 @@ import java.util.*;
 /**
  * Models the rooms of the maze.
  */
-public class Room {
+public class Room implements Serializable {
+
+    /** The serialVersionUID for this object. */
+    private static final long serialVersionUID = 1L;
+
     /** The letters corrosponding to an array. */
     private static final char[] NESW_NUMS = new char[]{'n', 'e', 's', 'w'};
 
     /** The strings corrosponding to possible room fills. */
     private static final String[] FILL_Strings = new String[]{"lndsc", "santa", "tree"};
 
-    /** The images used for highlighting. */
-    private final Image[] myHigLig;
+    /** The images used for highlighting, stored as the file locations. */
+    private final String[] myHigLig;
 
     /** The boolean array for the precense(true)/abcense(false) of doors. */
     private final boolean[] myNESWDoors;
@@ -37,11 +42,8 @@ public class Room {
     /** The question that locks this room. */
     private Question myQuestion;
 
-    /** The image representation of this room, stored in render order. */
-    private final Image[] myNESWRoom;
-
-    /** The ImageMerger that will help create the room image. */
-    private final RoomImageMerger myRoomImageMerger;
+    /** The image representation of this room, stored in render order and with the file locations. */
+    private final String[] myNESWRoom;
 
     /** a int that tracks the correct fill of this room.  */
     private final int myFillNum;
@@ -51,6 +53,8 @@ public class Room {
 
     /** Holds whether this room is an endpoint.  */
     private boolean myIsEndpoint = false;
+
+    /** Holds whether this room is the starting point. */
     private boolean myStart = false;
 
 
@@ -64,9 +68,8 @@ public class Room {
         Random random = new Random();
         myFillNum = random.nextInt(3);
 
-        myRoomImageMerger = new RoomImageMerger();
-        myNESWRoom = new Image[6];
-        myHigLig = new Image[2];
+        myNESWRoom = new String[6];
+        myHigLig = new String[2];
         pullHigLigImages();
         setHigLig(false);
 
@@ -85,10 +88,8 @@ public class Room {
      * pulls the possible highlight images from the files and stores them.
      */
     private void pullHigLigImages() {
-        myHigLig[0] = new ImageIcon(Objects.requireNonNull(getClass().
-                getResource("/roomFiles/roomHigLig/roomNoHigLig.png"))).getImage();
-        myHigLig[1] = new ImageIcon(Objects.requireNonNull(getClass().
-                getResource("/roomFiles/roomHigLig/roomWiHigLig.png"))).getImage();
+        myHigLig[0] = "/roomFiles/roomHigLig/roomNoHigLig.png";
+        myHigLig[1] = "/roomFiles/roomHigLig/roomWiHigLig.png";
     }
 
     /**
@@ -111,15 +112,11 @@ public class Room {
      */
     private void updateRoomImages() {
         if(myVisibility == 0) {
-            myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
-                    getResource("/roomFiles/fillRoom/"
-                            + FILL_Strings[myFillNum] + "FillRoom.png"))).getImage();
+            myNESWRoom[4] = "/roomFiles/fillRoom/" + FILL_Strings[myFillNum] + "FillRoom.png";
         } else if(myVisibility == 1) {
-            myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
-                    getResource("/roomFiles/fillRoom/lockFillRoom.png"))).getImage();
+            myNESWRoom[4] = "/roomFiles/fillRoom/lockFillRoom.png";
         } else {
-            myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
-                    getResource("/roomFiles/fillRoom/mystFillRoom.png"))).getImage();
+            myNESWRoom[4] = "/roomFiles/fillRoom/mystFillRoom.png";
         }
     }
 
@@ -155,7 +152,7 @@ public class Room {
         } else {
             result += "noDoor/" + NESW_NUMS[theNESW] + "NoDoor.png";
         }
-        myNESWRoom[theNESW] = new ImageIcon(Objects.requireNonNull(getClass().getResource(result))).getImage();
+        myNESWRoom[theNESW] = result;
     }
 
     /**
@@ -199,7 +196,7 @@ public class Room {
      */
     public Image getRoomImage() {
         updateRoomImages();
-        return myRoomImageMerger.MergeImage(myNESWRoom);
+        return RoomImageMerger.MergeImage(myNESWRoom);
     }
 
 //    /**

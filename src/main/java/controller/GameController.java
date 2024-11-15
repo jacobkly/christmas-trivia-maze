@@ -5,9 +5,11 @@ import view.GamePanel;
 import view.MazeViewFrame;
 import view.QuestionPanel;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class GameController implements GameListener{
 
@@ -38,6 +40,51 @@ public class GameController implements GameListener{
         List<Question> questions = new ArrayList<>(myQuestionList);
         Collections.shuffle(questions);
         myMaze = new Maze(questions, theNumRows, theNumCols);
+        myFrame.setMaze(myMaze);
+    }
+
+    @Override
+    public void saveGame(final Maze theMaze) {
+        try {
+            File file = new File(Objects.requireNonNull
+                    (this.getClass().getResource("/savedGames/savedMaze.ser")).getPath());
+            FileOutputStream fileOut = new FileOutputStream(file);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(theMaze);
+            out.close();
+            fileOut.close();
+            System.out.print("Serialized data is saved in /savedGames/savedMaze.ser");
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+    }
+
+    @Override
+    public void resumeGame() {
+        Maze maze = null;
+        try {
+            // currently would produce error if the file does not exist.
+            File file = new File(Objects.requireNonNull
+                    (this.getClass().getResource("/savedGames/savedMaze.ser")).getPath());
+
+            FileInputStream fileIn = new FileInputStream(file);
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            maze = (Maze) in.readObject();
+            in.close();
+            fileIn.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        }
+        catch (IOException i) {
+            i.printStackTrace();
+            return;
+        } catch (ClassNotFoundException c) {
+            System.out.println("Maze class not found");
+            c.printStackTrace();
+            return;
+        }
+
+        myMaze = maze;
         myFrame.setMaze(myMaze);
     }
 
