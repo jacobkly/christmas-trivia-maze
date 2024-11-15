@@ -10,7 +10,7 @@ public class ResultScreenPanel extends JPanel {
 
     private final static String[] myVictoryText = new String[] {
             "Ho ho ho!",
-            "You've reached the North Pole!",
+            "You've reached the North Pole.",
             "Welcome to my workshop!"
     };
 
@@ -20,15 +20,14 @@ public class ResultScreenPanel extends JPanel {
     };
 
     private final static String[] myDefeatText = new String[] {
-            "Bah! Humbag!",
-            "You couldn't even answer a simple question about Christmas?",
-            "What a Christmas Crook."
+            "Woah...",
+            "Looks like something went wrong.",
+            "Better luck next time!"
     };
 
     private final static String[] myDefeatStatsText = new String[] {
-            "Well, these stats are a Christmas catastrophe.",
-            "Time to hit the books and level up your holiday IQ.",
-            "Or maybe just stick to easier games..."
+            "Oh dear, these stats look frosty!",
+            "It's time to brush up your trivia."
     };
 
     private final GameListener myGameListener;
@@ -38,7 +37,6 @@ public class ResultScreenPanel extends JPanel {
     private final GridBagConstraints myInnerPanelConstraints;
 
     private final JButton[] myButtons = {
-            new JButton("New Game"),
             new JButton("Main Menu"),
             new JButton("Settings"),
             new JButton("Exit")
@@ -59,11 +57,10 @@ public class ResultScreenPanel extends JPanel {
         myInnerPanel.setLayout(new GridBagLayout());
 
         myInnerPanelConstraints = new GridBagConstraints();
-        myInnerPanelConstraints.insets = new Insets(10,10,10,10);
+        myInnerPanelConstraints.insets = new Insets(10,10,10,80);
         myInnerPanelConstraints.anchor = GridBagConstraints.CENTER;
         myInnerPanelConstraints.gridx = 0;
         myInnerPanelConstraints.gridy = 0;
-        setupInnerPanel();
 
         add(myInnerPanel, BorderLayout.EAST);
     }
@@ -79,14 +76,17 @@ public class ResultScreenPanel extends JPanel {
     }
 
     private void setupInnerPanel() {
+        String[] playerStats = myGameListener.getPlayerStatistics();
         if (myResult) {
             addText(new String[] {"Victory!"}, 55);
-            addText(myVictoryText, 12);
-            addText(myVictoryStatsText, 12);
+            addText(myVictoryText, 15);
+            addText(playerStats, 12);
+            addText(myVictoryStatsText, 15);
         } else {
             addText(new String[] {"Defeat"}, 55);
-            addText(myDefeatText, 12);
-            addText(myDefeatStatsText, 12);
+            addText(myDefeatText, 15);
+            addText(playerStats, 12);
+            addText(myDefeatStatsText, 15);
         }
 
         formatButtons();
@@ -113,7 +113,6 @@ public class ResultScreenPanel extends JPanel {
             textPanel.add(textLabel, textConstraints);
             textConstraints.gridy++;
         }
-
         myInnerPanel.add(textPanel, myInnerPanelConstraints);
         myInnerPanelConstraints.gridy++;
     }
@@ -146,10 +145,8 @@ public class ResultScreenPanel extends JPanel {
             buttonConstraints.gridy++;
 
             if (i == 0) {
-                myButtons[i].addActionListener(e -> myGameListener.startPreparation());
-            } else if (i == 1) {
                 myButtons[i].addActionListener(e -> myGameListener.startMainMenu());
-            } else if (i == 2) {
+            } else if (i == 1) {
                 myButtons[i].addActionListener(e -> {});
             } else {
                 myButtons[i].addActionListener(e -> System.exit(0));

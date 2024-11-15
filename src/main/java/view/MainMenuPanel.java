@@ -97,6 +97,8 @@ public class MainMenuPanel extends JPanel {
 
             if (i == 0) {
                 myButtons[i].addActionListener(e -> myGameListener.startPreparation());
+            } else if (i == 2) {
+                myButtons[i].addActionListener(e -> myGameListener.startResult());
             } else if (i == 3) {
                 myButtons[i].addActionListener(e -> System.exit(0));
             }
