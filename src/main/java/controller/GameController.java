@@ -99,13 +99,7 @@ public class GameController implements GameListener{
         Room selectedRoom = myMaze.getCurrentlySelectedRoom();
         Question question = selectedRoom.getQuestion();
 
-        boolean correct;
-        switch (question) {
-            case MultipleChoiceQuestion m -> correct = m.getAnswer().equals(theAnswer);
-            case TextInputQuestion tiq -> correct = tiq.getAnswer().equalsIgnoreCase(theAnswer);
-            case BooleanQuestion bq -> correct = bq.isAnswer() == Boolean.parseBoolean(theAnswer);
-            default -> throw new IllegalStateException("Unexpected question type");
-        }
+        boolean correct = selectedRoom.tryAnswer(theAnswer);
 
         if (correct) {
             if (selectedRoom.isEndpoint()) {
@@ -114,7 +108,6 @@ public class GameController implements GameListener{
                 startResult();
                 return true;
             }
-            selectedRoom.setVisibility(0);
         } else {
             // Wrong answer, remove 1 life
             if (myPlayer.getHealthCount() == 0) {

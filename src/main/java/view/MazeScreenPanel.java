@@ -77,7 +77,7 @@ public class MazeScreenPanel extends JPanel {
         Room selectedRoom = theMaze.getCurrentlySelectedRoom();
         if (selectedRoom != null) {
             myQuestionPanel.setQuestion(selectedRoom.getQuestion());
-            if (selectedRoom.isAnswered()) {
+            if (selectedRoom.isVisible()) {
                 myQuestionPanel.setQuestion(null);
             }
         } else {

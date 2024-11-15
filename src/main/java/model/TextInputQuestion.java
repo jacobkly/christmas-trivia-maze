@@ -12,4 +12,9 @@ public class TextInputQuestion extends Question {
     public String getAnswer() {
         return myAnswer;
     }
+
+    @Override
+    public boolean checkAnswer(String theAnswer) {
+        return getAnswer().equalsIgnoreCase(theAnswer);
+    }
 }
