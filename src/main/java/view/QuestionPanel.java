@@ -10,7 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 
 public class QuestionPanel extends JPanel {
@@ -69,9 +68,7 @@ public class QuestionPanel extends JPanel {
         public MultipleChoiceQuestionPanel(GameListener theGameListener, MultipleChoiceQuestion theQuestion) {
             setBackground(Color.BLACK);
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            List<String> answers = new ArrayList<>();
-            answers.add(theQuestion.getAnswer());
-            answers.addAll(theQuestion.getWrongAnswers());
+            List<String> answers = new ArrayList<>(theQuestion.getPossibleAnswers());
             Collections.shuffle(answers);
 
             ButtonGroup bg = new ButtonGroup();

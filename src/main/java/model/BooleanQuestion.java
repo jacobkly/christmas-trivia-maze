@@ -9,12 +9,8 @@ public class BooleanQuestion extends Question {
         answer = theAnswer;
     }
 
-    public boolean isAnswer() {
-        return answer;
-    }
-
     @Override
     public boolean checkAnswer(String theAnswer) {
-        return isAnswer() == Boolean.parseBoolean(theAnswer);
+        return answer == Boolean.parseBoolean(theAnswer);
     }
 }

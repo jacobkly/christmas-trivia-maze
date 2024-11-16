@@ -104,7 +104,6 @@ public class Maze implements Serializable {
      */
     private void mazeFirstSetup() {
         getRoom(myStartingRowCol[0], myStartingRowCol[1]).setVisibility(Room.Visibility.VISIBLE);
-        getRoom(myStartingRowCol[0], myStartingRowCol[1]).setAsStart();
         getRoom(myEndingRowCol[0], myEndingRowCol[1]).setAsEndpoint();
     }
 

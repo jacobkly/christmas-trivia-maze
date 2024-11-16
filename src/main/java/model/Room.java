@@ -53,12 +53,30 @@ public class Room implements Serializable {
         MYSTERY;
     }
 
+    /** The individual components that make up the info of a room. */
+    public enum RoomInfo {
+        NORTH_OPEN,
+        NORTH_CLOSED,
+        EAST_OPEN,
+        EAST_CLOSED,
+        SOUTH_OPEN,
+        SOUTH_CLOSED,
+        WEST_OPEN,
+        WEST_CLOSED,
+
+        LNDSC,
+        SANTA,
+        TREE,
+
+        LOCKED,
+        MYSTERY,
+
+        WIHIGLIG,
+        NOHIGLIG
+    }
+
     /** Holds whether this room is an endpoint.  */
     private boolean myIsEndpoint = false;
-
-    /** Holds whether this room is the starting point. */
-    private boolean myStart = false;
-
 
     /**
      * Creates a Room with custom values.
@@ -177,17 +195,17 @@ public class Room implements Serializable {
      * @return whether you can answer the question.
      */
     public boolean isAnswerable() {
-        return myVisibility == Visibility.LOCKED && !myStart;
+        return myVisibility == Visibility.LOCKED;
     }
 
     /**
-     * Returns the image that represent the room.
+     * Returns the image representation of this room, stored in render order and with the file locations.
      *
-     * @return the merged image.
+     * @return the image representation through file locations.
      */
-    public Image getRoomImage() {
+    public String[] getRoomImage() {
         updateRoomImages();
-        return RoomImageMerger.MergeImage(myNESWRoom);
+        return myNESWRoom;
     }
 
     /**
@@ -198,14 +216,12 @@ public class Room implements Serializable {
      * @param thePossibleAnswer the answer the user is trying.
      * @return whether the answer is correct or not.
      */
-    public boolean tryAnswer(final String thePossibleAnswer) {
+    public boolean checkAnswer(final String thePossibleAnswer) {
         if(myQuestion.checkAnswer(thePossibleAnswer)) {
             myVisibility = Visibility.VISIBLE;
         }
         return isVisible();
     }
-
-
 
     /**
      * Sets this room to be an endpoint.
@@ -214,19 +230,9 @@ public class Room implements Serializable {
         myIsEndpoint = true;
     }
 
-    public void setAsStart() {
-        myStart = true;
-    }
-
-    public boolean isStart() {
-        return myStart;
-    }
-
     /**
      * Sets the visibility of the room.
-     * 0 = fully visible
-     * 1 = partially visible
-     * 2 = not visible.
+     * Uses the enum VISIBILITY
      *
      * @param theVisibility the visibility level.
      */

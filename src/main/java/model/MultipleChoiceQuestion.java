@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MultipleChoiceQuestion extends Question {
@@ -17,16 +18,15 @@ public class MultipleChoiceQuestion extends Question {
         myWrongAnswers = theWrongAnswers;
     }
 
-    public String getAnswer() {
-        return myAnswer;
-    }
-
-    public List<String> getWrongAnswers() {
-        return myWrongAnswers;
+    public List<String> getPossibleAnswers() {
+        List<String> result = new ArrayList<String>();
+        result.add(myAnswer);
+        result.addAll(myWrongAnswers);
+        return result;
     }
 
     @Override
     public boolean checkAnswer(String theAnswer) {
-        return getAnswer().equals(theAnswer);
+        return myAnswer.equals(theAnswer);
     }
 }
