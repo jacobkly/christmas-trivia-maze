@@ -1,29 +1,28 @@
 package model;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Maze {
+/**
+ * Represents a maze that holds questions.
+ */
+public class Maze implements Serializable {
+    /** The serialVersionUID for this object. */
+    private static final long serialVersionUID = 1L;
 
+    /** The inverse directions for North, East, South and West for room doors. */
     private static final int[] NESW_INVERSE = new int[]{2, 3, 0, 1};
-    /**
-     * The 2D array of rooms in the maze.
-     */
+
+    /** The 2D array of rooms in the maze. */
     private final Room[][] myRooms;
 
-    /**
-     * The position of the starting row and starting col.
-     */
+    /** The position of the starting row and starting col. */
     private int[] myStartingRowCol;
 
-    /**
-     * The position of the ending row and ending col.
-     */
+    /** The position of the ending row and ending col. */
     private int[] myEndingRowCol;
 
-    /**
-     * The current room that is highlighted.
-     */
-//    private final int[] myCurrentRoomHigLig = new int[] {0, 0};
+    /** The current room that is highlighted. */
     private Room mySelectedRoom = null;
 
     /**
@@ -63,9 +62,9 @@ public class Maze {
         myStartingRowCol = new int[]{randomRow1, randomCol1};
 
         // Pick the second random element far away from the first
-        // the min distance is manhattan distance of half the row and col lengths.
+        // the min distance is based off of manhattan distance
         int minDistance1 = myRooms.length / 2;
-        int minDistance2 = myRooms[0].length / 2; // Define your desired minimum distance
+        int minDistance2 = myRooms[0].length / 2;
         int minDistance = minDistance1 + minDistance2;
 
         int randomRow2;
@@ -104,7 +103,7 @@ public class Maze {
      * Sets the starting and ending rooms to the correct state.
      */
     private void mazeFirstSetup() {
-        getRoom(myStartingRowCol[0], myStartingRowCol[1]).setVisibility(0);
+        getRoom(myStartingRowCol[0], myStartingRowCol[1]).setVisibility(Room.Visibility.VISIBLE);
         getRoom(myStartingRowCol[0], myStartingRowCol[1]).setAsStart();
         getRoom(myEndingRowCol[0], myEndingRowCol[1]).setAsEndpoint();
     }
@@ -193,21 +192,6 @@ public class Maze {
     }
 
     /**
-     * Carves a passage between two rooms.
-     *
-     * @param theRow1 the row number of the first room.
-     * @param theCol1 the col number of the first room.
-     * @param theRow2 the row number of the second room.
-     * @param theCol2 the col number of the second room.
-     */
-    private void carveDoor(final int theRow1, final int theCol1, final int theRow2, final int theCol2) {
-        // check if the rooms are adjacent and exist
-        // in other words, either the row or col can be different by just 1
-        // in addition, both must exist.
-
-    }
-
-    /**
      * sets the highlight status of the room.
      *
      * @param theRow the row of the room.
@@ -244,7 +228,8 @@ public class Maze {
         return col + (row * getCols());
     }
 
-    /** Update the visibility of rooms in a flattened 2d array.
+    /**
+     *  Update the visibility of rooms in a flattened 2d array.
      *  This method starts from a given starting room and travels adjacent rooms,
      *  updating their visibility based on the existence of passages between rooms.
      *  The visibility of a room is set to 1 if it has a passage from the current room,
@@ -275,11 +260,11 @@ public class Maze {
 
                 if (adjRoom != null) {
                     if (hasPassageBetween(currentRow, currentCol, adjacentRoomRow, adjacentRoomCol)) {
-                        if (adjRoom.getIsFullyVisible()) {
+                        if (adjRoom.isVisible()) {
                             roomsToVisit.push(getRoomIndex(adjacentRoomRow, adjacentRoomCol));
                         } else {
                             // Take into account answered wrong...
-                            adjRoom.setVisibility(1);
+                            adjRoom.setVisibility(Room.Visibility.LOCKED);
                         }
                     }
                     visitedRooms.add(adjacentRoomIndex);
@@ -289,44 +274,19 @@ public class Maze {
     }
 
     /**
-     * If a room is not visible, make it partiallyvisible.
-     * If a room is partially visible, do nothing.
-     * If a room is fully visible, update the visibility of adj rooms with a recursive call.
+     * Gets the number of rows in this maze.
      *
-     * @param theRow the row of the room to be checked.
-     * @param theCol the col of the room to be checked.
+     * @return the number of rows.
      */
-    private void recursiveRoomVisibilityUpdate(int theRow, int theCol) {
-        Room room = getRoom(theRow, theCol);
-        Stack<Room> roomsToVisit = new Stack<>();
-        roomsToVisit.add(room);
-
-
-        if (room.getIsFullyVisible()) {
-            int[][] theAdjRooms = getAdjacentRooms(theRow, theCol);
-            for (int i = 0; i < theAdjRooms.length; i++) {
-                Room adjRoom = getRoom(theAdjRooms[i][0], theAdjRooms[i][1]);
-                if (adjRoom != null) {
-                    if (hasPassageBetween(theRow, theCol, theAdjRooms[i][0], theAdjRooms[i][1])) {
-                        if (adjRoom.getIsFullyVisible()) {
-                            recursiveRoomVisibilityUpdate(theAdjRooms[i][0], theAdjRooms[i][1]);
-                        } else {
-                            adjRoom.setVisibility(1);
-                        }
-                    }
-                }
-            }
-
-        } else {
-            room.setVisibility(1);
-        }
-    }
-
-
     public int getRows() {
         return myRooms.length;
     }
 
+    /**
+     * Get the number of columns in this maze.
+     *
+     * @return the number of columns.
+     */
     public int getCols() {
         return myRooms[0].length;
     }

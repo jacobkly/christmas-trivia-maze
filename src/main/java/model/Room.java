@@ -1,7 +1,7 @@
 package model;
 
-import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -21,15 +21,16 @@ import java.util.*;
 /**
  * Models the rooms of the maze.
  */
-public class Room {
+public class Room implements Serializable {
+
+    /** The serialVersionUID for this object. */
+    private static final long serialVersionUID = 1L;
+
     /** The letters corrosponding to an array. */
     private static final char[] NESW_NUMS = new char[]{'n', 'e', 's', 'w'};
 
     /** The strings corrosponding to possible room fills. */
-    private static final String[] FILL_Strings = new String[]{"lndsc", "santa", "tree"};
-
-    /** The images used for highlighting. */
-    private final Image[] myHigLig;
+    private static final String[] FILL_STRINGS = new String[]{"lndsc", "santa", "tree"};
 
     /** The boolean array for the precense(true)/abcense(false) of doors. */
     private final boolean[] myNESWDoors;
@@ -37,20 +38,25 @@ public class Room {
     /** The question that locks this room. */
     private Question myQuestion;
 
-    /** The image representation of this room, stored in render order. */
-    private final Image[] myNESWRoom;
-
-    /** The ImageMerger that will help create the room image. */
-    private final RoomImageMerger myRoomImageMerger;
+    /** The image representation of this room, stored in render order and with the file locations. */
+    private final String[] myNESWRoom;
 
     /** a int that tracks the correct fill of this room.  */
     private final int myFillNum;
 
     /** Tracks the visibility status of this room, 0 is fully visible, 1 is partially visible, 2 is not visible. */
-    private int myVisibility;
+    private Visibility myVisibility;
+
+    public enum Visibility {
+        VISIBLE,
+        LOCKED,
+        MYSTERY;
+    }
 
     /** Holds whether this room is an endpoint.  */
     private boolean myIsEndpoint = false;
+
+    /** Holds whether this room is the starting point. */
     private boolean myStart = false;
 
 
@@ -60,17 +66,15 @@ public class Room {
      * @param theQuestion the question to be asked.
      */
     public Room(final Question theQuestion) {
-        myVisibility = 2;
+        myQuestion = theQuestion;
+
+        myVisibility = Visibility.MYSTERY;
+
         Random random = new Random();
         myFillNum = random.nextInt(3);
 
-        myRoomImageMerger = new RoomImageMerger();
-        myNESWRoom = new Image[6];
-        myHigLig = new Image[2];
-        pullHigLigImages();
+        myNESWRoom = new String[6];
         setHigLig(false);
-
-        myQuestion = theQuestion;
 
         myNESWDoors = new boolean[]{true, true, true, true};
         for(int i = 0; i < 4; i++) {
@@ -82,25 +86,15 @@ public class Room {
     }
 
     /**
-     * pulls the possible highlight images from the files and stores them.
-     */
-    private void pullHigLigImages() {
-        myHigLig[0] = new ImageIcon(Objects.requireNonNull(getClass().
-                getResource("/roomFiles/roomHigLig/roomNoHigLig.png"))).getImage();
-        myHigLig[1] = new ImageIcon(Objects.requireNonNull(getClass().
-                getResource("/roomFiles/roomHigLig/roomWiHigLig.png"))).getImage();
-    }
-
-    /**
      * Sets the highlight status of this room.
      *
      * @param theHigLigStatus whether the room is highlighted or not.
      */
     public void setHigLig(final boolean theHigLigStatus) {
         if(theHigLigStatus) {
-            myNESWRoom[5] = myHigLig[1];
+            myNESWRoom[5] = "/roomFiles/roomHigLig/roomWiHigLig.png";
         } else {
-            myNESWRoom[5] = myHigLig[0];
+            myNESWRoom[5] = "/roomFiles/roomHigLig/roomNoHigLig.png";
         }
     }
 
@@ -110,16 +104,12 @@ public class Room {
      *
      */
     private void updateRoomImages() {
-        if(myVisibility == 0) {
-            myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
-                    getResource("/roomFiles/fillRoom/"
-                            + FILL_Strings[myFillNum] + "FillRoom.png"))).getImage();
-        } else if(myVisibility == 1) {
-            myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
-                    getResource("/roomFiles/fillRoom/lockFillRoom.png"))).getImage();
+        if(myVisibility == Visibility.VISIBLE) {
+            myNESWRoom[4] = "/roomFiles/fillRoom/" + FILL_STRINGS[myFillNum] + "FillRoom.png";
+        } else if(myVisibility == Visibility.LOCKED) {
+            myNESWRoom[4] = "/roomFiles/fillRoom/lockFillRoom.png";
         } else {
-            myNESWRoom[4] = new ImageIcon(Objects.requireNonNull(getClass().
-                    getResource("/roomFiles/fillRoom/mystFillRoom.png"))).getImage();
+            myNESWRoom[4] = "/roomFiles/fillRoom/mystFillRoom.png";
         }
     }
 
@@ -155,7 +145,7 @@ public class Room {
         } else {
             result += "noDoor/" + NESW_NUMS[theNESW] + "NoDoor.png";
         }
-        myNESWRoom[theNESW] = new ImageIcon(Objects.requireNonNull(getClass().getResource(result))).getImage();
+        myNESWRoom[theNESW] = result;
     }
 
     /**
@@ -176,20 +166,18 @@ public class Room {
      *
      * @return whether this room is visible.
      */
-    public boolean getIsFullyVisible() {
-        return myVisibility == 0;
+    public boolean isVisible() {
+        return myVisibility == Visibility.VISIBLE;
     }
 
-    public boolean isLocked() {
-        return myVisibility == 1;
-    }
-
-    public boolean isAnswered() {
-        return myVisibility == 0;
-    }
-
+    /**
+     * Returns whether it is possible to answer the question to this room.
+     * It is answerable if the room status is "locked".
+     *
+     * @return whether you can answer the question.
+     */
     public boolean isAnswerable() {
-        return myVisibility == 1 && !myStart;
+        return myVisibility == Visibility.LOCKED && !myStart;
     }
 
     /**
@@ -199,23 +187,23 @@ public class Room {
      */
     public Image getRoomImage() {
         updateRoomImages();
-        return myRoomImageMerger.MergeImage(myNESWRoom);
+        return RoomImageMerger.MergeImage(myNESWRoom);
     }
 
-//    /**
-//     * Tries a possible answer to the question
-//     * This will also answer the question if it is correct.
-//     * If correct, it will return true.
-//     *
-//     * @param thePossibleAnswer the answer the user is trying.
-//     * @return whether the answer is correct or not.
-//     */
-//    public boolean tryAnswer(final String thePossibleAnswer) {
-//        if(myQuestion.checkAnswer(thePossibleAnswer)) {
-//            myVisibility = 0;
-//        }
-//        return getIsFullyVisible();
-//    }
+    /**
+     * Tries a possible answer to the question
+     * This will also answer the question if it is correct.
+     * If correct, it will return true.
+     *
+     * @param thePossibleAnswer the answer the user is trying.
+     * @return whether the answer is correct or not.
+     */
+    public boolean tryAnswer(final String thePossibleAnswer) {
+        if(myQuestion.checkAnswer(thePossibleAnswer)) {
+            myVisibility = Visibility.VISIBLE;
+        }
+        return isVisible();
+    }
 
 
 
@@ -242,10 +230,7 @@ public class Room {
      *
      * @param theVisibility the visibility level.
      */
-    public void setVisibility(final int theVisibility) {
-        if(theVisibility > 2 || theVisibility < 0) {
-            throw new IllegalArgumentException("Visibility must be between 0 and 2");
-        }
+    public void setVisibility(final Visibility theVisibility) {
         myVisibility = theVisibility;
     }
 

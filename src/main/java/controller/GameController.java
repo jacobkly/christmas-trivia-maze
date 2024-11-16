@@ -3,9 +3,11 @@ package controller;
 import model.*;
 import view.MazeViewFrame;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class GameController implements GameListener{
 
@@ -48,17 +50,56 @@ public class GameController implements GameListener{
     }
 
     @Override
+    public void saveGame(final Maze theMaze) {
+        try {
+            File file = new File(Objects.requireNonNull
+                    (this.getClass().getResource("/savedGames/savedMaze.ser")).getPath());
+            FileOutputStream fileOut = new FileOutputStream(file);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(theMaze);
+            out.close();
+            fileOut.close();
+            System.out.print("Serialized data is saved in /savedGames/savedMaze.ser");
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+    }
+
+    @Override
+    public void resumeGame() {
+        Maze maze = null;
+        try {
+            // currently would produce error if the file does not exist.
+            File file = new File(Objects.requireNonNull
+                    (this.getClass().getResource("/savedGames/savedMaze.ser")).getPath());
+
+            FileInputStream fileIn = new FileInputStream(file);
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            maze = (Maze) in.readObject();
+            in.close();
+            fileIn.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        }
+        catch (IOException i) {
+            i.printStackTrace();
+            return;
+        } catch (ClassNotFoundException c) {
+            System.out.println("Maze class not found");
+            c.printStackTrace();
+            return;
+        }
+
+        myMaze = maze;
+        myFrame.setMaze(myMaze);
+    }
+
+    @Override
     public boolean checkAnswer(final String theAnswer) {
         Room selectedRoom = myMaze.getCurrentlySelectedRoom();
         Question question = selectedRoom.getQuestion();
 
-        boolean correct;
-        switch (question) {
-            case MultipleChoiceQuestion m -> correct = m.getAnswer().equals(theAnswer);
-            case TextInputQuestion tiq -> correct = tiq.getAnswer().equalsIgnoreCase(theAnswer);
-            case BooleanQuestion bq -> correct = bq.isAnswer() == Boolean.parseBoolean(theAnswer);
-            default -> throw new IllegalStateException("Unexpected question type");
-        }
+        boolean correct = selectedRoom.tryAnswer(theAnswer);
 
         if (correct) {
             if (selectedRoom.isEndpoint()) {
@@ -67,7 +108,6 @@ public class GameController implements GameListener{
                 startResult();
                 return true;
             }
-            selectedRoom.setVisibility(0);
         } else {
             // Wrong answer, remove 1 life
             if (myPlayer.getHealthCount() == 0) {

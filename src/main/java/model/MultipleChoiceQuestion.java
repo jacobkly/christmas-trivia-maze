@@ -24,4 +24,9 @@ public class MultipleChoiceQuestion extends Question {
     public List<String> getWrongAnswers() {
         return myWrongAnswers;
     }
+
+    @Override
+    public boolean checkAnswer(String theAnswer) {
+        return getAnswer().equals(theAnswer);
+    }
 }
