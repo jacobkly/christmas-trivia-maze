@@ -1,6 +1,10 @@
 package model;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
+    /** The serialVersionUID for this object. */
+    private static final long serialVersionUID = 1L;
 
     private final static int MAX_HINT_COUNT = 3;
 
