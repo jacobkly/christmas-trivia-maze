@@ -59,11 +59,194 @@ class ModelBlackBoxTest {
     }
 
     /**
-     * Tests the image strings of the room class.
+     * Tests the updateRoomVisibility method.
      */
     @Test
-    public void testImageStrings() {
+    public void testUpdateVisibility() {
 
+    }
+
+    /**
+     * Tests the getRows and getCols methods.
+     */
+    @Test
+    public void testGetRowsGetCols() {
+
+    }
+
+    /**
+     * Tests the getCurrentlySelectedRoom functionality.
+     */
+    @Test
+    public void testGetCurrentlySelectedRoom() {
+        // use the question contained to check equivalence
+
+    }
+
+    /**
+     * Tests the setRoomHigLig functionality.
+     * Also tests the getCurrentlySelectedRoom functionality.
+     */
+    @Test
+    public void testSetRoomHigLig() {
+
+    }
+
+    /**
+     * Tests the getRoom method of the maze.
+     */
+    @Test
+    public void testGetRoom() {
+        // uses the question located in the room to test equivalence
+
+    }
+
+    /**
+     * Tests that the maze constructor works correctly.
+     */
+    @Test
+    public void testMazeConstructor() {
+        // test that each room exists through the contained questions
+
+        // test that a starting position exists (there is a landscape somewhere)
+
+        // test that an ending position exists (iterate through the rooms)
+
+        // test that borders of rooms are made properly
+    }
+
+    /**
+     * Tests the door information capabilities of RoomInfo.
+     */
+    @Test
+    public void testRoomDoorInfo() {
+        // tests default with doors
+        Room.RoomInfo[] testInfo = makeDefaultRoomInfo();
+        Room.RoomInfo[] info = myRooms[0].getRoomInfo();
+        compareRoomInfo(testInfo, info);
+
+        // removes doors
+        myRooms[0].setDoor(0, false);
+        myRooms[0].setDoor(1, false);
+        myRooms[0].setDoor(2, false);
+        myRooms[0].setDoor(3, false);
+
+        // tests that doors are gone
+        testInfo[0] = Room.RoomInfo.NORTH_CLOSED;
+        testInfo[1] = Room.RoomInfo.EAST_CLOSED;
+        testInfo[2] = Room.RoomInfo.SOUTH_CLOSED;
+        testInfo[3] = Room.RoomInfo.WEST_CLOSED;
+        info = myRooms[0].getRoomInfo();
+        compareRoomInfo(testInfo, info);
+    }
+
+    /**
+     * Tests the fill capabilities of the RoomInfo.
+     */
+    @Test
+    public void testRoomInfoFill() {
+        // visibility is default MYSTERY
+        Room.RoomInfo[] testInfo = makeDefaultRoomInfo();
+        Room.RoomInfo[] info = myRooms[0].getRoomInfo();
+        compareRoomInfo(testInfo, info);
+        // setting visibility to visible:
+        myRooms[0].setVisibility(Room.Visibility.VISIBLE);
+        info = myRooms[0].getRoomInfo();
+        assertVisible(info[4]);
+        // setting visibility to locked:
+        myRooms[0].setVisibility(Room.Visibility.LOCKED);
+        info = myRooms[0].getRoomInfo();
+        assertEquals(Room.RoomInfo.LOCKED, info[4]);
+        // setting visibility back to mystery:
+        myRooms[0].setVisibility(Room.Visibility.MYSTERY);
+        info = myRooms[0].getRoomInfo();
+        assertEquals(Room.RoomInfo.MYSTERY, info[4]);
+    }
+
+    /**
+     * asserts that the RoomInfo is one of the visible types.
+     *
+     * @param theInfo the RoomInfo.
+     */
+    private void assertVisible(Room.RoomInfo theInfo) {
+        assertNotEquals(theInfo, Room.RoomInfo.NORTH_OPEN);
+        assertNotEquals(theInfo, Room.RoomInfo.NORTH_CLOSED);
+
+        assertNotEquals(theInfo, Room.RoomInfo.EAST_OPEN);
+        assertNotEquals(theInfo, Room.RoomInfo.EAST_CLOSED);
+
+        assertNotEquals(theInfo, Room.RoomInfo.SOUTH_OPEN);
+        assertNotEquals(theInfo, Room.RoomInfo.SOUTH_CLOSED);
+
+        assertNotEquals(theInfo, Room.RoomInfo.WEST_OPEN);
+        assertNotEquals(theInfo, Room.RoomInfo.WEST_CLOSED);
+
+
+        assertNotEquals(theInfo, Room.RoomInfo.MYSTERY);
+        assertNotEquals(theInfo, Room.RoomInfo.LOCKED);
+
+        assertNotEquals(theInfo, Room.RoomInfo.NO_HIGHLIGHT);
+        assertNotEquals(theInfo, Room.RoomInfo.WITH_HIGHLIGHT);
+    }
+
+    /**
+     * Tests the roominfo of the highlighting capabilities.
+     */
+    @Test
+    public void testRoomInfoHigLig() {
+        Room.RoomInfo[] testInfo = makeDefaultRoomInfo();
+        testInfo[5] = Room.RoomInfo.WITH_HIGHLIGHT;
+        myRooms[0].setHigLig(true);
+        Room.RoomInfo[] info = myRooms[0].getRoomInfo();
+
+        compareRoomInfo(info, testInfo);
+
+        testInfo[5] = Room.RoomInfo.NO_HIGHLIGHT;
+        myRooms[0].setHigLig(false);
+        info = myRooms[0].getRoomInfo();
+
+        compareRoomInfo(info, testInfo);
+    }
+
+    /**
+     * Tests the RoomInfo of the room.
+     */
+    @Test
+    public void testRoomInfoDefault() {
+        Room.RoomInfo[] testInfo = makeDefaultRoomInfo();
+        Room.RoomInfo[] info = myRooms[0].getRoomInfo();
+        compareRoomInfo(info, testInfo);
+    }
+
+    /**
+     * Makes a default array of room information.
+     *
+     * @return a default room information array.
+     */
+    private Room.RoomInfo[] makeDefaultRoomInfo() {
+        Room.RoomInfo[] result = new Room.RoomInfo[6];
+        result[0] = Room.RoomInfo.NORTH_OPEN;
+        result[1] = Room.RoomInfo.EAST_OPEN;
+        result[2] = Room.RoomInfo.SOUTH_OPEN;
+        result[3] = Room.RoomInfo.WEST_OPEN;
+        result[4] = Room.RoomInfo.MYSTERY;
+        result[5] = Room.RoomInfo.NO_HIGHLIGHT;
+        return result;
+    }
+
+    /**
+     * Compares the room info of two seperate room info arrays.
+     *
+     * @param theInfo the room being tested.
+     * @param theTestInfo the test values to be used.
+     */
+    private void compareRoomInfo(Room.RoomInfo[] theInfo, Room.RoomInfo[] theTestInfo) {
+        assertEquals(theInfo[0], theTestInfo[0]);
+        assertEquals(theInfo[1], theTestInfo[1]);
+        assertEquals(theInfo[2], theTestInfo[2]);
+        assertEquals(theInfo[3], theTestInfo[3]);
+        assertEquals(theInfo[4], theTestInfo[4]);
+        assertEquals(theInfo[5], theTestInfo[5]);
     }
 
     /**
