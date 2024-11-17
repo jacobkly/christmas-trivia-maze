@@ -9,12 +9,8 @@ public class TextInputQuestion extends Question {
         myAnswer = theAnswer;
     }
 
-    public String getAnswer() {
-        return myAnswer;
-    }
-
     @Override
     public boolean checkAnswer(String theAnswer) {
-        return getAnswer().equalsIgnoreCase(theAnswer);
+        return myAnswer.equalsIgnoreCase(theAnswer);
     }
 }

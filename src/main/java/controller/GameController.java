@@ -99,7 +99,7 @@ public class GameController implements GameListener{
         Room selectedRoom = myMaze.getCurrentlySelectedRoom();
         Question question = selectedRoom.getQuestion();
 
-        boolean correct = selectedRoom.tryAnswer(theAnswer);
+        boolean correct = selectedRoom.checkAnswer(theAnswer);
 
         if (correct) {
             if (selectedRoom.isEndpoint()) {

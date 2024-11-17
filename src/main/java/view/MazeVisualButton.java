@@ -1,14 +1,9 @@
 package view;
 
-import model.BooleanQuestion;
-import model.MultipleChoiceQuestion;
-import model.Room;
-import model.TextInputQuestion;
+import model.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * A button that represents a grid on the maze.
@@ -40,8 +35,10 @@ public class MazeVisualButton extends JButton {
      * Updates the visual image of this button.
      */
     public void updateVisualImage() {
-        setIcon(new ImageIcon(myRoom.getRoomImage().getScaledInstance( 90, 90, Image.SCALE_SMOOTH)));
-        setDisabledIcon(new ImageIcon(myRoom.getRoomImage().getScaledInstance( 90, 90, Image.SCALE_SMOOTH)));
+        int dimension = 90;
+        Image img = RoomImageMerger.MergeImage(myRoom.getRoomImage());
+        setIcon(new ImageIcon(img.getScaledInstance( dimension, dimension, Image.SCALE_SMOOTH)));
+        setDisabledIcon(new ImageIcon(img.getScaledInstance( dimension, dimension, Image.SCALE_SMOOTH)));
         setEnabled(myRoom.isAnswerable());
     }
 
