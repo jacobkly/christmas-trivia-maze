@@ -29,4 +29,9 @@ public class MultipleChoiceQuestion extends Question {
     public boolean checkAnswer(String theAnswer) {
         return myAnswer.equals(theAnswer);
     }
+
+    @Override
+    public String getAnswer() {
+        return myAnswer;
+    }
 }

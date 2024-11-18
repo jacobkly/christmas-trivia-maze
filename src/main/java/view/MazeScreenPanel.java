@@ -2,6 +2,7 @@ package view;
 
 import controller.GameListener;
 import model.Maze;
+import model.Player;
 import model.Room;
 
 import javax.swing.*;
@@ -13,15 +14,19 @@ public class MazeScreenPanel extends JPanel {
 
     private final GamePanel myGamePanel;
     private final QuestionPanel myQuestionPanel;
-    private final StatusBarPanel myStatusBarPanel;
+    private StatusBarPanel myStatusBarPanel;
     private final KeyPanel myKeyPanel;
+    private GameListener myGameListener;
 
-    public MazeScreenPanel(GameListener myGameListener) {
+
+    public MazeScreenPanel(GameListener theGameListener) {
+        this.myGameListener = theGameListener;
 
         setSize(1200, 700);
         setLayout(new GridBagLayout());
         setBackground(Color.BLACK);
         setVisible(false);
+
 
         GridBagConstraints c = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
@@ -30,7 +35,7 @@ public class MazeScreenPanel extends JPanel {
 
         myGamePanel = new GamePanel(myGameListener);
         myQuestionPanel = new QuestionPanel(myGameListener);
-        myStatusBarPanel = new StatusBarPanel(myGameListener, 5, 3);
+        myStatusBarPanel = new StatusBarPanel(myGameListener);
         myKeyPanel = new KeyPanel(myGameListener);
 
 
@@ -71,6 +76,7 @@ public class MazeScreenPanel extends JPanel {
         add(myGamePanel, c4);
 
 
+
     }
 
     public void setMaze(final Maze theMaze) {
@@ -85,5 +91,26 @@ public class MazeScreenPanel extends JPanel {
         }
 
         myGamePanel.setMaze(theMaze);
+    }
+
+    public void setPlayer(Player thePlayer){
+
+//        remove(myStatusBarPanel);
+//        myStatusBarPanel = new StatusBarPanel(
+//                myGameListener, thePlayer.getHealthCount(),
+//                thePlayer.getHints());
+//        GridBagConstraints c2 = new GridBagConstraints();
+//        c2.gridx = 1;
+//        c2.gridy = 1;
+//        c2.anchor = SOUTHEAST;
+//        c2.insets = new Insets(5, 5, 5, 5);
+//        c2.weightx = 1.0;
+//        c2.weighty = 1.0;
+//        c2.fill = GridBagConstraints.BOTH;
+//        add(myStatusBarPanel, c2);
+
+        myStatusBarPanel.setPlayer(thePlayer);
+
+
     }
 }

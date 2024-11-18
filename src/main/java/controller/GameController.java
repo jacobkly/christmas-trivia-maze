@@ -1,6 +1,9 @@
 package controller;
 
-import model.*;
+import model.Maze;
+import model.Player;
+import model.Question;
+import model.Room;
 import view.MazeViewFrame;
 
 import java.io.*;
@@ -9,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class GameController implements GameListener{
+public class GameController implements GameListener {
 
     private final List<Question> myQuestionList = new ArrayList<>(QuestionFactory.getQuestionsFromDatabase());
 
@@ -37,13 +40,20 @@ public class GameController implements GameListener{
     }
 
     @Override
-    public void startGame(int theNumRows, int theNumCols, final String thePlayerName, final int thePlayerMaxHealth) {
+    public void startGame(
+            int theNumRows,
+            int theNumCols,
+            final String thePlayerName,
+            final int thePlayerMaxHealth,
+            final int thePlayerMaxHints
+    ) {
         List<Question> questions = new ArrayList<>(myQuestionList);
         Collections.shuffle(questions);
         myMaze = new Maze(questions, theNumRows, theNumCols);
         myFrame.setMaze(myMaze);
 
-        myPlayer = new Player(thePlayerName, thePlayerMaxHealth);
+        myPlayer = new Player(thePlayerName, thePlayerMaxHealth, thePlayerMaxHints);
+        myFrame.setPlayer(myPlayer);
         System.out.println("Player name: " + myPlayer.getName());
         System.out.println("Player health given: " + thePlayerMaxHealth);
         System.out.println("Player health received: " + myPlayer.getHealthCount());
@@ -80,8 +90,7 @@ public class GameController implements GameListener{
             fileIn.close();
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
-        }
-        catch (IOException i) {
+        } catch (IOException i) {
             i.printStackTrace();
             return;
         } catch (ClassNotFoundException c) {
@@ -96,10 +105,9 @@ public class GameController implements GameListener{
 
     @Override
     public boolean checkAnswer(final String theAnswer) {
+        boolean correct;
         Room selectedRoom = myMaze.getCurrentlySelectedRoom();
-        Question question = selectedRoom.getQuestion();
-
-        boolean correct = selectedRoom.checkAnswer(theAnswer);
+        correct = selectedRoom.checkAnswer(theAnswer);
 
         if (correct) {
             if (selectedRoom.isEndpoint()) {
@@ -109,15 +117,18 @@ public class GameController implements GameListener{
                 return true;
             }
         } else {
-            // Wrong answer, remove 1 life
-            if (myPlayer.getHealthCount() == 0) {
-                myFrame.updatePlayerResult(false);
-                startResult();
-                return false;
-            }
+            myPlayer.setHealthCount(myPlayer.getHealthCount() - 1);
+            myFrame.setPlayer(myPlayer);
+        }
+        // TODO merge result screen for win or loss into one method.
+        if (myPlayer.getHealthCount() == 0) {
+            myFrame.updatePlayerResult(false);
+            myFrame.setResultScreen();
+
+        } else {
+            myFrame.setMaze(myMaze);
         }
 
-        myFrame.setMaze(myMaze);
         return correct;
     }
 
@@ -152,4 +163,15 @@ public class GameController implements GameListener{
         /* --------------------------------------------------------- */
         return playerStats;
     }
+
+    @Override
+    public void useHint() {
+        if (myPlayer.getHints() > 0) {
+            myPlayer.setHints(myPlayer.getHints() - 1);
+            myFrame.setPlayer(myPlayer);
+            checkAnswer(myMaze.getCurrentlySelectedRoom().getQuestion().getAnswer());
+        }
+    }
+
+
 }

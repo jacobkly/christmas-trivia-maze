@@ -38,4 +38,6 @@ public abstract class Question implements Serializable {
      * @return whether the answer was correct or not.
      */
     public abstract boolean checkAnswer(String theAnswer);
+
+    public abstract String getAnswer();
 }

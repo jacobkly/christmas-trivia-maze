@@ -30,4 +30,6 @@ public class GamePanel extends JPanel {
         myMazeVisualPanel = new MazeVisualPanel(myGameListener, theMaze);
         add(myMazeVisualPanel);
     }
+
+
 }
