@@ -19,9 +19,6 @@ public class Maze implements Serializable {
     /** The position of the starting row and starting col. */
     private int[] myStartingRowCol;
 
-    /** The position of the ending row and ending col. */
-    private int[] myEndingRowCol;
-
     /** The current room that is highlighted. */
     private Room mySelectedRoom = null;
 
@@ -45,7 +42,6 @@ public class Maze implements Serializable {
         myRooms = theRooms;
 
         setStartAndEndPosition();
-        mazeFirstSetup();
         mazeBorderCreation();
     }
 
@@ -73,8 +69,10 @@ public class Maze implements Serializable {
             randomRow2 = random.nextInt(myRooms.length);
             randomCol2 = random.nextInt(myRooms[randomRow1].length);
         } while (Math.abs(randomRow1 - randomRow2) + Math.abs(randomCol1 - randomCol2) < minDistance);
-        myEndingRowCol = new int[]{randomRow2, randomCol2};
+        int[] endingRowCol = new int[]{randomRow2, randomCol2};
         System.out.println("Endpoint is: [" + randomRow2 + ", " + randomCol2 + "]");
+
+        mazeFirstSetup(endingRowCol);
     }
 
     /**
@@ -101,10 +99,12 @@ public class Maze implements Serializable {
 
     /**
      * Sets the starting and ending rooms to the correct state.
+     *
+     * @param theEndingRowCol the ending position of the maze.
      */
-    private void mazeFirstSetup() {
+    private void mazeFirstSetup(int[] theEndingRowCol) {
         getRoom(myStartingRowCol[0], myStartingRowCol[1]).setVisibility(Room.Visibility.VISIBLE);
-        getRoom(myEndingRowCol[0], myEndingRowCol[1]).setAsEndpoint();
+        getRoom(theEndingRowCol[0], theEndingRowCol[1]).setAsEndpoint();
     }
 
     /**
@@ -138,7 +138,7 @@ public class Maze implements Serializable {
      * @param theCol The col of the room to find the adjacent rooms of.
      * @return the adjacent rooms.
      */
-    public int[][] getAdjacentRooms(final int theRow, final int theCol) {
+    private int[][] getAdjacentRooms(final int theRow, final int theCol) {
         int[][] adjacentRooms = new int[4][2];
         int[][] directions = new int[][]{{theRow - 1, theCol},
                 {theRow, theCol + 1},

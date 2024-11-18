@@ -1,21 +1,7 @@
 package model;
 
-import java.awt.*;
 import java.io.Serializable;
 import java.util.*;
-
-/**
- * Room
- *  isSelected
- *  isLocked
- *  isAnswered
- *  isExit
- *  getQuestion
- *
- * RoomButton
- *   setRoom
- */
-
 
 
 /**
@@ -32,14 +18,11 @@ public class Room implements Serializable {
     /** The strings corrosponding to possible room fills. */
     private static final String[] FILL_STRINGS = new String[]{"lndsc", "santa", "tree"};
 
-    /** The boolean array for the precense(true)/abcense(false) of doors. */
-    private final boolean[] myNESWDoors;
-
     /** The question that locks this room. */
     private Question myQuestion;
 
     /** The image representation of this room, stored in render order and with the file locations. */
-    private final String[] myNESWRoom;
+    private final RoomInfo[] myNESWRoom;
 
     /** a int that tracks the correct fill of this room.  */
     private final int myFillNum;
@@ -55,25 +38,33 @@ public class Room implements Serializable {
 
     /** The individual components that make up the info of a room. */
     public enum RoomInfo {
-        NORTH_OPEN,
-        NORTH_CLOSED,
-        EAST_OPEN,
-        EAST_CLOSED,
-        SOUTH_OPEN,
-        SOUTH_CLOSED,
-        WEST_OPEN,
-        WEST_CLOSED,
+        NORTH_OPEN, // 0
+        NORTH_CLOSED, // 1
 
-        LNDSC,
-        SANTA,
-        TREE,
+        EAST_OPEN, // 2
+        EAST_CLOSED, // 3
 
-        LOCKED,
-        MYSTERY,
+        SOUTH_OPEN, // 4
+        SOUTH_CLOSED, // 5
 
-        WIHIGLIG,
-        NOHIGLIG
+        WEST_OPEN, // 6
+        WEST_CLOSED, // 7
+
+
+        LOCKED, // 8
+        MYSTERY, // 9
+
+
+        WITH_HIGHLIGHT, // 10
+        NO_HIGHLIGHT, // 11
+
+
+        LANDSCAPE, // 12
+        SANTA, // 13
+        TREE // 14
     }
+    /** Holds the RoomInfo values for easy access to their integer equivalents. */
+    private static final RoomInfo[] myRoomInfoValues = RoomInfo.values();
 
     /** Holds whether this room is an endpoint.  */
     private boolean myIsEndpoint = false;
@@ -91,15 +82,14 @@ public class Room implements Serializable {
         Random random = new Random();
         myFillNum = random.nextInt(3);
 
-        myNESWRoom = new String[6];
+        myNESWRoom = new RoomInfo[6];
         setHigLig(false);
 
-        myNESWDoors = new boolean[]{true, true, true, true};
         for(int i = 0; i < 4; i++) {
-            setDoor(i, myNESWDoors[i]);
+            setDoor(i, true);
         }
 
-        updateRoomImages();
+        updateRoomInfo();
 
     }
 
@@ -110,24 +100,24 @@ public class Room implements Serializable {
      */
     public void setHigLig(final boolean theHigLigStatus) {
         if(theHigLigStatus) {
-            myNESWRoom[5] = "/roomFiles/roomHigLig/roomWiHigLig.png";
+            myNESWRoom[5] = RoomInfo.WITH_HIGHLIGHT;
         } else {
-            myNESWRoom[5] = "/roomFiles/roomHigLig/roomNoHigLig.png";
+            myNESWRoom[5] = RoomInfo.NO_HIGHLIGHT;
         }
     }
 
 
     /**
-     * sets the images used for the room.
+     * sets the visual room info.
      *
      */
-    private void updateRoomImages() {
+    private void updateRoomInfo() {
         if(myVisibility == Visibility.VISIBLE) {
-            myNESWRoom[4] = "/roomFiles/fillRoom/" + FILL_STRINGS[myFillNum] + "FillRoom.png";
+            myNESWRoom[4] = myRoomInfoValues[myFillNum + 12];
         } else if(myVisibility == Visibility.LOCKED) {
-            myNESWRoom[4] = "/roomFiles/fillRoom/lockFillRoom.png";
+            myNESWRoom[4] = RoomInfo.LOCKED;
         } else {
-            myNESWRoom[4] = "/roomFiles/fillRoom/mystFillRoom.png";
+            myNESWRoom[4] = RoomInfo.MYSTERY;
         }
     }
 
@@ -142,7 +132,6 @@ public class Room implements Serializable {
         if(theNESW > 3 || theNESW < 0) {
             throw new IllegalArgumentException("NESW must be between 0 and 3");
         } else {
-            myNESWDoors[theNESW] = theDoor;
             setDoorVisual(theNESW, theDoor);
         }
     }
@@ -157,13 +146,11 @@ public class Room implements Serializable {
         if(theNESW > 3 || theNESW < 0) {
             throw new IllegalArgumentException("NESW must be between 0 and 3");
         }
-        String result = "/roomFiles/";
-        if (theDoor) {
-            result += "wiDoor/" + NESW_NUMS[theNESW] + "WiDoor.png";
-        } else {
-            result += "noDoor/" + NESW_NUMS[theNESW] + "NoDoor.png";
+        int result = theNESW * 2;
+        if (!theDoor) {
+            result ++;
         }
-        myNESWRoom[theNESW] = result;
+        myNESWRoom[theNESW] = myRoomInfoValues[result];
     }
 
     /**
@@ -175,7 +162,9 @@ public class Room implements Serializable {
      * @return the value of if there is a door.
      */
     public boolean getHasNESWDoor(int theNESW) {
-        return myNESWDoors[theNESW];
+        RoomInfo result = myRoomInfoValues[theNESW * 2];
+
+        return myNESWRoom[theNESW] == result;
     }
 
     /**
@@ -203,8 +192,8 @@ public class Room implements Serializable {
      *
      * @return the image representation through file locations.
      */
-    public String[] getRoomImage() {
-        updateRoomImages();
+    public RoomInfo[] getRoomInfo() {
+        updateRoomInfo();
         return myNESWRoom;
     }
 
