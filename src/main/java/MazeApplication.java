@@ -16,11 +16,7 @@ public class MazeApplication {
                  InstantiationException | IllegalAccessException e) {
             System.out.println("Look and feel not supported");
         }
-
-        ArrayList<String> songList = MusicUtil.getSongList();
-        MusicFactory musicFactory = new MusicFactory(songList);
-        MusicController musicController = new MusicController(musicFactory);
-        musicController.startPlaying();
+        setupMusic();
 
         var questionsFromDatabase = QuestionFactory.getQuestionsFromDatabase();
 
@@ -29,5 +25,12 @@ public class MazeApplication {
         controller.setView(view);
         view.setResizable(false);
         view.setVisible(true);
+    }
+
+    private static void setupMusic() throws URISyntaxException, IOException {
+        ArrayList<String> songList = MusicUtil.getSongList();
+        MusicFactory musicFactory = new MusicFactory(songList);
+        MusicController musicController = new MusicController(musicFactory);
+        musicController.startPlaying();
     }
 }
