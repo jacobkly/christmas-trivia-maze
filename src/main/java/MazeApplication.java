@@ -16,15 +16,21 @@ public class MazeApplication {
                  InstantiationException | IllegalAccessException e) {
             System.out.println("Look and feel not supported");
         }
-        ArrayList<String> songList = MusicUtil.getSongList();
-        MusicFactory musicFactory = new MusicFactory(songList);
-        MusicController musicController = new MusicController(musicFactory);
-        musicController.startPlaying();
-
-        var questionsFromDatabase = QuestionFactory.getQuestionsFromDatabase();
-
+//        var questionsFromDatabase = QuestionFactory.getQuestionsFromDatabase();
         GameController gameController = new GameController();
-        MazeViewFrame view = new MazeViewFrame(gameController, musicController);
+        ArrayList<String> songList = MusicUtil.getSongList();
+        MazeViewFrame view;
+
+        if (songList.isEmpty()) { // disable music feature
+            System.out.println("No songs found");
+            MusicController disabledMusic = new MusicController(new MusicFactory(new ArrayList<>()));
+            view = new MazeViewFrame(gameController, disabledMusic);
+        } else { // enable music feature
+            MusicFactory musicFactory = new MusicFactory(songList);
+            MusicController musicController = new MusicController(musicFactory);
+            view = new MazeViewFrame(gameController, musicController);
+            musicController.startPlaying();
+        }
         gameController.setView(view);
         view.setResizable(false);
         view.setVisible(true);
