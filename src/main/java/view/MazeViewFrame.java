@@ -1,6 +1,7 @@
 package view;
 
 import controller.GameListener;
+import controller.MusicController;
 import model.Maze;
 import model.Room;
 
@@ -8,8 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MazeViewFrame extends JFrame {
-
-    private final GameListener myGameListener;
 
     private final MainMenuPanel myMainMenuPanel;
 
@@ -19,9 +18,7 @@ public class MazeViewFrame extends JFrame {
 
     private final ResultScreenPanel myResultScreenPanel;
 
-    public MazeViewFrame(GameListener theGameListener) {
-        myGameListener = theGameListener;
-
+    public MazeViewFrame(final GameListener theGameListener, final MusicController theMusicController) {
         setTitle("Christmas Trivia Maze");
         setSize(1214, 760);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -29,10 +26,10 @@ public class MazeViewFrame extends JFrame {
         setLayout(new BorderLayout());
         setVisible(true);
 
-        myMainMenuPanel = new MainMenuPanel(myGameListener);
-        myPreparationPanel = new PreparationPanel(myGameListener);
-        myMazeScreenPanel = new MazeScreenPanel(myGameListener);
-        myResultScreenPanel = new ResultScreenPanel(myGameListener);
+        myMainMenuPanel = new MainMenuPanel(theGameListener, theMusicController);
+        myPreparationPanel = new PreparationPanel(theGameListener);
+        myMazeScreenPanel = new MazeScreenPanel(theGameListener);
+        myResultScreenPanel = new ResultScreenPanel(theGameListener);
 
         JMenuBar myMenuBar = new JMenuBar();
         JMenu myFileMenu = new JMenu("Help...");

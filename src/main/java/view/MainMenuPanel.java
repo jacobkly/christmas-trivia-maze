@@ -1,6 +1,7 @@
 package view;
 
 import controller.GameListener;
+import controller.MusicController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,6 +10,8 @@ import java.util.Objects;
 public class MainMenuPanel extends JPanel {
 
     private final GameListener myGameListener;
+
+    private final MusicController myMusicController;
 
     private final JPanel myInnerPanel;
 
@@ -19,8 +22,14 @@ public class MainMenuPanel extends JPanel {
             new JButton("Exit")
     };
 
-    public MainMenuPanel(final GameListener theGameListener) {
+    private int mySliderPosition;
+
+    public MainMenuPanel(final GameListener theGameListener, final MusicController theMusicController) {
         myGameListener = theGameListener;
+        myMusicController = theMusicController;
+        // get default slider position according to music controllers volume gain range
+        mySliderPosition = (int) (((myMusicController.getDefaultVolume() - myMusicController.getMinVolume()) /
+                                    (myMusicController.getMaxVolume() - myMusicController.getMinVolume())) * 100);
 
         setLayout(new BorderLayout());
 
@@ -96,15 +105,46 @@ public class MainMenuPanel extends JPanel {
             buttonConstraints.gridy++;
 
             if (i == 0) {
-                myButtons[i].addActionListener(e -> myGameListener.startPreparation());
+                myButtons[i].addActionListener(e -> { myGameListener.startPreparation(); repaint(); });
+            } else if (i == 1) {
+                myButtons[i].addActionListener(e -> { { } repaint(); });
             } else if (i == 2) {
-                myButtons[i].addActionListener(e -> myGameListener.startResult());
+                myButtons[i].addActionListener(e -> { volumeSlider(); repaint(); });
             } else if (i == 3) {
                 myButtons[i].addActionListener(e -> System.exit(0));
             }
         }
 
         myInnerPanel.add(buttonPanel, theConstraints);
+    }
+
+    private void volumeSlider() {
+        JSlider volumeSlider = new JSlider(0, 100, mySliderPosition);
+        volumeSlider.setMajorTickSpacing(20);
+        volumeSlider.setMinorTickSpacing(5);
+        volumeSlider.setPaintTicks(true);
+        volumeSlider.setPaintLabels(true);
+
+        JPanel sliderPanel = new JPanel();
+        sliderPanel.add(new JLabel("Volume:"));
+        sliderPanel.add(volumeSlider);
+
+        int volumeOption = JOptionPane.showConfirmDialog(
+                MainMenuPanel.this,
+                sliderPanel,
+                "Adjust Volume",
+                JOptionPane.OK_CANCEL_OPTION);
+
+        if (volumeOption == JOptionPane.OK_OPTION) {
+            mySliderPosition = volumeSlider.getValue();
+            float sliderVolumeLevel = ((float) mySliderPosition) / 100;
+            float minVolume = myMusicController.getMinVolume();
+            float maxVolume = myMusicController.getMaxVolume();
+            // converts from [0, 100] scale to [minVolume, maxVolume]
+            float newVolume = minVolume + ((maxVolume - minVolume) * sliderVolumeLevel);
+            myMusicController.setVolume(newVolume);
+            System.out.println("New Volume: " + newVolume);
+        }
     }
 
     @Override
