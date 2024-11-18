@@ -4,6 +4,7 @@ import javax.sound.sampled.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MusicFactory {
 
@@ -13,6 +14,7 @@ public class MusicFactory {
 
     public MusicFactory(final ArrayList<String> theSongList) {
         mySongList = theSongList;
+        Collections.shuffle(mySongList);
         myCurrSongIndex = 0;
     }
 
