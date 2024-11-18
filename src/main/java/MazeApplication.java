@@ -16,7 +16,6 @@ public class MazeApplication {
                  InstantiationException | IllegalAccessException e) {
             System.out.println("Look and feel not supported");
         }
-
         ArrayList<String> songList = MusicUtil.getSongList();
         MusicFactory musicFactory = new MusicFactory(songList);
         MusicController musicController = new MusicController(musicFactory);
@@ -24,9 +23,9 @@ public class MazeApplication {
 
         var questionsFromDatabase = QuestionFactory.getQuestionsFromDatabase();
 
-        GameController controller = new GameController();
-        MazeViewFrame view = new MazeViewFrame(controller);
-        controller.setView(view);
+        GameController gameController = new GameController();
+        MazeViewFrame view = new MazeViewFrame(gameController, musicController);
+        gameController.setView(view);
         view.setResizable(false);
         view.setVisible(true);
     }
