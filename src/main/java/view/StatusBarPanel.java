@@ -1,26 +1,37 @@
 package view;
 
 import controller.GameListener;
+import model.Player;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 public class StatusBarPanel extends JPanel {
 
-    public StatusBarPanel(final GameListener theGameListener, final int theHealthCount, final int theHintCount) {
 
+    private final GameListener myGameListener;
+    private final JButton myGetHint;
+    private final BufferedImage healthImage;
+    private final BufferedImage hintImage;
+    private final JPanel myHealthPanel;
+    private final JPanel myHintPanel;
+
+    public StatusBarPanel(final GameListener theGameListener) {
+
+        myGameListener = theGameListener;
         setBackground(Color.BLACK);
         setBorder(new RoundedBorder(40));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setMinimumSize(new Dimension(520, 150));
         setVisible(true);
 
-        BufferedImage healthImage;
-        BufferedImage hintImage;
+
 
         try {
             healthImage = ImageIO.read(getClass().getResource("/statusBarFiles/heart.png"));
@@ -30,29 +41,37 @@ public class StatusBarPanel extends JPanel {
         }
 
         add(Box.createVerticalGlue());
+        myHealthPanel = new JPanel();
+        myHealthPanel.setBackground(Color.BLACK);
+        add(myHealthPanel);
 
-        JPanel healthPanel = setupPanel("Life: ", healthImage, theHealthCount);
-        add(healthPanel);
+
+        add(Box.createVerticalGlue());
+        myHintPanel = new JPanel();
+        myHintPanel.setBackground(Color.BLACK);
+        add(myHintPanel);
 
         add(Box.createVerticalGlue());
 
-        JPanel hintPanel = setupPanel("Hints: ", hintImage, theHintCount);
-        add(hintPanel);
+        myGetHint = new JButton("Hint");
+        myGetHint.addActionListener(new ActionListener() {
 
-        add(Box.createVerticalGlue());
-
-        JButton getHint = new JButton("Hint");
-        getHint.setBackground(Color.BLACK);
-        getHint.setFont(Fonts.getPixelFont(12));
-        getHint.setForeground(Color.WHITE);
-        getHint.setBorder(new RoundedBorder(20, new Insets(5,5,5,5)));
-        getHint.setAlignmentX(Component.CENTER_ALIGNMENT);
-        add(getHint);
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                myGameListener.useHint();
+            }
+        });
+        myGetHint.setBackground(Color.BLACK);
+        myGetHint.setFont(Fonts.getPixelFont(12));
+        myGetHint.setForeground(Color.WHITE);
+        myGetHint.setBorder(new RoundedBorder(20, new Insets(5,5,5,5)));
+        myGetHint.setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(myGetHint);
 
         add(Box.createVerticalGlue());
     }
 
-    private JPanel setupPanel(
+    private JPanel createStatusPanel(
             final String theText,
             final BufferedImage theImage,
             final int theNumImages
@@ -86,5 +105,18 @@ public class StatusBarPanel extends JPanel {
             constraint.gridx++; // move to next pos for next image
         }
         return panel;
+    }
+
+    public void setPlayer(Player thePlayer) {
+        myHealthPanel.removeAll();
+        myHintPanel.removeAll();
+        myGetHint.setEnabled(thePlayer.getHints() > 0);
+        JPanel healthIconPanel = createStatusPanel("Life: ", healthImage, thePlayer.getHealthCount());
+        myHealthPanel.add(healthIconPanel);
+        myHealthPanel.repaint();
+
+        JPanel hintIconPanel = createStatusPanel("Hints: ", hintImage, thePlayer.getHints());
+        myHintPanel.add(hintIconPanel);
+        myHintPanel.repaint();
     }
 }

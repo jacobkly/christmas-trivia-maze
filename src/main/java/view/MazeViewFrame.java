@@ -2,6 +2,7 @@ package view;
 
 import controller.GameListener;
 import model.Maze;
+import model.Player;
 import model.Room;
 
 import javax.swing.*;
@@ -95,4 +96,11 @@ public class MazeViewFrame extends JFrame {
     public void updatePlayerResult(final boolean theResult) {
         myResultScreenPanel.updatePanel(theResult);
     }
+
+
+    public void setPlayer(Player thePlayer) {
+        myMazeScreenPanel.setPlayer(thePlayer);
+
+    }
 }
+

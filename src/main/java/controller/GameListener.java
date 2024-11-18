@@ -9,7 +9,13 @@ public interface GameListener {
 
    void startPreparation();
 
-   void startGame(int theNumRows, int theNumCols, final String thePlayerName, final int thePlayerMaxHealth);
+   void startGame(
+           int theNumRows,
+           int theNumCols,
+           String thePlayerName,
+           int thePlayerMaxHealth,
+           int thePlayerMaxHints
+   );
 
    /**
     * Saves a game by serializing the maze representation.
@@ -25,9 +31,12 @@ public interface GameListener {
 
    boolean checkAnswer(String theAnswer);
 
-   void startResult();
+   void startResult(); // TODO this is likely unnecessary.
 
    void onRoomClicked(Room theRoom);
 
-   String[] getPlayerStatistics();
+   String[] getPlayerStatistics(); // TODO This should not be here
+
+   void useHint();
+
 }

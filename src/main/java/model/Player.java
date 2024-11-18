@@ -9,22 +9,24 @@ public class Player implements Serializable {
     private final static int MAX_HINT_COUNT = 3;
 
     private final int myMaxHealth;
+    private final int myMaxHints;
 
     private String myName = "Joe";
 
     private int myHealthCount;
 
     /* delete after finished implementing hint/health processing */
-    private int myHintsUsed;
+    private int myHints;
     private int myRoomsDiscovered;
     /* --------------------------------------------------------- */
 
-    public Player(final String theName, final int theMaxHealth) {
+    public Player(final String theName, final int theMaxHealth, final int theMaxHints) {
         myName = theName;
         myMaxHealth = theMaxHealth;
         myHealthCount = theMaxHealth;
+        myMaxHints = theMaxHints;
         /* delete after finished implementing hint/health processing (default values for now) */
-        myHintsUsed = 0;
+        myHints = theMaxHints;
         myRoomsDiscovered = 0;
         /* ---------------------------------------------------------------------------------- */
     }
@@ -46,8 +48,16 @@ public class Player implements Serializable {
         }
     }
 
+    public int getHints() {
+        return myHints;
+    }
+
+    public void setHints(final int theHints) {
+        myHints = theHints;
+    }
+
     /* delete after finished implementing hint/health processing */
-    public int getHintsUsed() { return myHintsUsed; }
+    public int getHintsUsed() { return myMaxHints - myHints; }
     public int getRoomsDiscovered() { return myRoomsDiscovered; }
     /* --------------------------------------------------------- */
 }
