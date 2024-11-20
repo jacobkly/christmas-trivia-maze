@@ -85,9 +85,6 @@ public class StatusBarPanel extends JPanel {
         constraint.gridx = 0;
         constraint.gridy = 0;
 
-
-
-
         JTextArea textArea = new JTextArea(theText);
         textArea.setEditable(false);
         textArea.setBackground(Color.BLACK);

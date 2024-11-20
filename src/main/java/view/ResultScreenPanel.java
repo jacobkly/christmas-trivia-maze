@@ -1,6 +1,7 @@
 package view;
 
 import controller.GameListener;
+import controller.MusicController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,6 +33,8 @@ public class ResultScreenPanel extends JPanel {
 
     private final GameListener myGameListener;
 
+    private final MusicController myMusicController;
+
     private final JPanel myInnerPanel;
 
     private final GridBagConstraints myInnerPanelConstraints;
@@ -45,8 +48,9 @@ public class ResultScreenPanel extends JPanel {
     /** True is victory and false is defeat. */
     private boolean myResult;
 
-    public ResultScreenPanel(final GameListener theGameListener) {
+    public ResultScreenPanel(final GameListener theGameListener, final MusicController theMusicController) {
         myGameListener = theGameListener;
+        myMusicController = theMusicController;
         myResult = false;
 
         setSize(1214, 760);
@@ -144,10 +148,11 @@ public class ResultScreenPanel extends JPanel {
             buttonPanel.add(myButtons[i], buttonConstraints);
             buttonConstraints.gridy++;
 
+            // repaint() is used to bring back transparency to button after a user click
             if (i == 0) {
-                myButtons[i].addActionListener(e -> myGameListener.startMainMenu());
+                myButtons[i].addActionListener(e -> { myGameListener.startMainMenu(); repaint(); });
             } else if (i == 1) {
-                myButtons[i].addActionListener(e -> {});
+                myButtons[i].addActionListener(e -> { new VolumeSliderPanel(myMusicController); repaint(); });
             } else {
                 myButtons[i].addActionListener(e -> System.exit(0));
             }

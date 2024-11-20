@@ -172,6 +172,4 @@ public class GameController implements GameListener {
             checkAnswer(myMaze.getCurrentlySelectedRoom().getQuestion().getAnswer());
         }
     }
-
-
 }
