@@ -12,12 +12,6 @@ public class Room implements Serializable {
     /** The serialVersionUID for this object. */
     private static final long serialVersionUID = 1L;
 
-    /** The letters corrosponding to an array. */
-    private static final char[] NESW_NUMS = new char[]{'n', 'e', 's', 'w'};
-
-    /** The strings corrosponding to possible room fills. */
-    private static final String[] FILL_STRINGS = new String[]{"lndsc", "santa", "tree"};
-
     /** The question that locks this room. */
     private Question myQuestion;
 
@@ -38,6 +32,7 @@ public class Room implements Serializable {
 
     /** The individual components that make up the info of a room. */
     public enum RoomInfo {
+        // door values
         NORTH_OPEN, // 0
         NORTH_CLOSED, // 1
 
@@ -50,18 +45,28 @@ public class Room implements Serializable {
         WEST_OPEN, // 6
         WEST_CLOSED, // 7
 
-
+        // status values
         LOCKED, // 8
         MYSTERY, // 9
 
+        // extra status
+        PERM_LOCKED, // 10
+        ENDPOINT_LOCKED, // 11
 
-        WITH_HIGHLIGHT, // 10
-        NO_HIGHLIGHT, // 11
+        // Highlight values
+        WITH_HIGHLIGHT, // 12
+        NO_HIGHLIGHT, // 13
 
+        // basic values
+        LANDSCAPE, // 14
+        SANTA, // 14
+        TREE, // 16
 
-        LANDSCAPE, // 12
-        SANTA, // 13
-        TREE // 14
+        // added values
+        FIREPLACE,
+        GIFTS,
+        MOON
+
     }
     /** Holds the RoomInfo values for easy access to their integer equivalents. */
     private static final RoomInfo[] myRoomInfoValues = RoomInfo.values();
@@ -80,7 +85,7 @@ public class Room implements Serializable {
         myVisibility = Visibility.MYSTERY;
 
         Random random = new Random();
-        myFillNum = random.nextInt(3);
+        myFillNum = random.nextInt(6) + 14;
 
         myNESWRoom = new RoomInfo[6];
         setHigLig(false);
@@ -113,10 +118,10 @@ public class Room implements Serializable {
      */
     private void updateRoomInfo() {
         if(myVisibility == Visibility.VISIBLE) {
-            myNESWRoom[4] = myRoomInfoValues[myFillNum + 12];
-        } else if(myVisibility == Visibility.LOCKED) {
+            myNESWRoom[4] = myRoomInfoValues[myFillNum];
+        } else if(myVisibility == Visibility.LOCKED && myNESWRoom[4] != RoomInfo.PERM_LOCKED) {
             myNESWRoom[4] = RoomInfo.LOCKED;
-        } else {
+        } else if (myVisibility == Visibility.MYSTERY) {
             myNESWRoom[4] = RoomInfo.MYSTERY;
         }
     }
@@ -184,7 +189,7 @@ public class Room implements Serializable {
      * @return whether you can answer the question.
      */
     public boolean isAnswerable() {
-        return myVisibility == Visibility.LOCKED;
+        return myVisibility == Visibility.LOCKED && !(myNESWRoom[4] == RoomInfo.PERM_LOCKED);
     }
 
     /**
@@ -194,7 +199,11 @@ public class Room implements Serializable {
      */
     public RoomInfo[] getRoomInfo() {
         updateRoomInfo();
-        return myNESWRoom;
+        RoomInfo[] result = myNESWRoom.clone();
+        if(result[4] == RoomInfo.LOCKED && this.isEndpoint()) {
+            result[4] = RoomInfo.ENDPOINT_LOCKED;
+        }
+        return result;
     }
 
     /**
@@ -227,6 +236,16 @@ public class Room implements Serializable {
      */
     public void setVisibility(final Visibility theVisibility) {
         myVisibility = theVisibility;
+    }
+
+    /**
+     * Sets this room to be permanently inaccessable
+     */
+    public void setInaccessable() {
+        for(int i = 0; i < 4; i++) {
+            setDoor(i, false);
+        }
+        myNESWRoom[4] = RoomInfo.PERM_LOCKED;
     }
 
     /**

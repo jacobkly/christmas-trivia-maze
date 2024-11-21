@@ -60,13 +60,14 @@ public class GameController implements GameListener {
     }
 
     @Override
-    public void saveGame(final Maze theMaze) {
+    public void saveGame() {
         try {
             File file = new File(Objects.requireNonNull
                     (this.getClass().getResource("/savedGames/savedMaze.ser")).getPath());
             FileOutputStream fileOut = new FileOutputStream(file);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(theMaze);
+            out.writeObject(myMaze);
+            out.writeObject(myPlayer);
             out.close();
             fileOut.close();
             System.out.print("Serialized data is saved in /savedGames/savedMaze.ser");
@@ -78,6 +79,7 @@ public class GameController implements GameListener {
     @Override
     public void resumeGame() {
         Maze maze = null;
+        Player player = null;
         try {
             // currently would produce error if the file does not exist.
             File file = new File(Objects.requireNonNull
@@ -86,6 +88,7 @@ public class GameController implements GameListener {
             FileInputStream fileIn = new FileInputStream(file);
             ObjectInputStream in = new ObjectInputStream(fileIn);
             maze = (Maze) in.readObject();
+            player = (Player) in.readObject();
             in.close();
             fileIn.close();
         } catch (FileNotFoundException e) {

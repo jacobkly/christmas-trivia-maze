@@ -18,11 +18,9 @@ public interface GameListener {
    );
 
    /**
-    * Saves a game by serializing the maze representation.
-    *
-    * @param theMaze the maze of the game to be saved.
+    * Saves a game by serializing the maze and player representation.
     */
-   void saveGame(final Maze theMaze);
+   void saveGame();
 
    /**
     * Resumes a saved game by loading a maze from a path.
