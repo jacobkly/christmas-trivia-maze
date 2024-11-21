@@ -22,7 +22,8 @@ public class MainMenuPanel extends JPanel {
             new JButton("Exit")
     };
 
-    public MainMenuPanel(final GameListener theGameListener, final MusicController theMusicController) {
+    public MainMenuPanel(final GameListener theGameListener, final MusicController theMusicController,
+                         final VolumeSliderPanel theVolumeSliderPanel) {
         myGameListener = theGameListener;
         myMusicController = theMusicController;
 
@@ -37,17 +38,17 @@ public class MainMenuPanel extends JPanel {
         innerConstraints.anchor = GridBagConstraints.WEST;
         innerConstraints.gridx = 0;
         innerConstraints.gridy = 0;
-        setupMainPanel(innerConstraints);
+        setupMainPanel(innerConstraints, theVolumeSliderPanel);
 
         add(myInnerPanel, BorderLayout.WEST);
     }
 
-    private void setupMainPanel(final GridBagConstraints theConstraints) {
+    private void setupMainPanel(final GridBagConstraints theConstraints, final VolumeSliderPanel theVolumeSliderPanel) {
         addTitle(theConstraints);
         theConstraints.gridy++;
 
         formatButtons();
-        addButtons(theConstraints);
+        addButtons(theConstraints, theVolumeSliderPanel);
     }
 
     private void addTitle(final GridBagConstraints theConstraints) {
@@ -82,7 +83,7 @@ public class MainMenuPanel extends JPanel {
         }
     }
 
-    private void addButtons(final GridBagConstraints theConstraints) {
+    private void addButtons(final GridBagConstraints theConstraints, final VolumeSliderPanel theVolumeSliderPanel) {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(new Color(0, 0, 0, 0));
         buttonPanel.setLayout(new GridBagLayout());
@@ -104,7 +105,10 @@ public class MainMenuPanel extends JPanel {
             } else if (i == 1) {
                 myButtons[i].addActionListener(e -> { {/* the load game process here */} repaint(); });
             } else if (i == 2) {
-                myButtons[i].addActionListener(e -> { new VolumeSliderPanel(myMusicController); repaint(); });
+                myButtons[i].addActionListener(e -> {
+                    theVolumeSliderPanel.showDialog(this, "Settings");
+                    repaint();
+                });
             } else if (i == 3) {
                 myButtons[i].addActionListener(e -> System.exit(0));
             }

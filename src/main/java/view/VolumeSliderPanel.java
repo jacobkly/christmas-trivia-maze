@@ -3,12 +3,16 @@ package view;
 import controller.MusicController;
 
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 
 public class VolumeSliderPanel extends JPanel{
 
     private final MusicController myMusicController;
 
     private int mySliderPosition;
+
+    private JSlider myVolumeSlider;
 
     public VolumeSliderPanel(final MusicController theMusicController) {
         myMusicController = theMusicController;
@@ -20,30 +24,34 @@ public class VolumeSliderPanel extends JPanel{
     }
 
     private void setupPanel() {
-        JSlider volumeSlider = new JSlider(0, 100, mySliderPosition);
-        volumeSlider.setMajorTickSpacing(20);
-        volumeSlider.setMinorTickSpacing(5);
-        volumeSlider.setPaintTicks(true);
-        volumeSlider.setPaintLabels(true);
+        myVolumeSlider = new JSlider(0, 100, mySliderPosition);
+        myVolumeSlider.setMajorTickSpacing(20);
+        myVolumeSlider.setMinorTickSpacing(5);
+        myVolumeSlider.setPaintTicks(true);
+        myVolumeSlider.setPaintLabels(true);
 
         add(new JLabel("Volume:"));
-        add(volumeSlider);
+        add(myVolumeSlider);
 
+        myVolumeSlider.addChangeListener(e -> mySliderPosition = myVolumeSlider.getValue());
+    }
+
+    public void showDialog(final Component theParent, final String theTitle) {
         int volumeOption = JOptionPane.showConfirmDialog(
-                VolumeSliderPanel.this,
+                theParent,
                 this,
-                "Settings",
+                theTitle,
                 JOptionPane.OK_CANCEL_OPTION);
 
         if (volumeOption == JOptionPane.OK_OPTION) {
-            mySliderPosition = volumeSlider.getValue();
+            mySliderPosition = myVolumeSlider.getValue();
             float sliderVolumeLevel = ((float) mySliderPosition) / 100;
             float minVolume = myMusicController.getMinVolume();
             float maxVolume = myMusicController.getMaxVolume();
             // converts from [0, 100] scale to [minVolume, maxVolume]
             float newVolume = minVolume + ((maxVolume - minVolume) * sliderVolumeLevel);
             myMusicController.setVolume(newVolume);
-            System.out.println("New Volume: " + newVolume);
+            System.out.println("Vol: " + newVolume + ", Pos: " + mySliderPosition);
         }
     }
 }

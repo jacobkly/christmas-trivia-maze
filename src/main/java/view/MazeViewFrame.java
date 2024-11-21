@@ -19,6 +19,8 @@ public class MazeViewFrame extends JFrame {
 
     private final ResultScreenPanel myResultScreenPanel;
 
+    private final VolumeSliderPanel myVolumeSliderPanel;
+
     public MazeViewFrame(final GameListener theGameListener, final MusicController theMusicController) {
         setTitle("Christmas Trivia Maze");
         setSize(1214, 760);
@@ -27,10 +29,12 @@ public class MazeViewFrame extends JFrame {
         setLayout(new BorderLayout());
         setVisible(true);
 
-        myMainMenuPanel = new MainMenuPanel(theGameListener, theMusicController);
+        myVolumeSliderPanel = new VolumeSliderPanel(theMusicController);
+
+        myMainMenuPanel = new MainMenuPanel(theGameListener, theMusicController, myVolumeSliderPanel);
         myPreparationPanel = new PreparationPanel(theGameListener);
         myMazeScreenPanel = new MazeScreenPanel(theGameListener);
-        myResultScreenPanel = new ResultScreenPanel(theGameListener, theMusicController);
+        myResultScreenPanel = new ResultScreenPanel(theGameListener, theMusicController, myVolumeSliderPanel);
 
         JMenuBar myMenuBar = new JMenuBar();
         JMenu myFileMenu = new JMenu("Help...");
@@ -47,10 +51,10 @@ public class MazeViewFrame extends JFrame {
             repaint();
         });
 
-        JMenuItem settingsMenuItem = new JMenuItem("Settings");
-        myFileMenu.add(settingsMenuItem);
-        settingsMenuItem.addActionListener(e -> {
-            new VolumeSliderPanel(theMusicController);
+        JMenuItem volumeMenuItem = new JMenuItem("Volume");
+        myFileMenu.add(volumeMenuItem);
+        volumeMenuItem.addActionListener(e -> {
+            myVolumeSliderPanel.showDialog(this, "Volume");
             repaint();
         });
 
