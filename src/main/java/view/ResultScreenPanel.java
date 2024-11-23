@@ -7,53 +7,73 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
+/**
+ * A JPanel subclass that displays the result screen after the game ends, showing either a victory
+ * or defeat message along with relevant statistics.
+ *
+ * @author Jacob Klymenko
+ * @version 1.0
+ */
 public class ResultScreenPanel extends JPanel {
 
-    private final static String[] myVictoryText = new String[] {
+    /** Array of text for the victory message. */
+    private final static String[] VICTORY_TEXT = new String[] {
             "Ho ho ho!",
             "You've reached the North Pole.",
             "Welcome to my workshop!"
     };
 
-    private final static String[] myVictoryStatsText = new String[] {
+    /** Array of text for the victory statistics message. */
+    private final static String[] VICTORY_STATS_TEXT = new String[] {
             "Wow, you've been a busy elf!",
             "These stats are incredible!"
     };
 
-    private final static String[] myDefeatText = new String[] {
+    /** Array of text for the defeat message. */
+    private final static String[] DEFEAT_TEXT = new String[] {
             "Woah...",
             "Looks like something went wrong.",
             "Better luck next time!"
     };
 
-    private final static String[] myDefeatStatsText = new String[] {
+    /** Array of text for the defeat statistics message. */
+    private final static String[] DEFEAT_STATS_TEXT = new String[] {
             "Oh dear, these stats look frosty!",
             "It's time to brush up your trivia."
     };
 
+    /** The game listener responsible for game-related events. */
     private final GameListener myGameListener;
 
-    private final MusicController myMusicController;
-
+    /** The volume slider panel used for adjusting volume settings. */
     private final VolumeSliderPanel myVolumeSliderPanel;
 
+    /** The inner panel that holds the result text and buttons. */
     private final JPanel myInnerPanel;
 
+    /** The GridBagConstraints used for positioning components in the inner panel. */
     private final GridBagConstraints myInnerPanelConstraints;
 
+    /** Array of buttons for the result screen actions. */
     private final JButton[] myButtons = {
             new JButton("Main Menu"),
             new JButton("Settings"),
             new JButton("Exit")
     };
 
-    /** True is victory and false is defeat. */
+    /** A boolean indicating the result of the game: true for victory, false for defeat. */
     private boolean myResult;
 
-    public ResultScreenPanel(final GameListener theGameListener, final MusicController theMusicController,
+    /**
+     * Constructs a ResultScreenPanel with the specified game listener, music controller,
+     * and volume slider panel.
+     *
+     * @param theGameListener the listener for game events
+     * @param theVolumeSliderPanel the panel to control volume settings
+     */
+    public ResultScreenPanel(final GameListener theGameListener,
                              final VolumeSliderPanel theVolumeSliderPanel) {
         myGameListener = theGameListener;
-        myMusicController = theMusicController;
         myVolumeSliderPanel = theVolumeSliderPanel;
         myResult = false;
 
@@ -73,6 +93,11 @@ public class ResultScreenPanel extends JPanel {
         add(myInnerPanel, BorderLayout.EAST);
     }
 
+    /**
+     * Updates the panel to reflect the new result (victory or defeat).
+     *
+     * @param theResult true if the result is a victory, false if it's a defeat
+     */
     public void updatePanel(final boolean theResult) {
         myResult = theResult;
 
@@ -83,24 +108,33 @@ public class ResultScreenPanel extends JPanel {
         setupInnerPanel();
     }
 
+    /**
+     * Sets up the inner panel with the appropriate text and statistics based on the result.
+     */
     private void setupInnerPanel() {
         String[] playerStats = myGameListener.getPlayerStatistics();
         if (myResult) {
             addText(new String[] {"Victory!"}, 55);
-            addText(myVictoryText, 15);
+            addText(VICTORY_TEXT, 15);
             addText(playerStats, 12);
-            addText(myVictoryStatsText, 15);
+            addText(VICTORY_STATS_TEXT, 15);
         } else {
             addText(new String[] {"Defeat"}, 55);
-            addText(myDefeatText, 15);
+            addText(DEFEAT_TEXT, 15);
             addText(playerStats, 12);
-            addText(myDefeatStatsText, 15);
+            addText(DEFEAT_STATS_TEXT, 15);
         }
 
         formatButtons();
         addButtons();
     }
 
+    /**
+     * Adds a set of text labels to the inner panel.
+     *
+     * @param theText the array of text to display
+     * @param theFontSize the font size to use for the text
+     */
     private void addText(final String[] theText, final int theFontSize) {
         JPanel textPanel = new JPanel(new GridBagLayout());
         textPanel.setBackground(new Color(0,0,0,0));
@@ -125,6 +159,9 @@ public class ResultScreenPanel extends JPanel {
         myInnerPanelConstraints.gridy++;
     }
 
+    /**
+     * Formats the buttons on the result screen (Main Menu, Settings, Exit).
+     */
     private void formatButtons() {
         for (JButton button : myButtons) {
             button.setBackground(new Color(241, 241, 241, 175));
@@ -136,6 +173,9 @@ public class ResultScreenPanel extends JPanel {
         }
     }
 
+    /**
+     * Adds the action buttons (Main Menu, Settings, Exit) to the inner panel.
+     */
     private void addButtons() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(new Color(0, 0, 0, 0));
@@ -167,6 +207,11 @@ public class ResultScreenPanel extends JPanel {
         myInnerPanel.add(buttonPanel, myInnerPanelConstraints);
     }
 
+    /**
+     * Paints the background of the result screen with an appropriate image based on the result.
+     *
+     * @param theGraphics the graphics object to paint on
+     */
     @Override
     protected void paintComponent(final Graphics theGraphics) {
         ImageIcon icon;

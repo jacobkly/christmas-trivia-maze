@@ -12,18 +12,36 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Controls the logic and interactions of the game, coordinating between the view, player, and maze.
+ *
+ * @author Mathew Miller
+ * @author Cai Spidel
+ * @author Jacob Klymenko
+ * @version 1.0
+ */
 public class GameController implements GameListener {
 
+    /** The list of questions used in the game, fetched from the database. */
     private final List<Question> myQuestionList = new ArrayList<>(QuestionFactory.getQuestionsFromDatabase());
 
+    /** The view frame used to display the maze and other UI components. */
     private MazeViewFrame myFrame;
 
+    /** The maze representation of the game. */
     private Maze myMaze;
 
+    /** The player instance representing the user's character and stats. */
     private Player myPlayer;
 
+    /** Constructs a new GameController that does not initialize any components. */
     public GameController() { /* do nothing */ }
 
+    /**
+     * Sets the view frame for the game and starts the main menu.
+     *
+     * @param theFrame the view frame to set.
+     */
     public void setView(MazeViewFrame theFrame) {
         this.myFrame = theFrame;
         startMainMenu();
@@ -134,10 +152,6 @@ public class GameController implements GameListener {
 
     @Override
     public void startResult() {
-        /* to test result screens */
-//        myFrame.updatePlayerResult(true);
-//        myFrame.updatePlayerResult(false);
-        /* ---------------------- */
         myFrame.setResultScreen();
     }
 
@@ -157,10 +171,8 @@ public class GameController implements GameListener {
         String[] playerStats = new String[4]; // four main stats
         playerStats[0] = "Player name: " + myPlayer.getName();
         playerStats[1] = "Health left: " + myPlayer.getHealthCount() + " out of " + myPlayer.getMaxHealthCount();
-        /* last two elements won't be used, they are just an example */
         playerStats[2] = "Hints used: " + myPlayer.getHintsUsed() + " out of " + myPlayer.getMaxHintCount();
         playerStats[3] = "Rooms discovered: " + myPlayer.getRoomsDiscovered();
-        /* --------------------------------------------------------- */
         return playerStats;
     }
 
