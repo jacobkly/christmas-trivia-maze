@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
+import model.RoomEnums.*;
+
 /**
  * A class that merges 128x128 images together
  */
@@ -89,15 +91,17 @@ public class RoomImageMerger {
      * @param theRoomInfo the images to be merged, in render order.
      * @return the merged image.
      */
-    public static Image MergeImage(final Room.RoomInfo[] theRoomInfo) {
+    public static Image MergeImage(final RoomInfo[] theRoomInfo) {
         int width = 128;
         int height = 128;
 
         Image mergedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = mergedImage.getGraphics();
 
-        for (Room.RoomInfo roomInfo : theRoomInfo) {
-            graphics.drawImage(ROOM_IMAGES[roomInfo.ordinal()], 0, 0, null);
+        for (RoomInfo roomInfo : theRoomInfo) {
+            if(roomInfo != null) {
+                graphics.drawImage(ROOM_IMAGES[roomInfo.ordinal()], 0, 0, null);
+            }
         }
         graphics.dispose();
 

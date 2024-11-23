@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.util.*;
+import model.RoomEnums.*;
 
 /**
  * Represents a maze that holds questions.
@@ -9,9 +10,6 @@ import java.util.*;
 public class Maze implements Serializable {
     /** The serialVersionUID for this object. */
     private static final long serialVersionUID = 1L;
-
-    /** The inverse directions for North, East, South and West for room doors. */
-    private static final int[] NESW_INVERSE = new int[]{2, 3, 0, 1};
 
     /** The 2D array of rooms in the maze. */
     private final Room[][] myRooms;
@@ -70,7 +68,6 @@ public class Maze implements Serializable {
             randomCol2 = random.nextInt(myRooms[randomRow1].length);
         } while (Math.abs(randomRow1 - randomRow2) + Math.abs(randomCol1 - randomCol2) < minDistance);
         int[] endingRowCol = new int[]{randomRow2, randomCol2};
-        System.out.println("Endpoint is: [" + randomRow2 + ", " + randomCol2 + "]");
 
         mazeFirstSetup(endingRowCol);
     }
@@ -81,19 +78,19 @@ public class Maze implements Serializable {
     private void mazeBorderCreation() {
         // top row rooms, north wall
         for (int i = 0; i < myRooms[0].length; i++) {
-            myRooms[0][i].setDoor(0, false);
+            myRooms[0][i].setDoor(DoorDirection.NORTH, false);
         }
         // bottom row rooms, south wall
         for (int i = 0; i < myRooms[0].length; i++) {
-            myRooms[myRooms.length - 1][i].setDoor(2, false);
+            myRooms[myRooms.length - 1][i].setDoor(DoorDirection.SOUTH, false);
         }
         // first colomn rooms, west wall
         for (int i = 0; i < myRooms.length; i++) {
-            myRooms[i][0].setDoor(3, false);
+            myRooms[i][0].setDoor(DoorDirection.WEST, false);
         }
         // last clumn rooms, east wall
         for (int i = 0; i < myRooms.length; i++) {
-            myRooms[i][myRooms[0].length - 1].setDoor(1, false);
+            myRooms[i][myRooms[0].length - 1].setDoor(DoorDirection.EAST, false);
         }
     }
 
@@ -103,7 +100,7 @@ public class Maze implements Serializable {
      * @param theEndingRowCol the ending position of the maze.
      */
     private void mazeFirstSetup(int[] theEndingRowCol) {
-        getRoom(myStartingRowCol[0], myStartingRowCol[1]).setVisibility(Room.Visibility.VISIBLE);
+        getRoom(myStartingRowCol[0], myStartingRowCol[1]).setVisibility(Visibility.VISIBLE);
         getRoom(theEndingRowCol[0], theEndingRowCol[1]).setAsEndpoint();
     }
 
@@ -181,7 +178,8 @@ public class Maze implements Serializable {
             Room adjRoom = getRoom(adjacentRooms[i][0], adjacentRooms[i][1]);
             if (adjRoom != null) {
                 if (theRow2 == adjacentRooms[i][0] && theCol2 == adjacentRooms[i][1]) {
-                    if (room1.getHasNESWDoor(i) && adjRoom.getHasNESWDoor(NESW_INVERSE[i])) {
+                    if (room1.getHasNESWDoor(RoomEnums.DOOR_DIRECTIONS[i]) &&
+                            adjRoom.getHasNESWDoor(RoomEnums.inverseDoorDirection(RoomEnums.DOOR_DIRECTIONS[i]))) {
                         return true;
                     }
                 }
@@ -263,7 +261,7 @@ public class Maze implements Serializable {
                             roomsToVisit.push(getRoomIndex(adjacentRoomRow, adjacentRoomCol));
                         } else {
                             // Take into account answered wrong...
-                            adjRoom.setVisibility(Room.Visibility.LOCKED);
+                            adjRoom.setVisibility(Visibility.LOCKED);
                         }
                     }
                     visitedRooms.add(adjacentRoomIndex);

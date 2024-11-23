@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
+import model.RoomEnums.*;
 
 /**
  * Tests the model class through black box testing.
@@ -121,21 +122,21 @@ class ModelBlackBoxTest {
     @Test
     public void testRoomDoorInfo() {
         // tests default with doors
-        Room.RoomInfo[] testInfo = makeDefaultRoomInfo();
-        Room.RoomInfo[] info = myRooms[0].getRoomInfo();
+        RoomEnums.RoomInfo[] testInfo = makeDefaultRoomInfo();
+        RoomEnums.RoomInfo[] info = myRooms[0].getRoomInfo();
         compareRoomInfo(testInfo, info);
 
         // removes doors
-        myRooms[0].setDoor(0, false);
-        myRooms[0].setDoor(1, false);
-        myRooms[0].setDoor(2, false);
-        myRooms[0].setDoor(3, false);
+        myRooms[0].setDoor(RoomEnums.DoorDirection.NORTH, false);
+        myRooms[0].setDoor(RoomEnums.DoorDirection.EAST, false);
+        myRooms[0].setDoor(RoomEnums.DoorDirection.SOUTH, false);
+        myRooms[0].setDoor(RoomEnums.DoorDirection.WEST, false);
 
         // tests that doors are gone
-        testInfo[0] = Room.RoomInfo.NORTH_CLOSED;
-        testInfo[1] = Room.RoomInfo.EAST_CLOSED;
-        testInfo[2] = Room.RoomInfo.SOUTH_CLOSED;
-        testInfo[3] = Room.RoomInfo.WEST_CLOSED;
+        testInfo[0] = RoomEnums.RoomInfo.NORTH_CLOSED;
+        testInfo[1] = RoomEnums.RoomInfo.EAST_CLOSED;
+        testInfo[2] = RoomEnums.RoomInfo.SOUTH_CLOSED;
+        testInfo[3] = RoomEnums.RoomInfo.WEST_CLOSED;
         info = myRooms[0].getRoomInfo();
         compareRoomInfo(testInfo, info);
     }
@@ -146,21 +147,21 @@ class ModelBlackBoxTest {
     @Test
     public void testRoomInfoFill() {
         // visibility is default MYSTERY
-        Room.RoomInfo[] testInfo = makeDefaultRoomInfo();
-        Room.RoomInfo[] info = myRooms[0].getRoomInfo();
+        RoomEnums.RoomInfo[] testInfo = makeDefaultRoomInfo();
+        RoomEnums.RoomInfo[] info = myRooms[0].getRoomInfo();
         compareRoomInfo(testInfo, info);
         // setting visibility to visible:
-        myRooms[0].setVisibility(Room.Visibility.VISIBLE);
+        myRooms[0].setVisibility(RoomEnums.Visibility.VISIBLE);
         info = myRooms[0].getRoomInfo();
         assertVisible(info[4]);
         // setting visibility to locked:
-        myRooms[0].setVisibility(Room.Visibility.LOCKED);
+        myRooms[0].setVisibility(RoomEnums.Visibility.LOCKED);
         info = myRooms[0].getRoomInfo();
-        assertEquals(Room.RoomInfo.LOCKED, info[4]);
+        assertEquals(RoomEnums.RoomInfo.LOCKED, info[4]);
         // setting visibility back to mystery:
-        myRooms[0].setVisibility(Room.Visibility.MYSTERY);
+        myRooms[0].setVisibility(RoomEnums.Visibility.MYSTERY);
         info = myRooms[0].getRoomInfo();
-        assertEquals(Room.RoomInfo.MYSTERY, info[4]);
+        assertEquals(RoomEnums.RoomInfo.MYSTERY, info[4]);
     }
 
     /**
@@ -168,25 +169,25 @@ class ModelBlackBoxTest {
      *
      * @param theInfo the RoomInfo.
      */
-    private void assertVisible(Room.RoomInfo theInfo) {
-        assertNotEquals(theInfo, Room.RoomInfo.NORTH_OPEN);
-        assertNotEquals(theInfo, Room.RoomInfo.NORTH_CLOSED);
+    private void assertVisible(RoomEnums.RoomInfo theInfo) {
+        assertNotEquals(theInfo, RoomEnums.RoomInfo.NORTH_OPEN);
+        assertNotEquals(theInfo, RoomEnums.RoomInfo.NORTH_CLOSED);
 
-        assertNotEquals(theInfo, Room.RoomInfo.EAST_OPEN);
-        assertNotEquals(theInfo, Room.RoomInfo.EAST_CLOSED);
+        assertNotEquals(theInfo, RoomEnums.RoomInfo.EAST_OPEN);
+        assertNotEquals(theInfo, RoomEnums.RoomInfo.EAST_CLOSED);
 
-        assertNotEquals(theInfo, Room.RoomInfo.SOUTH_OPEN);
-        assertNotEquals(theInfo, Room.RoomInfo.SOUTH_CLOSED);
+        assertNotEquals(theInfo, RoomEnums.RoomInfo.SOUTH_OPEN);
+        assertNotEquals(theInfo, RoomEnums.RoomInfo.SOUTH_CLOSED);
 
-        assertNotEquals(theInfo, Room.RoomInfo.WEST_OPEN);
-        assertNotEquals(theInfo, Room.RoomInfo.WEST_CLOSED);
+        assertNotEquals(theInfo, RoomEnums.RoomInfo.WEST_OPEN);
+        assertNotEquals(theInfo, RoomEnums.RoomInfo.WEST_CLOSED);
 
 
-        assertNotEquals(theInfo, Room.RoomInfo.MYSTERY);
-        assertNotEquals(theInfo, Room.RoomInfo.LOCKED);
+        assertNotEquals(theInfo, RoomEnums.RoomInfo.MYSTERY);
+        assertNotEquals(theInfo, RoomEnums.RoomInfo.LOCKED);
 
-        assertNotEquals(theInfo, Room.RoomInfo.NO_HIGHLIGHT);
-        assertNotEquals(theInfo, Room.RoomInfo.WITH_HIGHLIGHT);
+        assertNotEquals(theInfo, RoomEnums.RoomInfo.NO_HIGHLIGHT);
+        assertNotEquals(theInfo, RoomEnums.RoomInfo.WITH_HIGHLIGHT);
     }
 
     /**
@@ -194,14 +195,14 @@ class ModelBlackBoxTest {
      */
     @Test
     public void testRoomInfoHigLig() {
-        Room.RoomInfo[] testInfo = makeDefaultRoomInfo();
-        testInfo[5] = Room.RoomInfo.WITH_HIGHLIGHT;
+        RoomEnums.RoomInfo[] testInfo = makeDefaultRoomInfo();
+        testInfo[5] = RoomEnums.RoomInfo.WITH_HIGHLIGHT;
         myRooms[0].setHigLig(true);
-        Room.RoomInfo[] info = myRooms[0].getRoomInfo();
+        RoomEnums.RoomInfo[] info = myRooms[0].getRoomInfo();
 
         compareRoomInfo(info, testInfo);
 
-        testInfo[5] = Room.RoomInfo.NO_HIGHLIGHT;
+        testInfo[5] = RoomEnums.RoomInfo.NO_HIGHLIGHT;
         myRooms[0].setHigLig(false);
         info = myRooms[0].getRoomInfo();
 
@@ -213,8 +214,8 @@ class ModelBlackBoxTest {
      */
     @Test
     public void testRoomInfoDefault() {
-        Room.RoomInfo[] testInfo = makeDefaultRoomInfo();
-        Room.RoomInfo[] info = myRooms[0].getRoomInfo();
+        RoomEnums.RoomInfo[] testInfo = makeDefaultRoomInfo();
+        RoomEnums.RoomInfo[] info = myRooms[0].getRoomInfo();
         compareRoomInfo(info, testInfo);
     }
 
@@ -223,14 +224,14 @@ class ModelBlackBoxTest {
      *
      * @return a default room information array.
      */
-    private Room.RoomInfo[] makeDefaultRoomInfo() {
-        Room.RoomInfo[] result = new Room.RoomInfo[6];
-        result[0] = Room.RoomInfo.NORTH_OPEN;
-        result[1] = Room.RoomInfo.EAST_OPEN;
-        result[2] = Room.RoomInfo.SOUTH_OPEN;
-        result[3] = Room.RoomInfo.WEST_OPEN;
-        result[4] = Room.RoomInfo.MYSTERY;
-        result[5] = Room.RoomInfo.NO_HIGHLIGHT;
+    private RoomEnums.RoomInfo[] makeDefaultRoomInfo() {
+        RoomEnums.RoomInfo[] result = new RoomEnums.RoomInfo[6];
+        result[0] = RoomEnums.RoomInfo.NORTH_OPEN;
+        result[1] = RoomEnums.RoomInfo.EAST_OPEN;
+        result[2] = RoomEnums.RoomInfo.SOUTH_OPEN;
+        result[3] = RoomEnums.RoomInfo.WEST_OPEN;
+        result[4] = RoomEnums.RoomInfo.MYSTERY;
+        result[5] = RoomEnums.RoomInfo.NO_HIGHLIGHT;
         return result;
     }
 
@@ -240,7 +241,7 @@ class ModelBlackBoxTest {
      * @param theInfo the room being tested.
      * @param theTestInfo the test values to be used.
      */
-    private void compareRoomInfo(Room.RoomInfo[] theInfo, Room.RoomInfo[] theTestInfo) {
+    private void compareRoomInfo(RoomEnums.RoomInfo[] theInfo, RoomEnums.RoomInfo[] theTestInfo) {
         assertEquals(theInfo[0], theTestInfo[0]);
         assertEquals(theInfo[1], theTestInfo[1]);
         assertEquals(theInfo[2], theTestInfo[2]);
@@ -258,15 +259,15 @@ class ModelBlackBoxTest {
         assertFalse(myRooms[0].isVisible());
         assertFalse(myRooms[0].isAnswerable());
         // setting visibility to visible:
-        myRooms[0].setVisibility(Room.Visibility.VISIBLE);
+        myRooms[0].setVisibility(RoomEnums.Visibility.VISIBLE);
         assertTrue(myRooms[0].isVisible());
         assertFalse(myRooms[0].isAnswerable());
         // setting visibility to locked:
-        myRooms[0].setVisibility(Room.Visibility.LOCKED);
+        myRooms[0].setVisibility(RoomEnums.Visibility.LOCKED);
         assertFalse(myRooms[0].isVisible());
         assertTrue(myRooms[0].isAnswerable());
         // setting visibility back to mystery:
-        myRooms[0].setVisibility(Room.Visibility.MYSTERY);
+        myRooms[0].setVisibility(RoomEnums.Visibility.MYSTERY);
         assertFalse(myRooms[0].isVisible());
         assertFalse(myRooms[0].isAnswerable());
     }
@@ -277,31 +278,22 @@ class ModelBlackBoxTest {
     @Test
     public void testSetDoor() {
         // tests default with doors
-        assertTrue(myRooms[0].getHasNESWDoor(0));
-        assertTrue(myRooms[0].getHasNESWDoor(1));
-        assertTrue(myRooms[0].getHasNESWDoor(2));
-        assertTrue(myRooms[0].getHasNESWDoor(3));
+        assertTrue(myRooms[0].getHasNESWDoor(RoomEnums.DoorDirection.NORTH));
+        assertTrue(myRooms[0].getHasNESWDoor(RoomEnums.DoorDirection.EAST));
+        assertTrue(myRooms[0].getHasNESWDoor(RoomEnums.DoorDirection.SOUTH));
+        assertTrue(myRooms[0].getHasNESWDoor(RoomEnums.DoorDirection.WEST));
 
         // removes doors
-        myRooms[0].setDoor(0, false);
-        myRooms[0].setDoor(1, false);
-        myRooms[0].setDoor(2, false);
-        myRooms[0].setDoor(3, false);
+        myRooms[0].setDoor(RoomEnums.DoorDirection.NORTH, false);
+        myRooms[0].setDoor(RoomEnums.DoorDirection.EAST, false);
+        myRooms[0].setDoor(RoomEnums.DoorDirection.SOUTH, false);
+        myRooms[0].setDoor(RoomEnums.DoorDirection.WEST, false);
 
         // tests that doors are gone
-        assertFalse(myRooms[0].getHasNESWDoor(0));
-        assertFalse(myRooms[0].getHasNESWDoor(1));
-        assertFalse(myRooms[0].getHasNESWDoor(2));
-        assertFalse(myRooms[0].getHasNESWDoor(3));
-    }
-
-    /**
-     * Tests that sending invalid values to setDoor throws an exception.
-     */
-    @Test
-    public void testSetDoorException() {
-        assertThrows(IllegalArgumentException.class, () -> myRooms[0].setDoor(-1, true));
-        assertThrows(IllegalArgumentException.class, () -> myRooms[0].setDoor(4, true));
+        assertFalse(myRooms[0].getHasNESWDoor(RoomEnums.DoorDirection.NORTH));
+        assertFalse(myRooms[0].getHasNESWDoor(RoomEnums.DoorDirection.EAST));
+        assertFalse(myRooms[0].getHasNESWDoor(RoomEnums.DoorDirection.SOUTH));
+        assertFalse(myRooms[0].getHasNESWDoor(RoomEnums.DoorDirection.WEST));
     }
 
     /**
@@ -327,10 +319,10 @@ class ModelBlackBoxTest {
         assertFalse(myRooms[0].isVisible());
         assertFalse(myRooms[0].isAnswerable());
         // myNESWDoors should be true, true, true, true.
-        assertTrue(myRooms[0].getHasNESWDoor(0));
-        assertTrue(myRooms[0].getHasNESWDoor(1));
-        assertTrue(myRooms[0].getHasNESWDoor(2));
-        assertTrue(myRooms[0].getHasNESWDoor(3));
+        assertTrue(myRooms[0].getHasNESWDoor(RoomEnums.DoorDirection.NORTH));
+        assertTrue(myRooms[0].getHasNESWDoor(RoomEnums.DoorDirection.EAST));
+        assertTrue(myRooms[0].getHasNESWDoor(RoomEnums.DoorDirection.SOUTH));
+        assertTrue(myRooms[0].getHasNESWDoor(RoomEnums.DoorDirection.WEST));
         // both end and start points are false.
         assertFalse(myRooms[0].isEndpoint());
 
