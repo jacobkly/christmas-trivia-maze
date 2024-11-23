@@ -82,9 +82,10 @@ public class MazeScreenPanel extends JPanel {
     public void setMaze(final Maze theMaze) {
         Room selectedRoom = theMaze.getCurrentlySelectedRoom();
         if (selectedRoom != null) {
-            myQuestionPanel.setQuestion(selectedRoom.getQuestion());
             if (selectedRoom.isVisible()) {
                 myQuestionPanel.setQuestion(null);
+            } else {
+                myQuestionPanel.setQuestion(selectedRoom.getQuestion());
             }
         } else {
             myQuestionPanel.setQuestion(null);
@@ -95,22 +96,8 @@ public class MazeScreenPanel extends JPanel {
 
     public void setPlayer(Player thePlayer){
 
-//        remove(myStatusBarPanel);
-//        myStatusBarPanel = new StatusBarPanel(
-//                myGameListener, thePlayer.getHealthCount(),
-//                thePlayer.getHints());
-//        GridBagConstraints c2 = new GridBagConstraints();
-//        c2.gridx = 1;
-//        c2.gridy = 1;
-//        c2.anchor = SOUTHEAST;
-//        c2.insets = new Insets(5, 5, 5, 5);
-//        c2.weightx = 1.0;
-//        c2.weighty = 1.0;
-//        c2.fill = GridBagConstraints.BOTH;
-//        add(myStatusBarPanel, c2);
-
         myStatusBarPanel.setPlayer(thePlayer);
 
-
     }
+
 }

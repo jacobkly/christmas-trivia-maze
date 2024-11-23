@@ -99,5 +99,6 @@ public class MazeViewFrame extends JFrame {
         myMazeScreenPanel.setPlayer(thePlayer);
 
     }
+
 }
 

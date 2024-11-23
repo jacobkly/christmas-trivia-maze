@@ -53,7 +53,7 @@ public class StatusBarPanel extends JPanel {
 
         add(Box.createVerticalGlue());
 
-        myGetHint = new JButton("Hint");
+        myGetHint = new JButton("Open Gift");
         myGetHint.addActionListener(new ActionListener() {
 
             @Override
@@ -115,7 +115,7 @@ public class StatusBarPanel extends JPanel {
         myHealthPanel.add(healthIconPanel);
         myHealthPanel.repaint();
 
-        JPanel hintIconPanel = createStatusPanel("Hints: ", hintImage, thePlayer.getHints());
+        JPanel hintIconPanel = createStatusPanel("Gifts: ", hintImage, thePlayer.getHints());
         myHintPanel.add(hintIconPanel);
         myHintPanel.repaint();
     }
