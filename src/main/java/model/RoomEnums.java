@@ -23,7 +23,7 @@ public class RoomEnums {
     public enum Visibility {
         VISIBLE,
         LOCKED,
-        MYSTERY;
+        MYSTERY
     }
     /** Holds the Visibility values for easy access to their integer equivalents. */
     public static final Visibility[] VISIBILITIES = Visibility.values();
@@ -87,6 +87,9 @@ public class RoomEnums {
     /** Holds the value where the fill values begin in the RoomInfos. */
     public static final int ROOM_INFO_FILL_START = 14;
 
+    /**
+     * private constructor to prevent instantiation.
+     */
     private RoomEnums() {
 
     }
@@ -97,14 +100,12 @@ public class RoomEnums {
      * @return the inverse of the direction.
      */
     public static DoorDirection inverseDoorDirection(DoorDirection theNESW) {
-        DoorDirection result = null;
-        switch (theNESW) {
-            case NORTH: result = DoorDirection.SOUTH; break;
-            case EAST: result = DoorDirection.WEST; break;
-            case SOUTH: result = DoorDirection.NORTH; break;
-            case WEST: result = DoorDirection.EAST; break;
-        }
-        return result;
+        return switch (theNESW) {
+            case NORTH -> DoorDirection.SOUTH;
+            case EAST -> DoorDirection.WEST;
+            case SOUTH -> DoorDirection.NORTH;
+            case WEST -> DoorDirection.EAST;
+        };
     }
 
 }

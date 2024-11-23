@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 import model.RoomEnums.*;
@@ -9,6 +10,7 @@ import model.RoomEnums.*;
  */
 public class Maze implements Serializable {
     /** The serialVersionUID for this object. */
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /** The 2D array of rooms in the maze. */
@@ -85,12 +87,12 @@ public class Maze implements Serializable {
             myRooms[myRooms.length - 1][i].setDoor(DoorDirection.SOUTH, false);
         }
         // first colomn rooms, west wall
-        for (int i = 0; i < myRooms.length; i++) {
-            myRooms[i][0].setDoor(DoorDirection.WEST, false);
+        for (Room[] room : myRooms) {
+            room[0].setDoor(DoorDirection.WEST, false);
         }
         // last clumn rooms, east wall
-        for (int i = 0; i < myRooms.length; i++) {
-            myRooms[i][myRooms[0].length - 1].setDoor(DoorDirection.EAST, false);
+        for (Room[] myRoom : myRooms) {
+            myRoom[myRooms[0].length - 1].setDoor(DoorDirection.EAST, false);
         }
     }
 
@@ -244,9 +246,9 @@ public class Maze implements Serializable {
             int currentRow = currentRoomIndex / getCols();
             int[][] theAdjRooms = getAdjacentRooms(currentRow, currentCol);
 
-            for (int i = 0; i < theAdjRooms.length; i++) {
-                int adjacentRoomRow = theAdjRooms[i][0];
-                int adjacentRoomCol = theAdjRooms[i][1];
+            for (int[] theAdjRoom : theAdjRooms) {
+                int adjacentRoomRow = theAdjRoom[0];
+                int adjacentRoomCol = theAdjRoom[1];
                 int adjacentRoomIndex = getRoomIndex(adjacentRoomRow, adjacentRoomCol);
                 Room adjRoom = getRoom(adjacentRoomRow, adjacentRoomCol);
 

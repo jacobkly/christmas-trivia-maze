@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 import static model.RoomEnums.*;
@@ -13,10 +14,11 @@ import static model.RoomEnums.RoomArrayValues.ROOM_HIGHLIGHT;
 public class Room implements Serializable {
 
     /** The serialVersionUID for this object. */
+    @Serial
     private static final long serialVersionUID = 3L;
 
     /** The question that locks this room. */
-    private Question myQuestion;
+    private final Question myQuestion;
 
     /** The image representation of this room, stored in render order and with the file locations. */
     private final RoomInfo[] myNESWRoom;
