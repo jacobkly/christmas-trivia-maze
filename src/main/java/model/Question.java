@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -8,10 +9,11 @@ import java.io.Serializable;
 public abstract class Question implements Serializable {
 
     /** The serialVersionUID for this object. */
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /** The prompt of this question. */
-    private String myPrompt;
+    private final String myPrompt;
 
     /**
      * Constructs a question.

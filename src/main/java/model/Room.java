@@ -1,7 +1,11 @@
 package model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
+import static model.RoomEnums.*;
+import static model.RoomEnums.RoomArrayValues.ROOM_FILL;
+import static model.RoomEnums.RoomArrayValues.ROOM_HIGHLIGHT;
 
 
 /**
@@ -10,16 +14,11 @@ import java.util.*;
 public class Room implements Serializable {
 
     /** The serialVersionUID for this object. */
-    private static final long serialVersionUID = 1L;
-
-    /** The letters corrosponding to an array. */
-    private static final char[] NESW_NUMS = new char[]{'n', 'e', 's', 'w'};
-
-    /** The strings corrosponding to possible room fills. */
-    private static final String[] FILL_STRINGS = new String[]{"lndsc", "santa", "tree"};
+    @Serial
+    private static final long serialVersionUID = 3L;
 
     /** The question that locks this room. */
-    private Question myQuestion;
+    private final Question myQuestion;
 
     /** The image representation of this room, stored in render order and with the file locations. */
     private final RoomInfo[] myNESWRoom;
@@ -29,42 +28,6 @@ public class Room implements Serializable {
 
     /** Tracks the visibility status of this room, 0 is fully visible, 1 is partially visible, 2 is not visible. */
     private Visibility myVisibility;
-
-    public enum Visibility {
-        VISIBLE,
-        LOCKED,
-        MYSTERY;
-    }
-
-    /** The individual components that make up the info of a room. */
-    public enum RoomInfo {
-        NORTH_OPEN, // 0
-        NORTH_CLOSED, // 1
-
-        EAST_OPEN, // 2
-        EAST_CLOSED, // 3
-
-        SOUTH_OPEN, // 4
-        SOUTH_CLOSED, // 5
-
-        WEST_OPEN, // 6
-        WEST_CLOSED, // 7
-
-
-        LOCKED, // 8
-        MYSTERY, // 9
-
-
-        WITH_HIGHLIGHT, // 10
-        NO_HIGHLIGHT, // 11
-
-
-        LANDSCAPE, // 12
-        SANTA, // 13
-        TREE // 14
-    }
-    /** Holds the RoomInfo values for easy access to their integer equivalents. */
-    private static final RoomInfo[] myRoomInfoValues = RoomInfo.values();
 
     /** Holds whether this room is an endpoint.  */
     private boolean myIsEndpoint = false;
@@ -80,13 +43,13 @@ public class Room implements Serializable {
         myVisibility = Visibility.MYSTERY;
 
         Random random = new Random();
-        myFillNum = random.nextInt(3);
+        myFillNum = random.nextInt(ROOM_INFOS.length - ROOM_INFO_FILL_START) + ROOM_INFO_FILL_START;
 
-        myNESWRoom = new RoomInfo[6];
+        myNESWRoom = new RoomInfo[ROOM_ARRAY_VALUES.length];
         setHigLig(false);
 
         for(int i = 0; i < 4; i++) {
-            setDoor(i, true);
+            setDoor(DOOR_DIRECTIONS[i], true);
         }
 
         updateRoomInfo();
@@ -100,24 +63,23 @@ public class Room implements Serializable {
      */
     public void setHigLig(final boolean theHigLigStatus) {
         if(theHigLigStatus) {
-            myNESWRoom[5] = RoomInfo.WITH_HIGHLIGHT;
+            myNESWRoom[ROOM_HIGHLIGHT.ordinal()] = RoomInfo.WITH_HIGHLIGHT;
         } else {
-            myNESWRoom[5] = RoomInfo.NO_HIGHLIGHT;
+            myNESWRoom[ROOM_HIGHLIGHT.ordinal()] = RoomInfo.NO_HIGHLIGHT;
         }
     }
 
 
     /**
      * sets the visual room info.
-     *
      */
     private void updateRoomInfo() {
         if(myVisibility == Visibility.VISIBLE) {
-            myNESWRoom[4] = myRoomInfoValues[myFillNum + 12];
-        } else if(myVisibility == Visibility.LOCKED) {
-            myNESWRoom[4] = RoomInfo.LOCKED;
-        } else {
-            myNESWRoom[4] = RoomInfo.MYSTERY;
+            myNESWRoom[ROOM_FILL.ordinal()] = ROOM_INFOS[myFillNum];
+        } else if(myVisibility == Visibility.LOCKED && myNESWRoom[ROOM_FILL.ordinal()] != RoomInfo.PERM_LOCKED) {
+            myNESWRoom[ROOM_FILL.ordinal()] = RoomInfo.LOCKED;
+        } else if (myVisibility == Visibility.MYSTERY) {
+            myNESWRoom[ROOM_FILL.ordinal()] = RoomInfo.MYSTERY;
         }
     }
 
@@ -128,30 +90,14 @@ public class Room implements Serializable {
      * @param theNESW the direction, represented by an int.
      * @param theDoor the state of the door.
      */
-    public void setDoor(final int theNESW, final boolean theDoor) {
-        if(theNESW > 3 || theNESW < 0) {
-            throw new IllegalArgumentException("NESW must be between 0 and 3");
-        } else {
-            setDoorVisual(theNESW, theDoor);
-        }
-    }
-
-    /**
-     * Sets the visual status of the doors.
-     *
-     * @param theNESW the direction, represented by an int.
-     * @param theDoor the state of the door visual. .
-     */
-    private void setDoorVisual(final int theNESW, final boolean theDoor) {
-        if(theNESW > 3 || theNESW < 0) {
-            throw new IllegalArgumentException("NESW must be between 0 and 3");
-        }
-        int result = theNESW * 2;
+    public void setDoor(final DoorDirection theNESW, final boolean theDoor) {
+        int result = theNESW.ordinal() * 2;
         if (!theDoor) {
             result ++;
         }
-        myNESWRoom[theNESW] = myRoomInfoValues[result];
+        myNESWRoom[theNESW.ordinal()] = ROOM_INFOS[result];
     }
+
 
     /**
      * returns whether there is a door at a given direction.
@@ -161,10 +107,10 @@ public class Room implements Serializable {
      *
      * @return the value of if there is a door.
      */
-    public boolean getHasNESWDoor(int theNESW) {
-        RoomInfo result = myRoomInfoValues[theNESW * 2];
+    public boolean getHasNESWDoor(DoorDirection theNESW) {
+        RoomInfo result = ROOM_INFOS[theNESW.ordinal() * 2];
 
-        return myNESWRoom[theNESW] == result;
+        return myNESWRoom[theNESW.ordinal()] == result;
     }
 
     /**
@@ -184,7 +130,7 @@ public class Room implements Serializable {
      * @return whether you can answer the question.
      */
     public boolean isAnswerable() {
-        return myVisibility == Visibility.LOCKED;
+        return myVisibility == Visibility.LOCKED && !(myNESWRoom[ROOM_FILL.ordinal()] == RoomInfo.PERM_LOCKED);
     }
 
     /**
@@ -194,7 +140,11 @@ public class Room implements Serializable {
      */
     public RoomInfo[] getRoomInfo() {
         updateRoomInfo();
-        return myNESWRoom;
+        RoomInfo[] result = myNESWRoom.clone();
+        if(result[ROOM_FILL.ordinal()] == RoomInfo.LOCKED && this.isEndpoint()) {
+            result[ROOM_FILL.ordinal()] = RoomInfo.ENDPOINT_LOCKED;
+        }
+        return result;
     }
 
     /**
@@ -227,6 +177,16 @@ public class Room implements Serializable {
      */
     public void setVisibility(final Visibility theVisibility) {
         myVisibility = theVisibility;
+    }
+
+    /**
+     * Sets this room to be permanently inaccessable
+     */
+    public void setInaccessable() {
+        for(int i = 0; i < 4; i++) {
+            setDoor(DOOR_DIRECTIONS[i], false);
+        }
+        myNESWRoom[4] = RoomInfo.PERM_LOCKED;
     }
 
     /**

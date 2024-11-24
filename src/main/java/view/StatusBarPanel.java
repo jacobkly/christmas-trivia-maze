@@ -72,8 +72,9 @@ public class StatusBarPanel extends JPanel {
 
         add(Box.createVerticalGlue());
 
-        myGetHint = new JButton("Hint");
+        myGetHint = new JButton("Open Gift");
         myGetHint.addActionListener(e -> myGameListener.useHint());
+      
         myGetHint.setBackground(Color.BLACK);
         myGetHint.setFont(Fonts.getPixelFont(12));
         myGetHint.setForeground(Color.WHITE);
@@ -135,7 +136,7 @@ public class StatusBarPanel extends JPanel {
         myHealthPanel.add(healthIconPanel);
         myHealthPanel.repaint();
 
-        JPanel hintIconPanel = createStatusPanel("Hints: ", myHintImage,
+        JPanel hintIconPanel = createStatusPanel("Gifts: ", myHintImage,
                                                     thePlayer.getHints());
         myHintPanel.add(hintIconPanel);
         myHintPanel.repaint();

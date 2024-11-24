@@ -2,20 +2,20 @@ package model;
 
 public class BooleanQuestion extends Question {
 
-    private boolean answer;
+    private final boolean myAnswer;
 
     public BooleanQuestion(final String thePrompt, final boolean theAnswer) {
         super(thePrompt);
-        answer = theAnswer;
+        myAnswer = theAnswer;
     }
 
     @Override
     public boolean checkAnswer(String theAnswer) {
-        return answer == Boolean.parseBoolean(theAnswer);
+        return myAnswer == Boolean.parseBoolean(theAnswer);
     }
 
     @Override
     public String getAnswer() {
-        return Boolean.toString(answer);
+        return Boolean.toString(myAnswer);
     }
 }

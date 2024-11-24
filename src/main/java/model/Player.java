@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -14,6 +15,7 @@ import java.io.Serializable;
 public class Player implements Serializable {
 
     /** The serial version UID for serialization compatibility. */
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /** The maximum number of hints a player can use. */
