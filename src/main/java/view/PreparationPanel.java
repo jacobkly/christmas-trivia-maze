@@ -58,18 +58,8 @@ public class PreparationPanel extends JPanel {
         setBackground(Color.BLACK);
         setLayout(new GridBagLayout());
 
-        myInnerPanel = new JPanel();
-        myInnerPanel.setBackground(Color.BLACK);
-        myInnerPanel.setBorder(new RoundedBorder(40));
-        myInnerPanel.setLayout(new GridBagLayout());
-        myInnerPanel.setPreferredSize(new Dimension(600, 400));
-
-        GridBagConstraints innerConstraints = new GridBagConstraints();
-        innerConstraints.insets = new Insets(10, 10, 10, 10);
-        innerConstraints.gridx = 0;
-        innerConstraints.gridy = 0;
-
-        setupPanel(innerConstraints);
+        myInnerPanel = createInnerPanel();
+        setupPanel();
 
         GridBagConstraints outerConstraints = new GridBagConstraints();
         outerConstraints.fill = GridBagConstraints.NONE;
@@ -81,33 +71,199 @@ public class PreparationPanel extends JPanel {
     }
 
     /**
-     * Sets up the various components within the inner panel using GridBagLayout.
+     * Creates and returns the inner panel for holding components.
      *
-     * @param theConstraints The GridBagConstraints used for positioning components.
+     * @return A JPanel configured as the inner panel.
      */
-    private void setupPanel(final GridBagConstraints theConstraints) {
-        JLabel[] labels = formatLoreLabels();
-        int labelCount = 0;
+    private JPanel createInnerPanel() {
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.BLACK);
+        panel.setBorder(new RoundedBorder(40));
+        panel.setLayout(new GridBagLayout());
+        panel.setPreferredSize(new Dimension(600, 400));
+        return panel;
+    }
 
-        myInnerPanel.add(labels[labelCount++], theConstraints);
-        theConstraints.gridy++;
+    /**
+     * Sets up the components within the inner panel.
+     */
+    private void setupPanel() {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(10, 10, 10, 10);
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+
+        addLoreLabels(constraints);
+        JTextField nameField = addNameField(constraints);
+        addDifficultyButtons(constraints);
+        addConfirmationButtons(constraints);
+        setupActionListeners(nameField);
+    }
+
+    /**
+     * Adds the lore labels to the inner panel.
+     *
+     * @param theConstraints The GridBagConstraints used for positioning.
+     */
+    private void addLoreLabels(final GridBagConstraints theConstraints) {
+        JLabel[] labels = formatLoreLabels();
+        for (int i = 0; i < labels.length - 1; i++) {
+            myInnerPanel.add(labels[i], theConstraints);
+            theConstraints.gridy++;
+        }
+    }
+
+    /**
+     * Adds the name input field to the inner panel.
+     *
+     * @param theConstraints The GridBagConstraints used for positioning.
+     * @return The created JTextField for user input.
+     */
+    private JTextField addNameField(final GridBagConstraints theConstraints) {
+        JLabel namePrompt = new JLabel(DIALOGUE[1]);
+        namePrompt.setForeground(Color.WHITE);
+        namePrompt.setFont(Fonts.getPixelFont(12));
 
         JTextField nameField = formatNameField();
-        addNamePrompt(labels[labelCount++], nameField, theConstraints);
 
-        myInnerPanel.add(labels[labelCount++], theConstraints);
+        JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 25, 0));
+        namePanel.setBackground(Color.BLACK);
+        namePanel.add(namePrompt);
+        namePanel.add(nameField);
+
+        myInnerPanel.add(namePanel, theConstraints);
         theConstraints.gridy++;
 
-        addDifficultyButtons(theConstraints);
+        return nameField;
+    }
+
+    /**
+     * Adds difficulty selection buttons to the inner panel.
+     *
+     * @param theConstraints The GridBagConstraints used for positioning.
+     */
+    private void addDifficultyButtons(final GridBagConstraints theConstraints) {
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setBackground(Color.BLACK);
+
+        myDifficultyGroup = new ButtonGroup();
+        for (int i = 0; i < DIFFICULTY_NAMES.length; i++) {
+            JRadioButton button = createDifficultyButton(DIFFICULTY_NAMES[i], i == 0);
+            myDifficultyGroup.add(button);
+            buttonPanel.add(button);
+            if (i < DIFFICULTY_NAMES.length - 1) {
+                buttonPanel.add(Box.createVerticalStrut(15));
+            }
+        }
 
         theConstraints.anchor = GridBagConstraints.CENTER;
-        myInnerPanel.add(labels[labelCount++], theConstraints);
-        theConstraints.anchor = GridBagConstraints.NORTHWEST;
+        myInnerPanel.add(buttonPanel, theConstraints);
         theConstraints.gridy++;
+        theConstraints.anchor = GridBagConstraints.NORTHWEST;
+    }
 
-        addYesNoButtons(theConstraints);
+    /**
+     * Adds the "Yes" and "No" buttons to the inner panel.
+     *
+     * @param theConstraints The GridBagConstraints used for positioning.
+     */
+    private void addConfirmationButtons(final GridBagConstraints theConstraints) {
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 75, 0));
+        buttonPanel.setBackground(Color.BLACK);
 
-        processUserDecision(nameField);
+        myYesButton = new JButton("Yes, I'm ready!");
+        myNoButton = new JButton("No, I'm scared...");
+
+        buttonPanel.add(myYesButton);
+        buttonPanel.add(myNoButton);
+
+        myInnerPanel.add(buttonPanel, theConstraints);
+        theConstraints.gridy++;
+    }
+
+    /**
+     * Sets up action listeners for the buttons.
+     *
+     * @param theNameField The JTextField containing the user's name.
+     */
+    private void setupActionListeners(final JTextField theNameField) {
+        myYesButton.addActionListener(e -> handleYesButton(theNameField));
+        myNoButton.addActionListener(e -> handleNoButton());
+    }
+
+    /**
+     * Handles the action for the "Yes" button.
+     *
+     * @param theNameField The JTextField containing the user's name.
+     */
+    private void handleYesButton(final JTextField theNameField) {
+        String playerName = theNameField.getText().trim();
+        if (playerName.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    this, "Please enter a name to continue.", "Missing Name", JOptionPane.WARNING_MESSAGE);
+        } else {
+            int[] difficulty = getChosenDifficulty();
+            myGameListener.startGame(5, 7, playerName, difficulty[0], difficulty[1]);
+        }
+    }
+
+    /**
+     * Handles the action for the "No" button.
+     */
+    private void handleNoButton() {
+        int choice = JOptionPane.showConfirmDialog(
+                this,
+                "That's okay! Take your time.\nShall you be taken back to Main Menu?",
+                "Fear is Normal",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (choice == JOptionPane.YES_OPTION) {
+            myGameListener.startMainMenu();
+        } else {
+            myGameListener.startPreparation();
+        }
+    }
+
+    /**
+     * Returns the chosen difficulty level.
+     *
+     * @return An array with max health and hints based on the selected difficulty.
+     */
+    private int[] getChosenDifficulty() {
+        int index = 0;
+        for (Enumeration<AbstractButton> buttons = myDifficultyGroup.getElements(); buttons.hasMoreElements(); index++) {
+            AbstractButton button = buttons.nextElement();
+            if (button.isSelected()) {
+                return switch (index) {
+                    case 0 -> new int[]{8, 6};
+                    case 1 -> new int[]{6, 4};
+                    case 2 -> new int[]{4, 2};
+                    default -> new int[]{8, 5};
+                };
+            }
+        }
+        return new int[]{8, 5};
+    }
+
+    /**
+     * Creates and formats a difficulty selection button.
+     *
+     * @param theText The button's label text.
+     * @param theIsSelected Whether the button is selected by default.
+     * @return The formatted JRadioButton.
+     */
+    private JRadioButton createDifficultyButton(final String theText, boolean theIsSelected) {
+        JRadioButton button = new JRadioButton(theText);
+        button.setForeground(Color.WHITE);
+        button.setFont(Fonts.getPixelFont(10));
+        button.setOpaque(false);
+        button.setBackground(Color.DARK_GRAY);
+        button.setFocusable(false);
+        button.setSelected(theIsSelected);
+        return button;
     }
 
     /**
@@ -117,7 +273,6 @@ public class PreparationPanel extends JPanel {
      */
     private JLabel[] formatLoreLabels() {
         JLabel[] labels = new JLabel[DIALOGUE.length];
-
         for (int i = 0; i < DIALOGUE.length; i++) {
             labels[i] = new JLabel(DIALOGUE[i]);
             labels[i].setBackground(Color.BLACK);
@@ -134,7 +289,6 @@ public class PreparationPanel extends JPanel {
      */
     private JTextField formatNameField() {
         JTextField nameField = new JTextField(15);
-
         nameField.setPreferredSize(new Dimension(125, 30));
         nameField.setBackground(Color.DARK_GRAY);
         nameField.setForeground(Color.WHITE);
@@ -142,148 +296,5 @@ public class PreparationPanel extends JPanel {
         nameField.setHorizontalAlignment(JTextField.CENTER);
         nameField.setCaretColor(Color.WHITE);
         return nameField;
-    }
-
-    /**
-     * Adds the name prompt label and name input field to the inner panel.
-     *
-     * @param theLabel The JLabel containing the prompt text.
-     * @param theNameField The JTextField where the user will input their name.
-     * @param theConstraints The GridBagConstraints used for positioning components.
-     */
-    private void addNamePrompt(final JLabel theLabel,
-                               final JTextField theNameField,
-                               final GridBagConstraints theConstraints) {
-        JPanel namePromptPanel = new JPanel();
-        namePromptPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 25, 0));
-        namePromptPanel.setBackground(Color.BLACK);
-
-        namePromptPanel.add(theLabel, theConstraints);
-        namePromptPanel.add(theNameField, theConstraints);
-
-        myInnerPanel.add(namePromptPanel, theConstraints);
-        theConstraints.gridy++;
-    }
-
-    /**
-     * Adds difficulty selection buttons to the inner panel.
-     *
-     * @param theConstraints The GridBagConstraints used for positioning components.
-     */
-    private void addDifficultyButtons(final GridBagConstraints theConstraints) {
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.setBackground(Color.BLACK);
-
-        myDifficultyGroup = new ButtonGroup();
-        for (int i = 0; i < DIFFICULTY_NAMES.length; i++) {
-            JRadioButton difficultyButton = new JRadioButton(DIFFICULTY_NAMES[i]);
-            difficultyButton.setForeground(Color.WHITE);
-            difficultyButton.setFont(Fonts.getPixelFont(10));
-            difficultyButton.setOpaque(false);
-            difficultyButton.setBackground(Color.DARK_GRAY);
-            difficultyButton.setFocusable(false);
-            myDifficultyGroup.add(difficultyButton);
-            if (i == 0) {
-                difficultyButton.setSelected(true);
-            }
-            buttonPanel.add(difficultyButton);
-            if (i < DIFFICULTY_NAMES.length - 1) { // gaps in between the buttons
-                buttonPanel.add(Box.createVerticalStrut(15));
-            }
-        }
-        // center the buttons
-        theConstraints.anchor = GridBagConstraints.CENTER;
-        myInnerPanel.add(buttonPanel, theConstraints);
-        theConstraints.gridy++;
-        theConstraints.anchor = GridBagConstraints.NORTHWEST;
-    }
-
-    /**
-     * Adds the "Yes" and "No" buttons to the inner panel.
-     *
-     * @param theConstraints The GridBagConstraints used for positioning components.
-     */
-    private void addYesNoButtons(final GridBagConstraints theConstraints) {
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 75, 0));
-        buttonPanel.setBackground(Color.BLACK);
-
-        myYesButton = new JButton("Yes, I'm ready!");
-        myNoButton = new JButton("No, I'm scared...");
-
-        buttonPanel.add(myYesButton);
-        buttonPanel.add(myNoButton);
-
-        myInnerPanel.add(buttonPanel, theConstraints);
-        theConstraints.gridy++;
-    }
-
-    /**
-     * Processes the user's decision based on the "Yes" or "No" button clicked.
-     *
-     * @param theNameField The JTextField containing the user's name input.
-     */
-    private void processUserDecision(final JTextField theNameField) {
-        myYesButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String playerName = theNameField.getText().trim();
-                if (playerName.isEmpty()) {
-                    JOptionPane.showMessageDialog(
-                            PreparationPanel.this,
-                            "Please enter a name to continue.",
-                            "Missing Name", JOptionPane.WARNING_MESSAGE);
-                } else {
-                    int playerMaxHealth = getChosenDifficulty();
-                    int playerMaxHints = 20;  // TODO to be changed based on difficulty
-                    myGameListener.startGame(5, 7, playerName, playerMaxHealth, playerMaxHints );
-                }
-            }
-        });
-
-        myNoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int choice = JOptionPane.showConfirmDialog(
-                        PreparationPanel.this,
-                        "That's okay! Take your time.\nShall you be taken back to Main Menu?",
-                        "Fear is Normal",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE
-                );
-
-                if (choice == JOptionPane.YES_OPTION) {
-                    myGameListener.startMainMenu();
-                } else {
-                    myGameListener.startPreparation();
-                }
-            }
-        });
-    }
-
-    /**
-     * Returns the difficulty level based on the selected radio button.
-     *
-     * @return The chosen difficulty level (8 for easy, 6 for medium, 4 for hard).
-     */
-    private int getChosenDifficulty() {
-        int difficulty = 8;
-        int buttonCount = 0;
-
-        // iterate over each button
-        for (Enumeration<AbstractButton> buttons = myDifficultyGroup.getElements(); buttons.hasMoreElements();) {
-            AbstractButton button = buttons.nextElement();
-            if (button.isSelected() && button.getText().equals(DIFFICULTY_NAMES[buttonCount])) {
-                difficulty = switch (buttonCount) {
-                    case 0 -> 8;
-                    case 1 -> 6;
-                    case 2 -> 4;
-                    default -> difficulty;
-                };
-            }
-            buttonCount++;
-        }
-        return difficulty;
     }
 }
