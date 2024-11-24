@@ -138,8 +138,9 @@ public class QuestionPanel extends JPanel {
         public MultipleChoiceQuestionPanel(GameListener theGameListener, MultipleChoiceQuestion theQuestion) {
             setBackground(Color.BLACK);
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            List<String> answers = new ArrayList<>(theQuestion.getPossibleAnswers());
-            Collections.shuffle(answers);
+            // List<String> answers = new ArrayList<>(theQuestion.getPossibleAnswers());
+            // Collections.shuffle(answers);
+            List<String> answers = theQuestion.getPossibleAnswers();
 
             ButtonGroup bg = new ButtonGroup();
             add(Box.createVerticalGlue());

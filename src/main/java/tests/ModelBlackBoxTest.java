@@ -21,6 +21,8 @@ class ModelBlackBoxTest {
     private Room[] myRooms;
     /** The maze to be tested. */
     private Maze myMaze;
+    /** The player to be tested. */
+    private Player myPlayer;
 
     /**
      * To be run before each test to set up the objects.
@@ -59,6 +61,9 @@ class ModelBlackBoxTest {
         q.add(myQuestions[2]);
         q.add(myQuestions[3]);
         myMaze = new Maze(q, 2, 2);
+
+        // player setup
+        myPlayer = new Player("name", 3, 2);
     }
 
 
@@ -488,6 +493,29 @@ class ModelBlackBoxTest {
         assertFalse(myRooms[0].checkAnswer("false"));
         assertFalse(myRooms[1].checkAnswer("c"));
         assertFalse(myRooms[2].checkAnswer("sorta"));
+    }
+
+    /**
+     * Tests the SerialWrapper class
+     */
+    @Test
+    public void testSerialWrapper() {
+        SerialWrapper wrapper = new SerialWrapper(myPlayer, myMaze);
+        assertEquals(myPlayer, wrapper.getPlayer());
+        assertEquals(myMaze, wrapper.getMaze());
+    }
+
+    // player tests do not yet test anything marked as "maybe change"
+    /**
+     * Tests the Player class
+     */
+    @Test
+    public void testPlayerConstructor() {
+        assertEquals("name", myPlayer.getName());
+        assertEquals(3, myPlayer.getMaxHealthCount());
+        assertEquals(3, myPlayer.getHealthCount());
+        assertEquals(2, myPlayer.getHints());
+
     }
 
 }

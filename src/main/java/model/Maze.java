@@ -1,3 +1,7 @@
+/*
+ * TCSS 360 Autumn 2024
+ * Course Project
+ */
 package model;
 
 import java.io.Serial;
@@ -13,7 +17,7 @@ import model.RoomEnums.*;
  * @author Jacob Klymenko
  * @version 1.0
  */
-public class Maze implements Serializable {
+public final class Maze implements Serializable {
     /** The serialVersionUID for this object. */
     @Serial
     private static final long serialVersionUID = 1L;
@@ -106,7 +110,7 @@ public class Maze implements Serializable {
      *
      * @param theEndingRowCol the ending position of the maze.
      */
-    private void mazeFirstSetup(int[] theEndingRowCol) {
+    private void mazeFirstSetup(final int[] theEndingRowCol) {
         getRoom(myStartingRowCol[0], myStartingRowCol[1]).setVisibility(Visibility.VISIBLE);
         getRoom(theEndingRowCol[0], theEndingRowCol[1]).setAsEndpoint();
     }
@@ -173,7 +177,7 @@ public class Maze implements Serializable {
      * @param theCol2 the column of the second room.
      * @return whether there is a passage between the rooms.
      */
-    private boolean hasPassageBetween(int theRow1, int theCol1, int theRow2, int theCol2) {
+    private boolean hasPassageBetween(final int theRow1, final int theCol1, final int theRow2, final int theCol2) {
         Room room1 = getRoom(theRow1, theCol1);
         Room room2 = getRoom(theRow2, theCol2);
 
@@ -228,8 +232,8 @@ public class Maze implements Serializable {
     /**
      * Returns the index of the given row / column as if the grid was a 1d array.
      */
-    private int getRoomIndex(int row, int col) {
-        return col + (row * getCols());
+    private int getRoomIndex(final int theRow, final int theCol) {
+        return theCol + (theRow * getCols());
     }
 
     /**
