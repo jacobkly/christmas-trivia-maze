@@ -5,8 +5,8 @@ import java.util.List;
 
 public class MultipleChoiceQuestion extends Question {
 
-    private String myAnswer;
-    private List<String> myWrongAnswers;
+    private final String myAnswer;
+    private final List<String> myWrongAnswers;
 
     public MultipleChoiceQuestion(
             final String thePrompt,
@@ -19,7 +19,7 @@ public class MultipleChoiceQuestion extends Question {
     }
 
     public List<String> getPossibleAnswers() {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         result.add(myAnswer);
         result.addAll(myWrongAnswers);
         return result;
