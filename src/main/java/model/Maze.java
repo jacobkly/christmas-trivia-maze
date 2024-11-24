@@ -10,11 +10,10 @@ import java.util.*;
 import model.RoomEnums.*;
 
 /**
- * Represents a maze that contains rooms with questions.
- * Used for the primary model for the maze game.
+ * Represents a maze that holds questions.
  *
- * @author Mathew Miller
  * @author Cai Spidel
+ * @author Mathew Miller
  * @author Jacob Klymenko
  * @version 1.0
  */
