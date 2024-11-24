@@ -19,6 +19,8 @@ public class MazeViewFrame extends JFrame {
 
     private final ResultScreenPanel myResultScreenPanel;
 
+    private final VolumeSliderPanel myVolumeSliderPanel;
+
     public MazeViewFrame(final GameListener theGameListener, final MusicController theMusicController) {
         setTitle("Christmas Trivia Maze");
         setSize(1214, 760);
@@ -27,10 +29,12 @@ public class MazeViewFrame extends JFrame {
         setLayout(new BorderLayout());
         setVisible(true);
 
-        myMainMenuPanel = new MainMenuPanel(theGameListener, theMusicController);
+        myVolumeSliderPanel = new VolumeSliderPanel(theMusicController);
+
+        myMainMenuPanel = new MainMenuPanel(theGameListener, theMusicController, myVolumeSliderPanel);
         myPreparationPanel = new PreparationPanel(theGameListener);
         myMazeScreenPanel = new MazeScreenPanel(theGameListener);
-        myResultScreenPanel = new ResultScreenPanel(theGameListener);
+        myResultScreenPanel = new ResultScreenPanel(theGameListener, theMusicController, myVolumeSliderPanel);
 
         JMenuBar myMenuBar = new JMenuBar();
         JMenu myFileMenu = new JMenu("Help...");
@@ -39,21 +43,38 @@ public class MazeViewFrame extends JFrame {
         myMenuBar.add(myFileMenu);
         JMenuItem helpMenuItem = new JMenuItem("How to Play");
         myFileMenu.add(helpMenuItem);
-        helpMenuItem.addActionListener(e -> JOptionPane.showMessageDialog(this,
-                "This is where we can put information" +
-                        "on how to play the game\nand let the user know how" +
-                        "the different features work"));
+        helpMenuItem.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this,
+                    "This is where we can put information" +
+                            "on how to play the game\nand let the user know how" +
+                            "the different features work");
+            repaint();
+        });
+
+        JMenuItem volumeMenuItem = new JMenuItem("Volume");
+        myFileMenu.add(volumeMenuItem);
+        volumeMenuItem.addActionListener(e -> {
+            myVolumeSliderPanel.showDialog(this, "Volume");
+            repaint();
+        });
+
         JMenuItem aboutMenuItem = new JMenuItem("About");
         myFileMenu.add(aboutMenuItem);
-        aboutMenuItem.addActionListener(e -> JOptionPane.showMessageDialog(this,
-                "Version - developing\nMathew Miller" +
-                        "\nJacob Klymenko\nCai Spidel"));
+        aboutMenuItem.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this,
+                    "Version - developing\nMathew Miller" +
+                            "\nJacob Klymenko\nCai Spidel");
+            repaint();
+        });
 
         JCheckBoxMenuItem debugMenuItem = new JCheckBoxMenuItem("Debug");
         debugMenuItem.setSelected(false);
         myFileMenu.add(debugMenuItem);
-        debugMenuItem.addActionListener(e -> JOptionPane.showMessageDialog(this,
-                "When this is selected debug mode is enabled"));
+        debugMenuItem.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this,
+                    "When this is selected debug mode is enabled");
+            repaint();
+        });
 
         this.add(myResultScreenPanel, BorderLayout.CENTER);
         this.add(myMazeScreenPanel, BorderLayout.CENTER);
@@ -90,14 +111,19 @@ public class MazeViewFrame extends JFrame {
         myResultScreenPanel.setVisible(true);
     }
 
+    public void setVolumeSliderPanel() {
+        myMainMenuPanel.setVisible(false);
+        myResultScreenPanel.setVisible(false);
+        myPreparationPanel.setVisible(false);
+        myMazeScreenPanel.setVisible(false);
+    }
+
     public void updatePlayerResult(final boolean theResult) {
         myResultScreenPanel.updatePanel(theResult);
     }
 
-
     public void setPlayer(Player thePlayer) {
         myMazeScreenPanel.setPlayer(thePlayer);
-
     }
 
 }

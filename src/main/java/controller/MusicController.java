@@ -6,11 +6,11 @@ import javax.sound.sampled.*;
 
 public class MusicController {
 
-    private static final float DEFAULT_VOLUME = 0.6f;
+    private static final float DEFAULT_VOLUME = 0.70f;
 
     private static final float MIN_VOLUME = 0.5f;
 
-    private static final float MAX_VOLUME = 0.75f;
+    private static final float MAX_VOLUME = 0.9f;
 
     private final MusicFactory myMusicFactory;
 

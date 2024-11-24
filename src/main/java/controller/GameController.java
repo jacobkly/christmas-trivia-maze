@@ -161,7 +161,7 @@ public class GameController implements GameListener {
         playerStats[0] = "Player name: " + myPlayer.getName();
         playerStats[1] = "Health left: " + myPlayer.getHealthCount() + " out of " + myPlayer.getMaxHealthCount();
         /* last two elements won't be used, they are just an example */
-        playerStats[2] = "Hints left: " + myPlayer.getHintsUsed() + " out of " + myPlayer.getMaxHintCount();
+        playerStats[2] = "Hints used: " + myPlayer.getHintsUsed() + " out of " + myPlayer.getMaxHintCount();
         playerStats[3] = "Rooms discovered: " + myPlayer.getRoomsDiscovered();
         /* --------------------------------------------------------- */
         return playerStats;
@@ -175,6 +175,4 @@ public class GameController implements GameListener {
             checkAnswer(myMaze.getCurrentlySelectedRoom().getQuestion().getAnswer());
         }
     }
-
-
 }

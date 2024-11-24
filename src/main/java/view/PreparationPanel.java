@@ -178,7 +178,7 @@ public class PreparationPanel extends JPanel { // Extend JPanel
                             "Missing Name", JOptionPane.WARNING_MESSAGE);
                 } else {
                     int playerMaxHealth = getChosenDifficulty();
-                    int playerMaxHints = 3;  // TODO to be changed based on difficulty
+                    int playerMaxHints = 20;  // TODO to be changed based on difficulty
                     myGameListener.startGame(5, 7, playerName, playerMaxHealth, playerMaxHints );
                 }
             }

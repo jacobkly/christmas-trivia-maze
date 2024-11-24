@@ -36,5 +36,4 @@ public interface GameListener {
    String[] getPlayerStatistics(); // TODO This should not be here
 
    void useHint();
-
 }
