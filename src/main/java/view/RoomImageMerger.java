@@ -84,7 +84,7 @@ public class RoomImageMerger {
 
 
     /**
-     * Merges a 128x128 set of images together.
+     * Merges a 16x16 set of images together.
      * The images are obtained from the string representations of file locations.
      * This is the visual representation of a room.
      *
@@ -92,8 +92,8 @@ public class RoomImageMerger {
      * @return the merged image.
      */
     public static Image MergeImage(final RoomInfo[] theRoomInfo) {
-        int width = 128;
-        int height = 128;
+        int width = 16;
+        int height = 16;
 
         Image mergedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics graphics = mergedImage.getGraphics();

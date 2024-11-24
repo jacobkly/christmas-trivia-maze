@@ -1,13 +1,32 @@
+/*
+ * TCSS 360 Autumn 2024
+ * Course Project
+ */
 package model;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class MultipleChoiceQuestion extends Question {
-
+/**
+ * Models multiple choice questions.
+ *
+ * @author Mathew Miller
+ * @author Cai Spidel
+ * @version 1.0
+ */
+public final class MultipleChoiceQuestion extends Question {
+    /** The correct answer */
     private final String myAnswer;
-    private final List<String> myWrongAnswers;
+    /** The list of possible answers */
+    private final List<String> myPossibleAnswers; // myWrongAnswers + myAnswer
 
+    /**
+     * Constructs an multiple choice question
+     *
+     * @param thePrompt the prompt of the question
+     * @param theAnswer the correct answer of the question
+     * @param theWrongAnswers the incorrect answers of the question
+     */
     public MultipleChoiceQuestion(
             final String thePrompt,
             final String theAnswer,
@@ -15,14 +34,21 @@ public class MultipleChoiceQuestion extends Question {
     ) {
         super(thePrompt);
         myAnswer = theAnswer;
-        myWrongAnswers = theWrongAnswers;
+        myPossibleAnswers = theWrongAnswers;
+        myPossibleAnswers.add(myAnswer);
+        Collections.shuffle(myPossibleAnswers);
     }
 
+    /**
+     * Returns the possible answers to the question
+     *
+     * @return all the possible answers
+     */
     public List<String> getPossibleAnswers() {
-        List<String> result = new ArrayList<>();
-        result.add(myAnswer);
-        result.addAll(myWrongAnswers);
-        return result;
+        // List<String> result = new ArrayList<>();
+        // result.add(myAnswer);
+        // result.addAll(myPossibleAnswers);
+        return myPossibleAnswers;
     }
 
     @Override

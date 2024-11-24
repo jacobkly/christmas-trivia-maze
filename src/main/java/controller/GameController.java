@@ -1,9 +1,6 @@
 package controller;
 
-import model.Maze;
-import model.Player;
-import model.Question;
-import model.Room;
+import model.*;
 import view.MazeViewFrame;
 
 import java.io.*;
@@ -61,49 +58,45 @@ public class GameController implements GameListener {
 
     @Override
     public void saveGame() {
+        SerialWrapper wrapper = new SerialWrapper(myPlayer, myMaze);
         try {
-            File file = new File(Objects.requireNonNull
-                    (this.getClass().getResource("/savedGames/savedMaze.ser")).getPath());
-            FileOutputStream fileOut = new FileOutputStream(file);
+            FileOutputStream fileOut = new FileOutputStream("saveGame.ser");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(myMaze);
-            out.writeObject(myPlayer);
+            out.writeObject(wrapper);
             out.close();
             fileOut.close();
-            System.out.print("Serialized data is saved in /savedGames/savedMaze.ser");
+            System.out.println("Serialized data is saved in savegame.ser");
         } catch (IOException i) {
             i.printStackTrace();
         }
     }
 
     @Override
-    public void resumeGame() {
-        Maze maze = null;
-        Player player = null;
+    public boolean resumeGame() {
+        SerialWrapper wrapper = null;
+        boolean success = false;
         try {
-            // currently would produce error if the file does not exist.
-            File file = new File(Objects.requireNonNull
-                    (this.getClass().getResource("/savedGames/savedMaze.ser")).getPath());
-
-            FileInputStream fileIn = new FileInputStream(file);
+            FileInputStream fileIn = new FileInputStream("savegame.ser");
             ObjectInputStream in = new ObjectInputStream(fileIn);
-            maze = (Maze) in.readObject();
-            player = (Player) in.readObject();
+            wrapper = (SerialWrapper) in.readObject();
             in.close();
             fileIn.close();
         } catch (FileNotFoundException e) {
-            System.out.println("File not found");
+            System.out.println("File not found, there is no saved game.");
         } catch (IOException i) {
             i.printStackTrace();
-            return;
         } catch (ClassNotFoundException c) {
-            System.out.println("Maze class not found");
+            System.out.println("SerialWrapper class not found");
             c.printStackTrace();
-            return;
         }
-
-        myMaze = maze;
-        myFrame.setMaze(myMaze);
+        if(wrapper != null) {
+            myMaze = wrapper.getMaze();
+            myPlayer = wrapper.getPlayer();
+            myFrame.setMaze(myMaze);
+            myFrame.setPlayer(myPlayer);
+            success = true;
+        }
+        return success;
     }
 
     @Override
@@ -129,6 +122,8 @@ public class GameController implements GameListener {
             myFrame.setResultScreen();
 
         } else {
+            saveGame();
+
             myFrame.setMaze(myMaze);
         }
 

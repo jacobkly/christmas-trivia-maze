@@ -1,3 +1,7 @@
+/*
+ * TCSS 360 Autumn 2024
+ * Course Project
+ */
 package model;
 
 import java.io.Serial;
@@ -9,9 +13,13 @@ import static model.RoomEnums.RoomArrayValues.ROOM_HIGHLIGHT;
 
 
 /**
- * Models the rooms of the maze.
+ * Class that models functionality of the rooms of a maze.
+ *
+ * @author Mathew Miller
+ * @author Cai Spidel
+ * @version 1.0
  */
-public class Room implements Serializable {
+public final class Room implements Serializable {
 
     /** The serialVersionUID for this object. */
     @Serial
@@ -101,9 +109,6 @@ public class Room implements Serializable {
 
     /**
      * returns whether there is a door at a given direction.
-     * uses an int to represent the direction.
-     * 0 = north, 1 = east
-     * 2 = south, 3 = west
      *
      * @return the value of if there is a door.
      */
@@ -115,7 +120,6 @@ public class Room implements Serializable {
 
     /**
      * Gets whether this room is visible.
-     * This room is visible if it's question has been answered.
      *
      * @return whether this room is visible.
      */
@@ -125,7 +129,8 @@ public class Room implements Serializable {
 
     /**
      * Returns whether it is possible to answer the question to this room.
-     * It is answerable if the room status is "locked".
+     * It is answerable if the room status is "locked",
+     * AND it is NOT permanently locked.
      *
      * @return whether you can answer the question.
      */
@@ -134,9 +139,9 @@ public class Room implements Serializable {
     }
 
     /**
-     * Returns the image representation of this room, stored in render order and with the file locations.
+     * Returns the room information through an array of their individual components
      *
-     * @return the image representation through file locations.
+     * @return the room information through the enums RoomInfo.
      */
     public RoomInfo[] getRoomInfo() {
         updateRoomInfo();
@@ -180,9 +185,9 @@ public class Room implements Serializable {
     }
 
     /**
-     * Sets this room to be permanently inaccessable
+     * Sets this room to be permanently inaccessible
      */
-    public void setInaccessable() {
+    public void setInaccessible() {
         for(int i = 0; i < 4; i++) {
             setDoor(DOOR_DIRECTIONS[i], false);
         }

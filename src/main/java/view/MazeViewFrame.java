@@ -23,7 +23,9 @@ public class MazeViewFrame extends JFrame {
 
     public MazeViewFrame(final GameListener theGameListener, final MusicController theMusicController) {
         setTitle("Christmas Trivia Maze");
-        setSize(1214, 760);
+        int width = 1214;
+        int height = 760;
+        setSize(width, height);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());

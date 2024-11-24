@@ -1,12 +1,19 @@
+/*
+ * TCSS 360 Autumn 2024
+ * Course Project
+ */
 package model;
 
 /**
  * holds enums used to manage the room class.
  */
-public class RoomEnums {
+public final class RoomEnums {
 
     /**
-     * Direction of a door.
+     * Holds the enums used to model a room.
+     *
+     * @author Cai Spidel
+     * @version 1.0
      */
     public enum DoorDirection {
         NORTH,

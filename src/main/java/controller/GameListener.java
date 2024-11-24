@@ -24,8 +24,10 @@ public interface GameListener {
 
    /**
     * Resumes a saved game by loading a maze from a path.
+    *
+    * @return whether resuming the game succeeded.
     */
-   void resumeGame();
+   boolean resumeGame();
 
    boolean checkAnswer(String theAnswer);
 

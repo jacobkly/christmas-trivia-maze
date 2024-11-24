@@ -103,7 +103,7 @@ public class MainMenuPanel extends JPanel {
             if (i == 0) {
                 myButtons[i].addActionListener(e -> { myGameListener.startPreparation(); repaint(); });
             } else if (i == 1) {
-                myButtons[i].addActionListener(e -> { {/* the load game process here */} repaint(); });
+                myButtons[i].addActionListener(e -> { { myGameListener.resumeGame();} repaint(); });
             } else if (i == 2) {
                 myButtons[i].addActionListener(e -> {
                     theVolumeSliderPanel.showDialog(this, "Settings");

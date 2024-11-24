@@ -1,3 +1,7 @@
+/*
+ * TCSS 360 Autumn 2024
+ * Course Project
+ */
 package model;
 
 import java.io.Serial;
@@ -5,6 +9,10 @@ import java.io.Serializable;
 
 /**
  * Represents a question that can be asked.
+ *
+ * @author Mathew Miller
+ * @author Cai Spidel
+ * @version 1.0
  */
 public abstract class Question implements Serializable {
 
@@ -41,5 +49,10 @@ public abstract class Question implements Serializable {
      */
     public abstract boolean checkAnswer(String theAnswer);
 
+    /**
+     * Gets the answer of an question
+     *
+     * @return the correct answer
+     */
     public abstract String getAnswer();
 }
