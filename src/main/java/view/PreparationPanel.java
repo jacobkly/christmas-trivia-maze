@@ -8,8 +8,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Enumeration;
 
-public class PreparationPanel extends JPanel { // Extend JPanel
+/**
+ * The PreparationPanel class is a custom JPanel that provides the user interface for preparing to
+ * start a game. It allows the user to input their name, choose a difficulty level, and either
+ * proceed with the game or return to the main menu.
+ *
+ * @author Jacob Klymenko
+ * @version 1.0
+ */
+public class PreparationPanel extends JPanel {
 
+    /** Array containing dialogue messages displayed to the user during the preparation phase. */
     private final static String[] DIALOGUE = {
             "So I see you wish to see Santa Claus!",
             "What is your name?",
@@ -17,20 +26,31 @@ public class PreparationPanel extends JPanel { // Extend JPanel
             "Hahaha... Are you sure about this?"
     };
 
+    /** Array containing difficulty level names that are presented as options to the user. */
     private final static String[] DIFFICULTY_NAMES = new String[] {
             " Frosty (Easy)", " Blizzard (Medium)", " Naughty List (Hard)"
     };
 
+    /** The GameListener used to communicate events back to the game controller. */
     private final GameListener myGameListener;
 
+    /** Inner panel that holds all the components of the preparation screen. */
     private final JPanel myInnerPanel;
 
+    /** A ButtonGroup to manage the difficulty level radio buttons. */
     private ButtonGroup myDifficultyGroup;
 
+    /** The "Yes" button used for confirming readiness to start the game. */
     private JButton myYesButton;
 
+    /** The "No" button used for opting to go back or not proceed with the game. */
     private JButton myNoButton;
 
+    /**
+     * Constructs a PreparationPanel with the specified GameListener.
+     *
+     * @param theGameListener The GameListener to handle game start and main menu transitions.
+     */
     public PreparationPanel(final GameListener theGameListener) {
         myGameListener = theGameListener;
 
@@ -60,6 +80,11 @@ public class PreparationPanel extends JPanel { // Extend JPanel
         add(myInnerPanel, outerConstraints);
     }
 
+    /**
+     * Sets up the various components within the inner panel using GridBagLayout.
+     *
+     * @param theConstraints The GridBagConstraints used for positioning components.
+     */
     private void setupPanel(final GridBagConstraints theConstraints) {
         JLabel[] labels = formatLoreLabels();
         int labelCount = 0;
@@ -85,6 +110,11 @@ public class PreparationPanel extends JPanel { // Extend JPanel
         processUserDecision(nameField);
     }
 
+    /**
+     * Formats and returns an array of JLabel components containing the dialogue text.
+     *
+     * @return An array of JLabels with the formatted dialogue text.
+     */
     private JLabel[] formatLoreLabels() {
         JLabel[] labels = new JLabel[DIALOGUE.length];
 
@@ -97,6 +127,11 @@ public class PreparationPanel extends JPanel { // Extend JPanel
         return labels;
     }
 
+    /**
+     * Creates and formats the name input field.
+     *
+     * @return The formatted JTextField for username input.
+     */
     private JTextField formatNameField() {
         JTextField nameField = new JTextField(15);
 
@@ -109,7 +144,15 @@ public class PreparationPanel extends JPanel { // Extend JPanel
         return nameField;
     }
 
-    private void addNamePrompt(final JLabel theLabel, final JTextField theNameField,
+    /**
+     * Adds the name prompt label and name input field to the inner panel.
+     *
+     * @param theLabel The JLabel containing the prompt text.
+     * @param theNameField The JTextField where the user will input their name.
+     * @param theConstraints The GridBagConstraints used for positioning components.
+     */
+    private void addNamePrompt(final JLabel theLabel,
+                               final JTextField theNameField,
                                final GridBagConstraints theConstraints) {
         JPanel namePromptPanel = new JPanel();
         namePromptPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 25, 0));
@@ -122,6 +165,11 @@ public class PreparationPanel extends JPanel { // Extend JPanel
         theConstraints.gridy++;
     }
 
+    /**
+     * Adds difficulty selection buttons to the inner panel.
+     *
+     * @param theConstraints The GridBagConstraints used for positioning components.
+     */
     private void addDifficultyButtons(final GridBagConstraints theConstraints) {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
@@ -151,6 +199,11 @@ public class PreparationPanel extends JPanel { // Extend JPanel
         theConstraints.anchor = GridBagConstraints.NORTHWEST;
     }
 
+    /**
+     * Adds the "Yes" and "No" buttons to the inner panel.
+     *
+     * @param theConstraints The GridBagConstraints used for positioning components.
+     */
     private void addYesNoButtons(final GridBagConstraints theConstraints) {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 75, 0));
@@ -166,6 +219,11 @@ public class PreparationPanel extends JPanel { // Extend JPanel
         theConstraints.gridy++;
     }
 
+    /**
+     * Processes the user's decision based on the "Yes" or "No" button clicked.
+     *
+     * @param theNameField The JTextField containing the user's name input.
+     */
     private void processUserDecision(final JTextField theNameField) {
         myYesButton.addActionListener(new ActionListener() {
             @Override
@@ -204,6 +262,11 @@ public class PreparationPanel extends JPanel { // Extend JPanel
         });
     }
 
+    /**
+     * Returns the difficulty level based on the selected radio button.
+     *
+     * @return The chosen difficulty level (8 for easy, 6 for medium, 4 for hard).
+     */
     private int getChosenDifficulty() {
         int difficulty = 8;
         int buttonCount = 0;

@@ -7,6 +7,11 @@ import model.RoomEnums.*;
 
 /**
  * Represents a maze that holds questions.
+ *
+ * @author Cai Spidel
+ * @author Mathew Miller
+ * @author Jacob Klymenko
+ * @version 1.0
  */
 public class Maze implements Serializable {
     /** The serialVersionUID for this object. */

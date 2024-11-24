@@ -9,40 +9,96 @@ import model.Room;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The MazeViewFrame class represents the main game frame for the "Christmas Trivia Maze" game.
+ * It handles the layout, panels, and menu items, such as the main menu, preparation screen,
+ * maze screen, result screen, and volume control. This frame also manages interactions like
+ * displaying help, about, debug options, and volume settings.
+ *
+ * @author Mathew Miller
+ * @author Jacob Klymenko
+ * @version 1.0
+ */
 public class MazeViewFrame extends JFrame {
 
-    private final MainMenuPanel myMainMenuPanel;
+    /** The main menu panel displayed when the game starts. */
+    private MainMenuPanel myMainMenuPanel;
 
-    private final PreparationPanel myPreparationPanel;
+    /** The preparation panel displayed before the game starts. */
+    private PreparationPanel myPreparationPanel;
 
-    private final MazeScreenPanel myMazeScreenPanel;
+    /** The maze screen panel where the gameplay happens. */
+    private MazeScreenPanel myMazeScreenPanel;
 
-    private final ResultScreenPanel myResultScreenPanel;
+    /** The result screen panel displayed after the game ends. */
+    private ResultScreenPanel myResultScreenPanel;
 
-    private final VolumeSliderPanel myVolumeSliderPanel;
+    /** The volume slider panel for controlling game sound. */
+    private VolumeSliderPanel myVolumeSliderPanel;
 
+    /**
+     * Constructs a MazeViewFrame object, setting up the game frame with necessary panels and menus.
+     *
+     * @param theGameListener the listener responsible for game-related events.
+     * @param theMusicController the controller for managing the game's music settings.
+     */
     public MazeViewFrame(final GameListener theGameListener, final MusicController theMusicController) {
+        initializeFrame();
+        initializePanels(theGameListener, theMusicController);
+        initializeMenuBar();
+        addPanelsToFrame();
+    }
+
+    /**
+     * Initializes the frame settings such as title, size, close operation, and layout.
+     */
+    private void initializeFrame() {
         setTitle("Christmas Trivia Maze");
         setSize(1214, 760);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         setVisible(true);
+    }
 
+    /**
+     * Initializes the panels for the game, including the main menu, preparation, maze screen, and result screen.
+     *
+     * @param theGameListener the listener responsible for game-related events.
+     * @param theMusicController the controller for managing the game's music settings.
+     */
+    private void initializePanels(final GameListener theGameListener,
+                                  final MusicController theMusicController) {
         myVolumeSliderPanel = new VolumeSliderPanel(theMusicController);
-
-        myMainMenuPanel = new MainMenuPanel(theGameListener, theMusicController, myVolumeSliderPanel);
+        myMainMenuPanel = new MainMenuPanel(theGameListener, myVolumeSliderPanel);
         myPreparationPanel = new PreparationPanel(theGameListener);
         myMazeScreenPanel = new MazeScreenPanel(theGameListener);
-        myResultScreenPanel = new ResultScreenPanel(theGameListener, theMusicController, myVolumeSliderPanel);
+        myResultScreenPanel = new ResultScreenPanel(theGameListener, myVolumeSliderPanel);
+    }
 
-        JMenuBar myMenuBar = new JMenuBar();
-        JMenu myFileMenu = new JMenu("Help...");
-        setJMenuBar(myMenuBar);
+    /**
+     * Initializes the menu bar and its items, including help, volume, about, and debug options.
+     */
+    private void initializeMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("Help...");
+        setJMenuBar(menuBar);
+        menuBar.add(fileMenu);
 
-        myMenuBar.add(myFileMenu);
+        addHelpMenuItem(fileMenu);
+        addVolumeMenuItem(fileMenu);
+        addAboutMenuItem(fileMenu);
+        addDebugMenuItem(fileMenu);
+    }
+
+    /**
+     * Adds the "How to Play" menu item to the file menu.
+     *
+     * @param theFileMenu the file menu to which the item will be added.
+     */
+    private void addHelpMenuItem(final JMenu theFileMenu) {
         JMenuItem helpMenuItem = new JMenuItem("How to Play");
-        myFileMenu.add(helpMenuItem);
+        theFileMenu.add(helpMenuItem);
         helpMenuItem.addActionListener(e -> {
             JOptionPane.showMessageDialog(this,
                     "This is where we can put information" +
@@ -50,39 +106,70 @@ public class MazeViewFrame extends JFrame {
                             "the different features work");
             repaint();
         });
+    }
 
+    /**
+     * Adds the "Volume" menu item to the file menu.
+     *
+     * @param theFileMenu the file menu to which the item will be added.
+     */
+    private void addVolumeMenuItem(final JMenu theFileMenu) {
         JMenuItem volumeMenuItem = new JMenuItem("Volume");
-        myFileMenu.add(volumeMenuItem);
+        theFileMenu.add(volumeMenuItem);
         volumeMenuItem.addActionListener(e -> {
             myVolumeSliderPanel.showDialog(this, "Volume");
             repaint();
         });
+    }
 
+    /**
+     * Adds the "About" menu item to the file menu.
+     *
+     * @param theFileMenu the file menu to which the item will be added.
+     */
+    private void addAboutMenuItem(final JMenu theFileMenu) {
         JMenuItem aboutMenuItem = new JMenuItem("About");
-        myFileMenu.add(aboutMenuItem);
+        theFileMenu.add(aboutMenuItem);
         aboutMenuItem.addActionListener(e -> {
             JOptionPane.showMessageDialog(this,
                     "Version - developing\nMathew Miller" +
                             "\nJacob Klymenko\nCai Spidel");
             repaint();
         });
+    }
 
+    /**
+     * Adds the "Debug" menu item to the file menu.
+     *
+     * @param theFileMenu the file menu to which the item will be added.
+     */
+    private void addDebugMenuItem(final JMenu theFileMenu) {
         JCheckBoxMenuItem debugMenuItem = new JCheckBoxMenuItem("Debug");
         debugMenuItem.setSelected(false);
-        myFileMenu.add(debugMenuItem);
+        theFileMenu.add(debugMenuItem);
         debugMenuItem.addActionListener(e -> {
             JOptionPane.showMessageDialog(this,
                     "When this is selected debug mode is enabled");
             repaint();
         });
+    }
 
+    /**
+     * Adds the various panels (result, maze, preparation, and main menu) to the frame.
+     */
+    private void addPanelsToFrame() {
         this.add(myResultScreenPanel, BorderLayout.CENTER);
         this.add(myMazeScreenPanel, BorderLayout.CENTER);
         this.add(myPreparationPanel, BorderLayout.CENTER);
         this.add(myMainMenuPanel, BorderLayout.CENTER);
     }
 
-    public void setMaze(Maze theMaze) {
+    /**
+     * Sets the maze screen visible and hides other panels.
+     *
+     * @param theMaze the maze object to be displayed.
+     */
+    public void setMaze(final Maze theMaze) {
         myMainMenuPanel.setVisible(false);
         myResultScreenPanel.setVisible(false);
         myPreparationPanel.setVisible(false);
@@ -90,6 +177,9 @@ public class MazeViewFrame extends JFrame {
         myMazeScreenPanel.setMaze(theMaze);
     }
 
+    /**
+     * Sets the preparation screen visible and hides other panels.
+     */
     public void setPreparation() {
         myMainMenuPanel.setVisible(false);
         myMazeScreenPanel.setVisible(false);
@@ -97,6 +187,9 @@ public class MazeViewFrame extends JFrame {
         myPreparationPanel.setVisible(true);
     }
 
+    /**
+     * Sets the main menu screen visible and hides other panels.
+     */
     public void setMainMenu() {
         myMazeScreenPanel.setVisible(false);
         myPreparationPanel.setVisible(false);
@@ -104,6 +197,9 @@ public class MazeViewFrame extends JFrame {
         myMainMenuPanel.setVisible(true);
     }
 
+    /**
+     * Sets the result screen visible and hides other panels.
+     */
     public void setResultScreen() {
         myMainMenuPanel.setVisible(false);
         myPreparationPanel.setVisible(false);
@@ -111,18 +207,21 @@ public class MazeViewFrame extends JFrame {
         myResultScreenPanel.setVisible(true);
     }
 
-    public void setVolumeSliderPanel() {
-        myMainMenuPanel.setVisible(false);
-        myResultScreenPanel.setVisible(false);
-        myPreparationPanel.setVisible(false);
-        myMazeScreenPanel.setVisible(false);
-    }
-
+    /**
+     * Updates the player's result on the result screen.
+     *
+     * @param theResult the result to be displayed (true for victory, false for defeat).
+     */
     public void updatePlayerResult(final boolean theResult) {
         myResultScreenPanel.updatePanel(theResult);
     }
 
-    public void setPlayer(Player thePlayer) {
+    /**
+     * Sets the player object on the maze screen.
+     *
+     * @param thePlayer the player object to be displayed on the maze screen.
+     */
+    public void setPlayer(final Player thePlayer) {
         myMazeScreenPanel.setPlayer(thePlayer);
     }
 

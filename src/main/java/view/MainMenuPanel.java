@@ -7,14 +7,23 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
+/**
+ * Represents the main menu panel of the Christmas Trivia Maze game. Contains buttons for starting
+ * a new game, loading a game, accessing settings, and exiting the game.
+ *
+ * @author Jacob Klymenko
+ * @author Mathew Miller
+ * @version 1.0
+ */
 public class MainMenuPanel extends JPanel {
 
+    /** The listener responsible for handling game events. */
     private final GameListener myGameListener;
 
-    private final MusicController myMusicController;
-
+    /** The inner panel that holds the menu components. */
     private final JPanel myInnerPanel;
 
+    /** The buttons in the main menu for various actions. */
     private final JButton[] myButtons = {
             new JButton("New Game"),
             new JButton("Load Game"),
@@ -22,10 +31,15 @@ public class MainMenuPanel extends JPanel {
             new JButton("Exit")
     };
 
-    public MainMenuPanel(final GameListener theGameListener, final MusicController theMusicController,
+    /**
+     * Constructs a new MainMenuPanel with the specified GameListener and VolumeSliderPanel.
+     *
+     * @param theGameListener The GameListener to handle game-related actions.
+     * @param theVolumeSliderPanel The VolumeSliderPanel to control the volume settings.
+     */
+    public MainMenuPanel(final GameListener theGameListener,
                          final VolumeSliderPanel theVolumeSliderPanel) {
         myGameListener = theGameListener;
-        myMusicController = theMusicController;
 
         setLayout(new BorderLayout());
 
@@ -43,7 +57,14 @@ public class MainMenuPanel extends JPanel {
         add(myInnerPanel, BorderLayout.WEST);
     }
 
-    private void setupMainPanel(final GridBagConstraints theConstraints, final VolumeSliderPanel theVolumeSliderPanel) {
+    /**
+     * Sets up the main menu panel with the title and buttons.
+     *
+     * @param theConstraints The GridBagConstraints for positioning components.
+     * @param theVolumeSliderPanel The VolumeSliderPanel for volume control.
+     */
+    private void setupMainPanel(final GridBagConstraints theConstraints,
+                                final VolumeSliderPanel theVolumeSliderPanel) {
         addTitle(theConstraints);
         theConstraints.gridy++;
 
@@ -51,6 +72,11 @@ public class MainMenuPanel extends JPanel {
         addButtons(theConstraints, theVolumeSliderPanel);
     }
 
+    /**
+     * Adds the title of the game ("Christmas Trivia Maze") to the panel.
+     *
+     * @param theConstraints The GridBagConstraints for positioning the title.
+     */
     private void addTitle(final GridBagConstraints theConstraints) {
         final String[] title = new String[] {"Christmas", "Trivia Maze"};
         JPanel titlePanel = new JPanel();
@@ -72,6 +98,9 @@ public class MainMenuPanel extends JPanel {
         myInnerPanel.add(titlePanel, theConstraints);
     }
 
+    /**
+     * Formats the buttons with a specific background color, border, and font.
+     */
     private void formatButtons() {
         for (JButton button : myButtons) {
             button.setBackground(new Color(241, 241, 241, 175));
@@ -83,6 +112,12 @@ public class MainMenuPanel extends JPanel {
         }
     }
 
+    /**
+     * Adds the buttons to the panel and assigns action listeners to each button.
+     *
+     * @param theConstraints The GridBagConstraints for positioning the buttons.
+     * @param theVolumeSliderPanel The VolumeSliderPanel for volume control.
+     */
     private void addButtons(final GridBagConstraints theConstraints, final VolumeSliderPanel theVolumeSliderPanel) {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(new Color(0, 0, 0, 0));
@@ -116,6 +151,11 @@ public class MainMenuPanel extends JPanel {
         myInnerPanel.add(buttonPanel, theConstraints);
     }
 
+    /**
+     * Paints the background image of the main menu.
+     *
+     * @param theGraphics The Graphics object used to paint the component.
+     */
     @Override
     protected void paintComponent(final Graphics theGraphics) {
         ImageIcon myIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(
