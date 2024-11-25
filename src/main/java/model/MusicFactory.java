@@ -61,4 +61,12 @@ public class MusicFactory {
     public void updateToNextSong() {
         myCurrSongIndex = (myCurrSongIndex + 1) % mySongList.size();
     }
+
+    /**
+     * Retrieves the index of the currently loaded song in the song list.
+     *
+     * @return the index of the current song in the list. The index is 0-based, with the first song
+     *         in the list having an index of 0.
+     */
+    public int getCurrSongIndex() { return myCurrSongIndex; }
 }
