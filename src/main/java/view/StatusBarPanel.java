@@ -117,6 +117,7 @@ public class StatusBarPanel extends JPanel {
         hintButton.setForeground(Color.WHITE);
         hintButton.setBorder(new RoundedBorder(20, new Insets(5, 5, 5, 5)));
         hintButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        hintButton.setEnabled(false);
         return hintButton;
     }
 
@@ -177,7 +178,6 @@ public class StatusBarPanel extends JPanel {
     public void setPlayerInfo(final Player thePlayer) {
         updateStatusPanel(myHealthPanel, "Life: ", myHealthImage, thePlayer.getHealthCount());
         updateStatusPanel(myHintPanel, "Gifts: ", myHintImage, thePlayer.getHints());
-        myGetHint.setEnabled(thePlayer.getHints() > 0);
     }
 
     /**
@@ -193,5 +193,9 @@ public class StatusBarPanel extends JPanel {
         thePanel.removeAll();
         thePanel.add(createStatusPanel(theLabel, theImage, theCount));
         thePanel.repaint();
+    }
+
+    public void setHintEnabled(boolean enabled){
+        myGetHint.setEnabled(enabled);
     }
 }

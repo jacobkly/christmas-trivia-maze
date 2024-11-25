@@ -25,7 +25,7 @@ public class KeyPanel extends JPanel {
     private static final String[] KEY_DESCRIPTIONS = {
             "Locked Room: ",
             "Health Count: ",
-            "Hint: ",
+            "Gift: ",
             "Undiscovered Room: ",
             "Discovered Room: "};
 

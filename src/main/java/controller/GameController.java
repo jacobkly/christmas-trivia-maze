@@ -124,6 +124,12 @@ public class GameController implements GameListener {
         correct = selectedRoom.checkAnswer(theAnswer);
 
         if (correct) {
+            try{
+                myFrame.playSoundEffect(true);
+            } catch (Exception theE) {
+                throw new RuntimeException(theE);
+            }
+
             if (selectedRoom.isEndpoint()) {
                 System.out.println("--- PLAYER REACHED END POINT ---");
                 myFrame.updatePlayerResult(true);
@@ -131,6 +137,11 @@ public class GameController implements GameListener {
                 return true;
             }
         } else {
+            try{
+                myFrame.playSoundEffect(false);
+            } catch (Exception theE) {
+                throw new RuntimeException(theE);
+            }
             myPlayer.setHealthCount(myPlayer.getHealthCount() - 1);
             myFrame.setPlayer(myPlayer);
         }
@@ -156,6 +167,7 @@ public class GameController implements GameListener {
     @Override
     public void onRoomClicked(final Room theRoom) {
         Room selectedRoom = myMaze.getCurrentlySelectedRoom();
+        myFrame.setHintEnabled(myPlayer.getHints() > 0 && selectedRoom.getQuestion() != null);
         if (selectedRoom != null) {
             selectedRoom.setHigLig(false);
         }
@@ -181,5 +193,7 @@ public class GameController implements GameListener {
             myFrame.setPlayer(myPlayer);
             checkAnswer(myMaze.getCurrentlySelectedRoom().getQuestion().getAnswer());
         }
+        myFrame.setHintEnabled(false);
     }
+
 }

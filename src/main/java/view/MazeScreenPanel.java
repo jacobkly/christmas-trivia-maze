@@ -100,4 +100,8 @@ public class MazeScreenPanel extends JPanel {
 
     }
 
+    public void setHintEnabled(boolean enabled){
+        myStatusBarPanel.setHintEnabled(enabled);
+    }
+
 }
