@@ -20,25 +20,22 @@ public class MusicUtil {
     /**
      * Retrieves a list of all songs in the "backgroundMusic" directory.
      *
+     * @param theMusicDirectory the directory containing music files.
      * @return an {@link ArrayList} of song file names found in the directory.
-     * @throws URISyntaxException if the music directory URL cannot be converted to a URI.
      * @throws IOException if an error occurs while accessing the files in the directory.
      */
-    public static ArrayList<String> getSongList() throws URISyntaxException, IOException {
+    public static ArrayList<String> getSongList(final String theMusicDirectory) throws IOException {
         ArrayList<String> songList = new ArrayList<>();
-        String musicDirectory = "backgroundMusic";
-        URL musicURL = MusicUtil.class.getClassLoader().getResource(musicDirectory);
+        Path musicPath = Paths.get(theMusicDirectory);
 
-        if (musicURL != null) {
-            Path musicPath = Paths.get(musicURL.toURI());
-
+        if (Files.exists(musicPath) && Files.isDirectory(musicPath)) {
             try (Stream<Path> files = Files.walk(musicPath)) {
-                files.filter(Files::isRegularFile).forEach(
-                        file -> songList.add(file.getFileName().toString())
-                );
-            } catch (IOException theException) {
-                theException.printStackTrace();
+                files.filter(Files::isRegularFile)
+                        .filter(file -> file.toString().endsWith(".wav"))
+                        .forEach(file -> songList.add(file.getFileName().toString()));
             }
+        } else {
+            throw new IOException("Directory does not exist or not a valid directory: " + theMusicDirectory);
         }
         return songList;
     }

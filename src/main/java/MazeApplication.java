@@ -35,7 +35,7 @@ public class MazeApplication {
             System.out.println("Look and feel not supported");
         }
         GameController gameController = new GameController();
-        ArrayList<String> songList = MusicUtil.getSongList();
+        ArrayList<String> songList = MusicUtil.getSongList("backgroundMusic");
         MazeViewFrame view;
 
         if (songList.isEmpty()) { // disable music feature
