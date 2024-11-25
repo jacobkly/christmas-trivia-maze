@@ -36,7 +36,7 @@ public class MazeScreenPanel extends JPanel {
         myGamePanel = new GamePanel(myGameListener);
         myQuestionPanel = new QuestionPanel(myGameListener);
         myStatusBarPanel = new StatusBarPanel(myGameListener);
-        myKeyPanel = new KeyPanel(myGameListener);
+        myKeyPanel = new KeyPanel();
 
 
         c.gridx = 1;
@@ -96,7 +96,7 @@ public class MazeScreenPanel extends JPanel {
 
     public void setPlayer(Player thePlayer){
 
-        myStatusBarPanel.setPlayer(thePlayer);
+        myStatusBarPanel.setPlayerInfo(thePlayer);
 
     }
 

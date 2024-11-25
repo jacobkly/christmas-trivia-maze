@@ -22,6 +22,15 @@ import java.io.IOException;
  */
 public class StatusBarPanel extends JPanel {
 
+    /** The height of the status bar panel in pixels. */
+    private static final int PANEL_HEIGHT = 150;
+
+    /** The width of the status bar panel in pixels. */
+    private static final int PANEL_WIDTH = 520;
+
+    /** The size (width and height) of the icons displayed in the status panels, in pixels. */
+    private static final int ICON_SIZE = 40;
+
     /** The GameListener object used to interact with the game's logic. */
     private final GameListener myGameListener;
 
@@ -47,41 +56,80 @@ public class StatusBarPanel extends JPanel {
      */
     public StatusBarPanel(final GameListener theGameListener) {
         myGameListener = theGameListener;
+        setPanelDefaults();
+        myHealthImage = loadImage("/statusBarFiles/heart.png");
+        myHintImage = loadImage("/statusBarFiles/lightbulb.png");
+
+        myHealthPanel = createStatusPanelContainer();
+        myHintPanel = createStatusPanelContainer();
+
+        myGetHint = createHintButton();
+
+        assemblePanel();
+    }
+
+    /**
+     * Sets default configurations for the panel.
+     */
+    private void setPanelDefaults() {
         setBackground(Color.BLACK);
         setBorder(new RoundedBorder(40));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setMinimumSize(new Dimension(520, 150));
+        setMinimumSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         setVisible(true);
+    }
 
+    /**
+     * Loads an image from the given path.
+     *
+     * @param thePath the path to the image resource
+     * @return the loaded BufferedImage
+     */
+    private BufferedImage loadImage(final String thePath) {
         try {
-            myHealthImage = ImageIO.read(getClass().getResource("/statusBarFiles/heart.png"));
-            myHintImage = ImageIO.read(getClass().getResource("/statusBarFiles/lightbulb.png"));
+            return ImageIO.read(getClass().getResource(thePath));
         } catch (final Exception theError) {
             throw new RuntimeException("Problem with image initialization; " + theError);
         }
+    }
 
+    /**
+     * Creates a reusable container for status panels.
+     *
+     * @return a JPanel for displaying status elements
+     */
+    private JPanel createStatusPanelContainer() {
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.BLACK);
+        return panel;
+    }
+
+    /**
+     * Creates the hint button with all necessary configurations.
+     *
+     * @return the configured JButton
+     */
+    private JButton createHintButton() {
+        JButton hintButton = new JButton("Open Gift");
+        hintButton.addActionListener(e -> myGameListener.useHint());
+        hintButton.setBackground(Color.BLACK);
+        hintButton.setFont(Fonts.getPixelFont(12));
+        hintButton.setForeground(Color.WHITE);
+        hintButton.setBorder(new RoundedBorder(20, new Insets(5, 5, 5, 5)));
+        hintButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        return hintButton;
+    }
+
+    /**
+     * Assembles all components into the main panel.
+     */
+    private void assemblePanel() {
         add(Box.createVerticalGlue());
-        myHealthPanel = new JPanel();
-        myHealthPanel.setBackground(Color.BLACK);
         add(myHealthPanel);
-
         add(Box.createVerticalGlue());
-        myHintPanel = new JPanel();
-        myHintPanel.setBackground(Color.BLACK);
         add(myHintPanel);
-
         add(Box.createVerticalGlue());
-
-        myGetHint = new JButton("Open Gift");
-        myGetHint.addActionListener(e -> myGameListener.useHint());
-      
-        myGetHint.setBackground(Color.BLACK);
-        myGetHint.setFont(Fonts.getPixelFont(12));
-        myGetHint.setForeground(Color.WHITE);
-        myGetHint.setBorder(new RoundedBorder(20, new Insets(5,5,5,5)));
-        myGetHint.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(myGetHint);
-
         add(Box.createVerticalGlue());
     }
 
@@ -98,12 +146,11 @@ public class StatusBarPanel extends JPanel {
                                      final int theNumImages) {
         JPanel panel = new JPanel();
         panel.setBackground(Color.BLACK);
-        panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, ICON_SIZE));
         panel.setLayout(new GridBagLayout());
 
         GridBagConstraints constraint = new GridBagConstraints();
         constraint.gridx = 0;
-        constraint.gridy = 0;
 
         JTextArea textArea = new JTextArea(theText);
         textArea.setEditable(false);
@@ -115,9 +162,9 @@ public class StatusBarPanel extends JPanel {
 
         for (int i = 0; i < theNumImages; i++) {
             JLabel imageLabel = new JLabel(new ImageIcon(
-                    theImage.getScaledInstance(40, 40, Image.SCALE_DEFAULT)));
+                    theImage.getScaledInstance(ICON_SIZE, ICON_SIZE, Image.SCALE_DEFAULT)));
             panel.add(imageLabel, constraint);
-            constraint.gridx++; // move to next position for the next image
+            constraint.gridx++;
         }
         return panel;
     }
@@ -127,18 +174,24 @@ public class StatusBarPanel extends JPanel {
      *
      * @param thePlayer the Player object whose status will be displayed
      */
-    public void setPlayer(Player thePlayer) {
-        myHealthPanel.removeAll();
-        myHintPanel.removeAll();
+    public void setPlayerInfo(final Player thePlayer) {
+        updateStatusPanel(myHealthPanel, "Life: ", myHealthImage, thePlayer.getHealthCount());
+        updateStatusPanel(myHintPanel, "Gifts: ", myHintImage, thePlayer.getHints());
         myGetHint.setEnabled(thePlayer.getHints() > 0);
-        JPanel healthIconPanel = createStatusPanel("Life: ", myHealthImage,
-                                                    thePlayer.getHealthCount());
-        myHealthPanel.add(healthIconPanel);
-        myHealthPanel.repaint();
+    }
 
-        JPanel hintIconPanel = createStatusPanel("Gifts: ", myHintImage,
-                                                    thePlayer.getHints());
-        myHintPanel.add(hintIconPanel);
-        myHintPanel.repaint();
+    /**
+     * Updates a status panel with new data.
+     *
+     * @param thePanel the panel to update
+     * @param theLabel the label text
+     * @param theImage the image to display
+     * @param theCount the number of images to display
+     */
+    private void updateStatusPanel(final JPanel thePanel, final String theLabel,
+                                   final BufferedImage theImage, final int theCount) {
+        thePanel.removeAll();
+        thePanel.add(createStatusPanel(theLabel, theImage, theCount));
+        thePanel.repaint();
     }
 }
