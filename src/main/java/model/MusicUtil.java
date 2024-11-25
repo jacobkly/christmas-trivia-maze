@@ -33,9 +33,10 @@ public class MusicUtil {
                 files.filter(Files::isRegularFile)
                         .filter(file -> file.toString().endsWith(".wav"))
                         .forEach(file -> songList.add(file.getFileName().toString()));
+            } catch (final Exception theException) {
+                throw new IOException("Directory does not exist or not a valid directory: " + theMusicDirectory);
+
             }
-        } else {
-            throw new IOException("Directory does not exist or not a valid directory: " + theMusicDirectory);
         }
         return songList;
     }
