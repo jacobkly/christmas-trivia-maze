@@ -171,7 +171,6 @@ public class GameController implements GameListener {
         if (selectedRoom != null) {
             selectedRoom.setHigLig(false);
         }
-
         theRoom.setHigLig(true);
         myFrame.setMaze(myMaze);
     }
