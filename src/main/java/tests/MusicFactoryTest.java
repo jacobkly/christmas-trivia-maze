@@ -34,8 +34,8 @@ public class MusicFactoryTest {
     @BeforeEach
     public void setUp() {
         ArrayList<String> songList = new ArrayList<>();
-        // Only the first song is added to the list for testing
-        songList.add("Let It Snow.wav"); // This song should exist in the resources folder
+        // This song should exist in the resources folder to for correct tests
+        songList.add("Unit Test Song.wav");
         myMusicFactory = new MusicFactory(songList);
     }
 
