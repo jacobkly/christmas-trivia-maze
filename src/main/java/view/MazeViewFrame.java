@@ -6,8 +6,11 @@ import model.Maze;
 import model.Player;
 import model.Room;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.util.Objects;
 
 /**
  * The MazeViewFrame class represents the main game frame for the "Christmas Trivia Maze" game.
@@ -225,6 +228,24 @@ public class MazeViewFrame extends JFrame {
      */
     public void setPlayer(final Player thePlayer) {
         myMazeScreenPanel.setPlayer(thePlayer);
+    }
+
+    public void setHintEnabled(boolean enabled){
+        myMazeScreenPanel.setHintEnabled(enabled);
+    }
+
+    public void playSoundEffect(boolean result) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        AudioInputStream audio;
+        if (result){
+             audio = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResourceAsStream("/soundEffects/RightAnswer.wav")));
+        }else{
+             audio = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResourceAsStream("/soundEffects/WrongAnswer.wav")));
+        }
+
+        Clip clip = AudioSystem.getClip();
+        clip.open(audio);
+        clip.start();
+
     }
 
 }

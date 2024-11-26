@@ -14,7 +14,8 @@ public class QuestionFactory {
     public static List<Question> getQuestionsFromDatabase() {
         List<Question> questionList = new ArrayList<>();
 
-        String selectMultipleChoice = "SELECT question, answer, wrong_answer_1, wrong_answer_2, wrong_answer_3 FROM multiple_choice_question";
+        String selectMultipleChoice = "SELECT question, answer, wrong_answer_1," +
+                " wrong_answer_2, wrong_answer_3 FROM multiple_choice_question";
         String selectBoolean = "SELECT question, answer FROM boolean_question";
         String selectTextInput = "SELECT question, answer FROM text_input_question";
 
