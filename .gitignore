@@ -22,9 +22,6 @@ out/
 *.tar.gz
 *.rar
 
-# Music files
-
-
 # Save files
 *.ser
 
