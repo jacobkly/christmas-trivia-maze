@@ -35,7 +35,7 @@ public class MusicFactoryTest {
     public void setUp() {
         ArrayList<String> songList = new ArrayList<>();
         // This song should exist in the resources folder to for correct tests
-        songList.add("Unit Test Song.wav");
+        songList.add("Silent Night.wav");
         myMusicFactory = new MusicFactory(songList);
     }
 
