@@ -15,7 +15,7 @@ import java.util.stream.Stream;
  * @author Jacob Klymenko
  * @version 1.0
  */
-public class MusicUtil {
+public final class MusicUtil {
 
     /**
      * Retrieves a list of all songs in the "backgroundMusic" directory.
