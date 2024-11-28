@@ -24,6 +24,10 @@ import java.util.Objects;
  */
 public class MazeViewFrame extends JFrame {
 
+    private final GameListener myGameListener;
+
+    private final MusicController myMusicController;
+
     /** The main menu panel displayed when the game starts. */
     private MainMenuPanel myMainMenuPanel;
 
@@ -46,10 +50,12 @@ public class MazeViewFrame extends JFrame {
      * @param theMusicController the controller for managing the game's music settings.
      */
     public MazeViewFrame(final GameListener theGameListener, final MusicController theMusicController) {
+        myGameListener = theGameListener;
+        myMusicController = theMusicController;
+
         initializeFrame();
-        initializePanels(theGameListener, theMusicController);
-//        initializeMenuBar();
-        setJMenuBar(new MenuBar(theGameListener, myVolumeSliderPanel));
+        initializePanels();
+        setJMenuBar(new MenuBar(myGameListener, myVolumeSliderPanel, this));
         addPanelsToFrame();
     }
 
@@ -58,9 +64,7 @@ public class MazeViewFrame extends JFrame {
      */
     private void initializeFrame() {
         setTitle("Christmas Trivia Maze");
-        int width = 1214;
-        int height = 760;
-        setSize(width, height);
+        setSize(1214, 760);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
@@ -69,95 +73,13 @@ public class MazeViewFrame extends JFrame {
 
     /**
      * Initializes the panels for the game, including the main menu, preparation, maze screen, and result screen.
-     *
-     * @param theGameListener the listener responsible for game-related events.
-     * @param theMusicController the controller for managing the game's music settings.
      */
-    private void initializePanels(final GameListener theGameListener,
-                                  final MusicController theMusicController) {
-        myVolumeSliderPanel = new VolumeSliderPanel(theMusicController);
-        myMainMenuPanel = new MainMenuPanel(theGameListener, myVolumeSliderPanel);
-        myPreparationPanel = new PreparationPanel(theGameListener);
-        myMazeScreenPanel = new MazeScreenPanel(theGameListener);
-        myResultScreenPanel = new ResultScreenPanel(theGameListener, myVolumeSliderPanel);
-    }
-
-    /**
-     * Initializes the menu bar and its items, including help, volume, about, and debug options.
-     */
-    private void initializeMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu("Help...");
-        setJMenuBar(menuBar);
-        menuBar.add(fileMenu);
-
-        addHelpMenuItem(fileMenu);
-        addVolumeMenuItem(fileMenu);
-        addAboutMenuItem(fileMenu);
-        addDebugMenuItem(fileMenu);
-    }
-
-    /**
-     * Adds the "How to Play" menu item to the file menu.
-     *
-     * @param theFileMenu the file menu to which the item will be added.
-     */
-    private void addHelpMenuItem(final JMenu theFileMenu) {
-        JMenuItem helpMenuItem = new JMenuItem("How to Play");
-        theFileMenu.add(helpMenuItem);
-        helpMenuItem.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this,
-                    "This is where we can put information" +
-                            "on how to play the game\nand let the user know how" +
-                            "the different features work");
-            repaint();
-        });
-    }
-
-    /**
-     * Adds the "Volume" menu item to the file menu.
-     *
-     * @param theFileMenu the file menu to which the item will be added.
-     */
-    private void addVolumeMenuItem(final JMenu theFileMenu) {
-        JMenuItem volumeMenuItem = new JMenuItem("Volume");
-        theFileMenu.add(volumeMenuItem);
-        volumeMenuItem.addActionListener(e -> {
-            myVolumeSliderPanel.showDialog(this, "Volume");
-            repaint();
-        });
-    }
-
-    /**
-     * Adds the "About" menu item to the file menu.
-     *
-     * @param theFileMenu the file menu to which the item will be added.
-     */
-    private void addAboutMenuItem(final JMenu theFileMenu) {
-        JMenuItem aboutMenuItem = new JMenuItem("About");
-        theFileMenu.add(aboutMenuItem);
-        aboutMenuItem.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this,
-                    "Version - developing\nMathew Miller" +
-                            "\nJacob Klymenko\nCai Spidel");
-            repaint();
-        });
-    }
-
-    /**
-     * Adds the "Debug" menu item to the file menu.
-     *
-     * @param theFileMenu the file menu to which the item will be added.
-     */
-    private void addDebugMenuItem(final JMenu theFileMenu) {
-        JCheckBoxMenuItem debugMenuItem = new JCheckBoxMenuItem("Debug");
-        debugMenuItem.setSelected(false);
-        theFileMenu.add(debugMenuItem);
-        debugMenuItem.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this,
-                    "When this is selected debug mode is enabled");
-            repaint();
-        });
+    private void initializePanels() {
+        myVolumeSliderPanel = new VolumeSliderPanel(myMusicController);
+        myMainMenuPanel = new MainMenuPanel(myGameListener, myVolumeSliderPanel);
+        myPreparationPanel = new PreparationPanel(myGameListener);
+        myMazeScreenPanel = new MazeScreenPanel(myGameListener);
+        myResultScreenPanel = new ResultScreenPanel(myGameListener, myVolumeSliderPanel);
     }
 
     /**
@@ -231,23 +153,26 @@ public class MazeViewFrame extends JFrame {
         myMazeScreenPanel.setPlayer(thePlayer);
     }
 
-    public void setHintEnabled(boolean enabled){
-        myMazeScreenPanel.setHintEnabled(enabled);
+    public void setHintEnabled(final boolean theEnabled){
+        myMazeScreenPanel.setHintEnabled(theEnabled);
     }
 
-    public void playSoundEffect(boolean result) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+    // TODO kinda looks like controller code
+    public void playSoundEffect(final boolean theResult)
+            throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         AudioInputStream audio;
-        if (result){
-             audio = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResourceAsStream("/soundEffects/RightAnswer.wav")));
-        }else{
-             audio = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResourceAsStream("/soundEffects/WrongAnswer.wav")));
+
+        if (theResult) {
+             audio = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass()
+                     .getResourceAsStream("/soundEffects/RightAnswer.wav")));
+        } else {
+             audio = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass()
+                     .getResourceAsStream("/soundEffects/WrongAnswer.wav")));
         }
 
         Clip clip = AudioSystem.getClip();
         clip.open(audio);
         clip.start();
-
     }
-
 }
 

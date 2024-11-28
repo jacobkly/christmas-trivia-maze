@@ -3,26 +3,34 @@ package view;
 import controller.GameListener;
 
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+import java.awt.*;
 
-public class MenuBar extends JMenuBar {
+public final class MenuBar extends JMenuBar {
 
     private final GameListener myGameListener;
 
     private final VolumeSliderPanel myVolumeSliderPanel;
 
+    private final Component myParentComponent;
+
     public MenuBar(final GameListener theGameListener,
-                   final VolumeSliderPanel theVolumeSliderPanel) {
+                   final VolumeSliderPanel theVolumeSliderPanel,
+                   final Component theParentComponent) {
         myGameListener = theGameListener;
         myVolumeSliderPanel = theVolumeSliderPanel;
+        myParentComponent = theParentComponent;
 
         addFileMenu();
         addSettingsMenu();
-        addAboutMenu();
+        addInformationMenu();
     }
 
     private void addFileMenu() {
         JMenu fileMenu = new JMenu("File");
         add(fileMenu);
+        addJMenuActionListener(fileMenu);
 
         addSaveMenuItem(fileMenu);
         addLoadMenuItem(fileMenu);
@@ -34,7 +42,7 @@ public class MenuBar extends JMenuBar {
         theFileMenu.add(saveMenuItem);
         saveMenuItem.addActionListener(e -> {
             /* save game action here */
-            repaint();
+            myParentComponent.repaint();
         });
     }
 
@@ -43,19 +51,23 @@ public class MenuBar extends JMenuBar {
         theFileMenu.add(loadMenuItem);
         loadMenuItem.addActionListener(e -> {
             /* load game directory action here */
-            repaint();
+            myParentComponent.repaint();
         });
     }
 
     private void addExitGameMenuItem(final JMenu theFileMenu) {
         JMenuItem exitGameMenuItem = new JMenuItem("Exit Game");
         theFileMenu.add(exitGameMenuItem);
-        exitGameMenuItem.addActionListener(e -> myGameListener.startMainMenu());
+        exitGameMenuItem.addActionListener(e -> {
+            myGameListener.startMainMenu();
+            myParentComponent.repaint();
+        });
     }
 
     private void addSettingsMenu() {
         JMenu settingsMenu = new JMenu("Settings");
         add(settingsMenu);
+        addJMenuActionListener(settingsMenu);
 
         addVolumeMenuItem(settingsMenu);
         addDebugModeMenuItem(settingsMenu);
@@ -65,8 +77,8 @@ public class MenuBar extends JMenuBar {
         JMenuItem volumeMenuItem = new JMenuItem("Volume");
         theSettingsMenu.add(volumeMenuItem);
         volumeMenuItem.addActionListener(e -> {
-            myVolumeSliderPanel.showDialog(this, "Volume");
-            repaint();
+            myVolumeSliderPanel.showDialog(myParentComponent, "Volume");
+            myParentComponent.repaint();
         });
     }
 
@@ -80,21 +92,73 @@ public class MenuBar extends JMenuBar {
            } else {
                /* disable debug mode action here */
            }
-           repaint();
+            myParentComponent.repaint();
         });
     }
 
-    private void addAboutMenu() {
-        JMenu aboutMenu = new JMenu("About");
-        add(aboutMenu);
+    private void addInformationMenu() {
+        JMenu informationMenu = new JMenu("Information");
+        add(informationMenu);
+        addJMenuActionListener(informationMenu);
 
-        aboutMenu.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this,
-                    "In development by: " +
-                            "Mathew Miller\n" +
-                            "Jacob Klymenko\n" +
-                            "Cai Spidel");
-            repaint();
+        addAboutMenuItem(informationMenu);
+        addInstructionsMenuItem(informationMenu);
+    }
+
+    private void addAboutMenuItem(final JMenu theInfoMenu) {
+        JMenuItem aboutMenuItem = new JMenuItem("About");
+        theInfoMenu.add(aboutMenuItem);
+        aboutMenuItem.addActionListener(e -> {
+            JOptionPane.showMessageDialog(myParentComponent,
+                    """
+                    In development by:
+                    
+                    Cai Spidel
+                    Mathew Miller
+                    Jacob Klymenko
+                    """);
+            myParentComponent.repaint();
+        });
+    }
+
+    private void addInstructionsMenuItem(final JMenu theInfoMenu) {
+        JMenuItem instructionsMenuItem = new JMenuItem("Instructions");
+        theInfoMenu.add(instructionsMenuItem);
+        instructionsMenuItem.addActionListener(e -> {
+            JOptionPane.showMessageDialog(
+                    myParentComponent,
+                    """
+                    How to Play!
+                
+                    Click on a square containing a lock.
+                    
+                    A question will appear.
+                    
+                    If answered correctly continue on!
+                    If not, try again at the cost of one health...
+                
+                    If you are completely stumped, use a gift!
+                    
+                    A gift answers the question for you.
+                    They are limited so use them sparingly!
+                
+                    Now play and try to find Santa!
+                    """);
+            myParentComponent.repaint();
+        });
+    }
+
+    private void addJMenuActionListener(final JMenu theMenu) {
+        theMenu.addMenuListener(new MenuListener() {
+            // No action needed here for repainting parent component
+            @Override
+            public void menuSelected(final MenuEvent theEvent) {}
+
+            @Override
+            public void menuDeselected(final MenuEvent theEvent) { myParentComponent.repaint(); }
+
+            @Override
+            public void menuCanceled(final MenuEvent theEvent) { myParentComponent.repaint(); }
         });
     }
 }
