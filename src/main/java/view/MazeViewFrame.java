@@ -48,7 +48,8 @@ public class MazeViewFrame extends JFrame {
     public MazeViewFrame(final GameListener theGameListener, final MusicController theMusicController) {
         initializeFrame();
         initializePanels(theGameListener, theMusicController);
-        initializeMenuBar();
+//        initializeMenuBar();
+        setJMenuBar(new MenuBar(theGameListener, myVolumeSliderPanel));
         addPanelsToFrame();
     }
 
