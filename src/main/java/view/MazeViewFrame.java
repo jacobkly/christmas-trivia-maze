@@ -24,8 +24,10 @@ import java.util.Objects;
  */
 public class MazeViewFrame extends JFrame {
 
+    /** The listener responsible for handling game events. */
     private final GameListener myGameListener;
 
+    /** The music controller used to control the background music. */
     private final MusicController myMusicController;
 
     /** The main menu panel displayed when the game starts. */
@@ -153,11 +155,25 @@ public class MazeViewFrame extends JFrame {
         myMazeScreenPanel.setPlayer(thePlayer);
     }
 
+    /**
+     * Enables or disables the hint feature on the maze screen panel.
+     *
+     * @param theEnabled true to enable hints, false to disable them.
+     */
     public void setHintEnabled(final boolean theEnabled){
         myMazeScreenPanel.setHintEnabled(theEnabled);
     }
 
     // TODO kinda looks like controller code
+    /**
+     * Plays a sound effect based on the result of an action.
+     *
+     * @param theResult true to play the "correct answer" sound effect, false to play the
+     *                  "wrong answer" sound effect.
+     * @throws UnsupportedAudioFileException if the audio file format is unsupported.
+     * @throws IOException if an I/O error occurs during sound file reading.
+     * @throws LineUnavailableException if the audio line cannot be opened.
+     */
     public void playSoundEffect(final boolean theResult)
             throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         AudioInputStream audio;
