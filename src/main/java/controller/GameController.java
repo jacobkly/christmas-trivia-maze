@@ -7,7 +7,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Controls the logic and interactions of the game, coordinating between the view, player, and maze.
@@ -20,7 +19,8 @@ import java.util.Objects;
 public class GameController implements GameListener {
 
     /** The list of questions used in the game, fetched from the database. */
-    private final List<Question> myQuestionList = new ArrayList<>(QuestionFactory.getQuestionsFromDatabase());
+    private final List<Question> myQuestionList =
+            new ArrayList<>(QuestionFactory.getQuestionsFromDatabase());
 
     /** The view frame used to display the maze and other UI components. */
     private MazeViewFrame myFrame;
@@ -31,8 +31,9 @@ public class GameController implements GameListener {
     /** The player instance representing the user's character and stats. */
     private Player myPlayer;
 
-    /** Constructs a new GameController that does not initialize any components. */
-    public GameController() { /* do nothing */ }
+    private int myRoomsDiscovered;
+
+    public GameController() { myRoomsDiscovered = 0; }
 
     /**
      * Sets the view frame for the game and starts the main menu.
@@ -69,9 +70,6 @@ public class GameController implements GameListener {
 
         myPlayer = new Player(thePlayerName, thePlayerMaxHealth, thePlayerMaxHints);
         myFrame.setPlayer(myPlayer);
-        System.out.println("Player name: " + myPlayer.getName());
-        System.out.println("Player health given: " + thePlayerMaxHealth);
-        System.out.println("Player health received: " + myPlayer.getHealthCount());
     }
 
     @Override
@@ -124,14 +122,15 @@ public class GameController implements GameListener {
         correct = selectedRoom.checkAnswer(theAnswer);
 
         if (correct) {
-            try{
+            myPlayer.setRoomsDiscovered(++myRoomsDiscovered);
+
+            try {
                 myFrame.playSoundEffect(true);
             } catch (Exception theE) {
                 throw new RuntimeException(theE);
             }
 
             if (selectedRoom.isEndpoint()) {
-                System.out.println("--- PLAYER REACHED END POINT ---");
                 myFrame.updatePlayerResult(true);
                 myFrame.setResultScreen();
                 return true;

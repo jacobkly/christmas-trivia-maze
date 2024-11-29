@@ -18,23 +18,23 @@ public final class Player implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    /** The player's name. */
+    private final String myName;
+
     /** The maximum health of the player. */
     private final int myMaxHealth;
 
     /** The maximum number of hints the player can have. */
     private final int myMaxHints;
 
-    /** The number of rooms discovered by the player. */
-    private final int myRoomsDiscovered;
-
-    /** The player's name. */
-    private final String myName;
-
     /** The player's current health count. */
     private int myHealthCount;
 
     /** The number of hints remaining for the player. */
     private int myHints;
+
+    /** The number of rooms discovered by the player. */
+    private int myRoomsDiscovered;
 
     /**
      * Constructs a new player with the specified name, maximum health, and maximum hints.
@@ -120,13 +120,22 @@ public final class Player implements Serializable {
      */
     public int getHintsUsed() { return myMaxHints - myHints; }
 
-    // TODO most likely not needed after implementing functionality elsewhere
     /**
      * Gets the number of rooms the player has discovered.
      *
      * @return the number of rooms discovered.
      */
     public int getRoomsDiscovered() { return myRoomsDiscovered; }
+
+
+    /**
+     * Sets the number of rooms the player has discovered.
+     *
+     * @param theRoomsDiscovered the new number of rooms discovered.
+     */
+    public void setRoomsDiscovered(final int theRoomsDiscovered) {
+        myRoomsDiscovered = theRoomsDiscovered;
+    }
 
     /**
      * Retrieves an array of the player's current statistics, including name, health, hints used,
