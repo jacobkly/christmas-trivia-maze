@@ -31,8 +31,12 @@ public class GameController implements GameListener {
     /** The player instance representing the user's character and stats. */
     private Player myPlayer;
 
+    /** Tracks the number of rooms the player has discovered.  */
     private int myRoomsDiscovered;
 
+    /**
+     * Constructs a new GameController and does not perform any initialization.
+     */
     public GameController() { /* do nothing */ }
 
     /**
