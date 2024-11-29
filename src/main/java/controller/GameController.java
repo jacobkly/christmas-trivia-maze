@@ -74,7 +74,7 @@ public class GameController implements GameListener {
         myRoomsDiscovered = 0;
 
         myPlayer = new Player(thePlayerName, thePlayerMaxHealth, thePlayerMaxHints);
-        myFrame.setPlayer(myPlayer);
+        myFrame.setPlayer(myPlayer.getHealth(), myPlayer.getHints());
     }
 
     @Override
@@ -114,7 +114,7 @@ public class GameController implements GameListener {
             myMaze = wrapper.getMaze();
             myPlayer = wrapper.getPlayer();
             myFrame.setMaze(myMaze);
-            myFrame.setPlayer(myPlayer);
+            myFrame.setPlayer(myPlayer.getHealth(), myPlayer.getHints());
             success = true;
         }
         return success;
@@ -147,11 +147,11 @@ public class GameController implements GameListener {
             } catch (Exception theE) {
                 throw new RuntimeException(theE);
             }
-            myPlayer.setHealthCount(myPlayer.getHealthCount() - 1);
-            myFrame.setPlayer(myPlayer);
+            myPlayer.setHealth(myPlayer.getHealth() - 1);
+            myFrame.setPlayer(myPlayer.getHealth(), myPlayer.getHints());
         }
         // TODO merge result screen for win or loss into one method.
-        if (myPlayer.getHealthCount() == 0) {
+        if (myPlayer.getHealth() == 0) {
             myFrame.updatePlayerResult(false);
             myFrame.setResultScreen();
 
@@ -181,7 +181,7 @@ public class GameController implements GameListener {
     public void useHint() {
         if (myPlayer.getHints() > 0) {
             myPlayer.setHints(myPlayer.getHints() - 1);
-            myFrame.setPlayer(myPlayer);
+            myFrame.setPlayer(myPlayer.getHealth(), myPlayer.getHints());
             checkAnswer(myMaze.getCurrentlySelectedRoom().getQuestion().getAnswer());
         }
         myFrame.setHintEnabled(false);

@@ -74,9 +74,6 @@ public class MazeScreenPanel extends JPanel {
         c4.weighty = 1.0;
         c4.fill = GridBagConstraints.BOTH;
         add(myGamePanel, c4);
-
-
-
     }
 
     public void setMaze(final Maze theMaze) {
@@ -94,10 +91,8 @@ public class MazeScreenPanel extends JPanel {
         myGamePanel.setMaze(theMaze);
     }
 
-    public void setPlayer(Player thePlayer){
-
-        myStatusBarPanel.setPlayerInfo(thePlayer);
-
+    public void setPlayer(final int theHealth, final int theHints){
+        myStatusBarPanel.setPlayerInfo(theHealth, theHints);
     }
 
     public void setHintEnabled(boolean enabled){

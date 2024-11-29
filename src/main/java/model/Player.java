@@ -28,7 +28,7 @@ public final class Player implements Serializable {
     private final int myMaxHints;
 
     /** The player's current health count. */
-    private int myHealthCount;
+    private int myHealth;
 
     /** The number of hints remaining for the player. */
     private int myHints;
@@ -46,7 +46,7 @@ public final class Player implements Serializable {
     public Player(final String theName, final int theMaxHealth, final int theMaxHints) {
         myName = theName;
         myMaxHealth = theMaxHealth;
-        myHealthCount = theMaxHealth;
+        myHealth = theMaxHealth;
         myMaxHints = theMaxHints;
         myHints = theMaxHints;
         myRoomsDiscovered = 0;
@@ -60,18 +60,18 @@ public final class Player implements Serializable {
     public String getName() { return myName; }
 
     /**
-     * Gets the player's maximum health count.
+     * Gets the player's maximum health.
      *
      * @return the maximum health of the player.
      */
-    public int getMaxHealthCount() { return myMaxHealth; }
+    public int getMaxHealth() { return myMaxHealth; }
 
     /**
-     * Gets the player's current health count.
+     * Gets the player's current health.
      *
      * @return the current health of the player.
      */
-    public int getHealthCount() { return myHealthCount; }
+    public int getHealth() { return myHealth; }
 
     /**
      * Sets the player's current health count.
@@ -80,11 +80,11 @@ public final class Player implements Serializable {
      * @throws IllegalArgumentException if the health count is not between 0 and the player's
      *                                  maximum health.
      */
-    public void setHealthCount(final int theHealthCount) {
+    public void setHealth(final int theHealthCount) {
         if (theHealthCount < 0 || theHealthCount > myMaxHealth) {
             throw new IllegalArgumentException("Player health must be between 0 and " + myMaxHealth);
         } else {
-            myHealthCount = theHealthCount;
+            myHealth = theHealthCount;
         }
     }
 
@@ -146,7 +146,7 @@ public final class Player implements Serializable {
     public String[] getPlayerStatistics() {
         String[] playerStats = new String[4];
         playerStats[0] = "Player name: " + getName();
-        playerStats[1] = "Health left: " + getHealthCount() + " out of " + getMaxHealthCount();
+        playerStats[1] = "Health left: " + getHealth() + " out of " + getMaxHealth();
         playerStats[2] = "Hints used: " + getHintsUsed() + " out of " + getMaxHints();
         playerStats[3] = "Rooms discovered: " + getRoomsDiscovered();
         return playerStats;
