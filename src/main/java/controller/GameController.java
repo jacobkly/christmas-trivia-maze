@@ -33,7 +33,7 @@ public class GameController implements GameListener {
 
     private int myRoomsDiscovered;
 
-    public GameController() { myRoomsDiscovered = 0; }
+    public GameController() { /* do nothing */ }
 
     /**
      * Sets the view frame for the game and starts the main menu.
@@ -67,6 +67,7 @@ public class GameController implements GameListener {
         Collections.shuffle(questions);
         myMaze = new Maze(questions, theNumRows, theNumCols);
         myFrame.setMaze(myMaze);
+        myRoomsDiscovered = 0;
 
         myPlayer = new Player(thePlayerName, thePlayerMaxHealth, thePlayerMaxHints);
         myFrame.setPlayer(myPlayer);
@@ -133,6 +134,7 @@ public class GameController implements GameListener {
             if (selectedRoom.isEndpoint()) {
                 myFrame.updatePlayerResult(true);
                 myFrame.setResultScreen();
+                myRoomsDiscovered = 0;
                 return true;
             }
         } else {
