@@ -37,7 +37,7 @@ public class PlayerTest {
     @Test
     public void testGetMaxHintCount() {
         Player player = new Player("Alice", 8, 3);
-        assertEquals(3, player.getMaxHintCount(),
+        assertEquals(3, player.getMaxHints(),
                 "Maximum hint count should be 3.");
     }
 

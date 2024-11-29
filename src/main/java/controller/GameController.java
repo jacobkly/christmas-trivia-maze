@@ -133,7 +133,7 @@ public class GameController implements GameListener {
             if (selectedRoom.isEndpoint()) {
                 System.out.println("--- PLAYER REACHED END POINT ---");
                 myFrame.updatePlayerResult(true);
-                startResult();
+                myFrame.setResultScreen();
                 return true;
             }
         } else {
@@ -152,16 +152,10 @@ public class GameController implements GameListener {
 
         } else {
             saveGame();
-
             myFrame.setMaze(myMaze);
         }
 
         return correct;
-    }
-
-    @Override
-    public void startResult() {
-        myFrame.setResultScreen();
     }
 
     @Override
@@ -176,14 +170,7 @@ public class GameController implements GameListener {
     }
 
     @Override
-    public String[] getPlayerStatistics() {
-        String[] playerStats = new String[4]; // four main stats
-        playerStats[0] = "Player name: " + myPlayer.getName();
-        playerStats[1] = "Health left: " + myPlayer.getHealthCount() + " out of " + myPlayer.getMaxHealthCount();
-        playerStats[2] = "Hints used: " + myPlayer.getHintsUsed() + " out of " + myPlayer.getMaxHintCount();
-        playerStats[3] = "Rooms discovered: " + myPlayer.getRoomsDiscovered();
-        return playerStats;
-    }
+    public String[] playerStatistics() { return myPlayer.getPlayerStatistics(); }
 
     @Override
     public void useHint() {
