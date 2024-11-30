@@ -1,6 +1,5 @@
 package controller;
 
-import model.Maze;
 import model.Room;
 
 /**
@@ -46,7 +45,7 @@ public interface GameListener {
     *
     * @return whether resuming the game succeeded.
     */
-   boolean resumeGame();
+   boolean loadGame();
 
    /**
     * Checks the player's answer to the current question.
