@@ -39,7 +39,6 @@ public class MazeVisualPanel extends JPanel {
         }
 
         updateVisualInfo(theMaze);
-        setBorder(BorderFactory.createLineBorder(Color.WHITE));
         setVisible(true);
     }
 

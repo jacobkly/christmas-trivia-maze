@@ -171,12 +171,12 @@ public class StatusBarPanel extends JPanel {
     }
 
     /**
-     * Updates the status bar with the player's current health and hint values.
+     * Updates the status bar to display the player's current health and hints.
      *
-     * @param thePlayer the Player object whose status will be displayed
+     * @param thePlayer Current player info to update the UI with.
      */
     public void setPlayerInfo(final Player thePlayer) {
-        updateStatusPanel(myHealthPanel, "Life: ", myHealthImage, thePlayer.getHealthCount());
+        updateStatusPanel(myHealthPanel, "Life: ", myHealthImage, thePlayer.getHealth());
         updateStatusPanel(myHintPanel, "Gifts: ", myHintImage, thePlayer.getHints());
     }
 
@@ -195,7 +195,12 @@ public class StatusBarPanel extends JPanel {
         thePanel.repaint();
     }
 
-    public void setHintEnabled(boolean enabled){
-        myGetHint.setEnabled(enabled);
+    /**
+     * Enables or disables the hint functionality for the player.
+     *
+     * @param theIsEnabled true to enable the hint button, false to disable it.
+     */
+    public void setHintEnabled(final boolean theIsEnabled){
+        myGetHint.setEnabled(theIsEnabled);
     }
 }

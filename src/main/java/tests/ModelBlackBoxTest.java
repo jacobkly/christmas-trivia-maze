@@ -512,8 +512,8 @@ class ModelBlackBoxTest {
     @Test
     public void testPlayerConstructor() {
         assertEquals("name", myPlayer.getName());
-        assertEquals(3, myPlayer.getMaxHealthCount());
-        assertEquals(3, myPlayer.getHealthCount());
+        assertEquals(3, myPlayer.getMaxHealth());
+        assertEquals(3, myPlayer.getHealth());
         assertEquals(2, myPlayer.getHints());
 
     }

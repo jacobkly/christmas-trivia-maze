@@ -12,7 +12,7 @@ import java.util.Collections;
  * @author Jacob Klymenko
  * @version 1.0
  */
-public class MusicFactory {
+public final class MusicFactory {
 
     /** The list of songs in the playlist. */
     private final ArrayList<String> mySongList;

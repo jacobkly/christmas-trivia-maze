@@ -1,6 +1,7 @@
 package view;
 
 import controller.GameListener;
+import model.Player;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -117,34 +118,36 @@ public class ResultScreenPanel extends JPanel {
     }
 
     /**
-     * Updates the panel to reflect the new result (victory or defeat).
+     * Updates the panel to reflect the result of the game session.
      *
-     * @param theResult true if the result is a victory, false if it's a defeat
+     * @param theResult Indicates if this was a win or a loss.
+     * @param thePlayerStatistics Strings describing various statistics about the players game session.
      */
-    public void updatePanel(final boolean theResult) {
+    public void setResult(final boolean theResult, final String[] thePlayerStatistics) {
         myResult = theResult;
 
         myInnerPanel.removeAll();
         myInnerPanel.revalidate();
         myInnerPanel.repaint();
 
-        setupInnerPanel();
+        setupInnerPanel(thePlayerStatistics);
     }
 
     /**
      * Sets up the inner panel with the appropriate text and statistics based on the result.
+     *
+     * @param thePlayerStatistics Strings describing various statistics about the players game session.
      */
-    private void setupInnerPanel() {
-        String[] playerStats = myGameListener.getPlayerStatistics();
+    private void setupInnerPanel(final String[] thePlayerStatistics) {
         if (myResult) {
             addText(new String[]{"Victory!"}, 55);
             addText(VICTORY_TEXT, 15);
-            addText(playerStats, 12);
+            addText(thePlayerStatistics, 12);
             addText(VICTORY_STATS_TEXT, 15);
         } else {
             addText(new String[]{"Defeat"}, 55);
             addText(DEFEAT_TEXT, 15);
-            addText(playerStats, 12);
+            addText(thePlayerStatistics, 12);
             addText(DEFEAT_STATS_TEXT, 15);
         }
 

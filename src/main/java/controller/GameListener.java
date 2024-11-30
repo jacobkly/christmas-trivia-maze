@@ -56,23 +56,11 @@ public interface GameListener {
    boolean checkAnswer(String theAnswer);
 
    /**
-    * Starts the result screen, displaying the game's outcome.
-    */
-   void startResult(); // TODO this is likely unnecessary.
-
-   /**
     * Handles a room click event.
     *
     * @param theRoom the room that was clicked.
     */
    void onRoomClicked(Room theRoom);
-
-   /**
-    * Retrieves the player's statistics.
-    *
-    * @return an array of strings containing player statistics.
-    */
-   String[] getPlayerStatistics(); // TODO This should not be here
 
    /**
     * Uses a hint to reveal the answer to the current question.
