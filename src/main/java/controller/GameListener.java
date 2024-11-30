@@ -1,6 +1,5 @@
 package controller;
 
-import model.Maze;
 import model.Room;
 
 /**
@@ -46,7 +45,7 @@ public interface GameListener {
     *
     * @return whether resuming the game succeeded.
     */
-   boolean resumeGame();
+   boolean loadGame();
 
    /**
     * Checks the player's answer to the current question.
@@ -62,13 +61,6 @@ public interface GameListener {
     * @param theRoom the room that was clicked.
     */
    void onRoomClicked(Room theRoom);
-
-   /**
-    * Retrieves the player's statistics.
-    *
-    * @return an array of strings containing player statistics.
-    */
-   String[] playerStatistics();
 
    /**
     * Uses a hint to reveal the answer to the current question.

@@ -128,32 +128,26 @@ public class MazeViewFrame extends JFrame {
     }
 
     /**
-     * Sets the result screen visible and hides other panels.
+     * Shows the results UI for a win / loss and associated player statistics.
+     * @param theResult Indicates if this was a win or a loss.
+     * @param thePlayerStatistics Strings describing various statistics about the players game session.
      */
-    public void setResultScreen() {
+    public void setResult(final boolean theResult, final String[] thePlayerStatistics) {
+        myResultScreenPanel.setResult(theResult, thePlayerStatistics);
         myMainMenuPanel.setVisible(false);
         myPreparationPanel.setVisible(false);
         myMazeScreenPanel.setVisible(false);
         myResultScreenPanel.setVisible(true);
-    }
 
-    /**
-     * Updates the player's result on the result screen.
-     *
-     * @param theResult the result to be displayed (true for victory, false for defeat).
-     */
-    public void updatePlayerResult(final boolean theResult) {
-        myResultScreenPanel.updatePanel(theResult);
     }
 
     /**
      * Updates the maze screen with the player's current health and hints.
      *
-     * @param theHealth the player's current health to display on the maze screen.
-     * @param theHints  the player's remaining hints to display on the maze screen.
+     * @param thePlayer Current player information for display in the UI.
      */
-    public void setPlayer(final int theHealth, final int theHints) {
-        myMazeScreenPanel.setPlayer(theHealth, theHints);
+    public void setPlayer(final Player thePlayer) {
+        myMazeScreenPanel.setPlayer(thePlayer);
     }
 
     /**

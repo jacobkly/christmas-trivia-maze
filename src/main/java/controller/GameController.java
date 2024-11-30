@@ -3,6 +3,8 @@ package controller;
 import model.*;
 import view.MazeViewFrame;
 
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +41,10 @@ public class GameController implements GameListener {
      */
     public GameController() { /* do nothing */ }
 
+    /** Filechooser to choose locations to save and load files */
+    private final JFileChooser myFileChooser = new JFileChooser("./src/main/resources/saveFiles");
+
+
     /**
      * Sets the view frame for the game and starts the main menu.
      *
@@ -74,48 +80,60 @@ public class GameController implements GameListener {
         myRoomsDiscovered = 0;
 
         myPlayer = new Player(thePlayerName, thePlayerMaxHealth, thePlayerMaxHints);
-        myFrame.setPlayer(myPlayer.getHealth(), myPlayer.getHints());
+        myFrame.setPlayer(myPlayer);
     }
 
     @Override
     public void saveGame() {
         SerialWrapper wrapper = new SerialWrapper(myPlayer, myMaze);
-        try {
-            FileOutputStream fileOut = new FileOutputStream("saveGame.ser");
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(wrapper);
-            out.close();
-            fileOut.close();
-            System.out.println("Serialized data is saved in savegame.ser");
-        } catch (IOException i) {
-            i.printStackTrace();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Save Files", "ser");
+        myFileChooser.setFileFilter(filter);
+        final int result = myFileChooser.showSaveDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            try {
+                FileOutputStream fileOut = new FileOutputStream(myFileChooser.getSelectedFile());
+                ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                out.writeObject(wrapper);
+                out.close();
+                fileOut.close();
+                System.out.println("Serialized data is saved in savegame.ser");
+            } catch (IOException i) {
+                i.printStackTrace();
+            }
         }
     }
 
     @Override
-    public boolean resumeGame() {
+    public boolean loadGame() {
         SerialWrapper wrapper = null;
         boolean success = false;
-        try {
-            FileInputStream fileIn = new FileInputStream("savegame.ser");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            wrapper = (SerialWrapper) in.readObject();
-            in.close();
-            fileIn.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found, there is no saved game.");
-        } catch (IOException i) {
-            i.printStackTrace();
-        } catch (ClassNotFoundException c) {
-            System.out.println("SerialWrapper class not found");
-            c.printStackTrace();
-        }
-        if(wrapper != null) {
-            myMaze = wrapper.getMaze();
-            myPlayer = wrapper.getPlayer();
-            myFrame.setMaze(myMaze);
-            myFrame.setPlayer(myPlayer.getHealth(), myPlayer.getHints());
-            success = true;
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Save Files", "ser");
+        myFileChooser.setFileFilter(filter);
+        final int result = myFileChooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            try {
+                FileInputStream fileIn = new FileInputStream(myFileChooser.getSelectedFile());
+                ObjectInputStream in = new ObjectInputStream(fileIn);
+                wrapper = (SerialWrapper) in.readObject();
+                in.close();
+                fileIn.close();
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found, there is no saved game.");
+            } catch (IOException i) {
+                JOptionPane.showMessageDialog(null,
+                        "The selected file is not a save game!", "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (ClassNotFoundException c) {
+                System.out.println("SerialWrapper class not found");
+                c.printStackTrace();
+            }
+            if (wrapper != null) {
+                myMaze = wrapper.getMaze();
+                myPlayer = wrapper.getPlayer();
+                myFrame.setMaze(myMaze);
+                myFrame.setPlayer(myPlayer);
+                success = true;
+            }
         }
         return success;
     }
@@ -136,8 +154,7 @@ public class GameController implements GameListener {
             }
 
             if (selectedRoom.isEndpoint()) {
-                myFrame.updatePlayerResult(true);
-                myFrame.setResultScreen();
+                myFrame.setResult(true, myPlayer.getPlayerStatistics());
                 myRoomsDiscovered = 0;
                 return true;
             }
@@ -148,15 +165,14 @@ public class GameController implements GameListener {
                 throw new RuntimeException(theE);
             }
             myPlayer.setHealth(myPlayer.getHealth() - 1);
-            myFrame.setPlayer(myPlayer.getHealth(), myPlayer.getHints());
+            myFrame.setPlayer(myPlayer);
         }
         // TODO merge result screen for win or loss into one method.
         if (myPlayer.getHealth() == 0) {
-            myFrame.updatePlayerResult(false);
-            myFrame.setResultScreen();
+            myFrame.setResult(false, myPlayer.getPlayerStatistics());
 
         } else {
-            saveGame();
+
             myFrame.setMaze(myMaze);
         }
 
@@ -175,13 +191,10 @@ public class GameController implements GameListener {
     }
 
     @Override
-    public String[] playerStatistics() { return myPlayer.getPlayerStatistics(); }
-
-    @Override
     public void useHint() {
         if (myPlayer.getHints() > 0) {
             myPlayer.setHints(myPlayer.getHints() - 1);
-            myFrame.setPlayer(myPlayer.getHealth(), myPlayer.getHints());
+            myFrame.setPlayer(myPlayer);
             checkAnswer(myMaze.getCurrentlySelectedRoom().getQuestion().getAnswer());
         }
         myFrame.setHintEnabled(false);

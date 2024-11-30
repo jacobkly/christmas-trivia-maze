@@ -173,12 +173,11 @@ public class StatusBarPanel extends JPanel {
     /**
      * Updates the status bar to display the player's current health and hints.
      *
-     * @param theHealth the player's current health to display.
-     * @param theHints  the player's remaining hints to display.
+     * @param thePlayer Current player info to update the UI with.
      */
-    public void setPlayerInfo(final int theHealth, final int theHints) {
-        updateStatusPanel(myHealthPanel, "Life: ", myHealthImage, theHealth);
-        updateStatusPanel(myHintPanel, "Gifts: ", myHintImage, theHints);
+    public void setPlayerInfo(final Player thePlayer) {
+        updateStatusPanel(myHealthPanel, "Life: ", myHealthImage, thePlayer.getHealth());
+        updateStatusPanel(myHintPanel, "Gifts: ", myHintImage, thePlayer.getHints());
     }
 
     /**
