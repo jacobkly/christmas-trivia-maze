@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @author Cai Spidel
  * @version 1.0
  */
-public class Player implements Serializable {
+public final class Player implements Serializable {
 
     /** The serial version UID for serialization compatibility. */
     @Serial
@@ -123,6 +123,7 @@ public class Player implements Serializable {
      */
     public int getHintsUsed() { return myMaxHints - myHints; }
 
+    // TODO most likely not needed after implementing functionality elsewhere
     /**
      * Gets the number of rooms the player has discovered.
      *
