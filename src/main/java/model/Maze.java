@@ -80,6 +80,8 @@ public final class Maze implements Serializable {
         } while (Math.abs(randomRow1 - randomRow2) + Math.abs(randomCol1 - randomCol2) < minDistance);
         int[] endingRowCol = new int[]{randomRow2, randomCol2};
 
+        System.out.println("Maze Exit: " + randomRow2 + "," + randomCol2);
+
         mazeFirstSetup(endingRowCol);
     }
 

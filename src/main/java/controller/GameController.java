@@ -7,7 +7,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Controls the logic and interactions of the game, coordinating between the view, player, and maze.
@@ -20,7 +19,8 @@ import java.util.Objects;
 public class GameController implements GameListener {
 
     /** The list of questions used in the game, fetched from the database. */
-    private final List<Question> myQuestionList = new ArrayList<>(QuestionFactory.getQuestionsFromDatabase());
+    private final List<Question> myQuestionList =
+            new ArrayList<>(QuestionFactory.getQuestionsFromDatabase());
 
     /** The view frame used to display the maze and other UI components. */
     private MazeViewFrame myFrame;
@@ -31,7 +31,12 @@ public class GameController implements GameListener {
     /** The player instance representing the user's character and stats. */
     private Player myPlayer;
 
-    /** Constructs a new GameController that does not initialize any components. */
+    /** Tracks the number of rooms the player has discovered.  */
+    private int myRoomsDiscovered;
+
+    /**
+     * Constructs a new GameController and does not perform any initialization.
+     */
     public GameController() { /* do nothing */ }
 
     /**
@@ -66,12 +71,10 @@ public class GameController implements GameListener {
         Collections.shuffle(questions);
         myMaze = new Maze(questions, theNumRows, theNumCols);
         myFrame.setMaze(myMaze);
+        myRoomsDiscovered = 0;
 
         myPlayer = new Player(thePlayerName, thePlayerMaxHealth, thePlayerMaxHints);
-        myFrame.setPlayer(myPlayer);
-        System.out.println("Player name: " + myPlayer.getName());
-        System.out.println("Player health given: " + thePlayerMaxHealth);
-        System.out.println("Player health received: " + myPlayer.getHealthCount());
+        myFrame.setPlayer(myPlayer.getHealth(), myPlayer.getHints());
     }
 
     @Override
@@ -111,7 +114,7 @@ public class GameController implements GameListener {
             myMaze = wrapper.getMaze();
             myPlayer = wrapper.getPlayer();
             myFrame.setMaze(myMaze);
-            myFrame.setPlayer(myPlayer);
+            myFrame.setPlayer(myPlayer.getHealth(), myPlayer.getHints());
             success = true;
         }
         return success;
@@ -124,16 +127,18 @@ public class GameController implements GameListener {
         correct = selectedRoom.checkAnswer(theAnswer);
 
         if (correct) {
-            try{
+            myPlayer.setRoomsDiscovered(++myRoomsDiscovered);
+
+            try {
                 myFrame.playSoundEffect(true);
             } catch (Exception theE) {
                 throw new RuntimeException(theE);
             }
 
             if (selectedRoom.isEndpoint()) {
-                System.out.println("--- PLAYER REACHED END POINT ---");
                 myFrame.updatePlayerResult(true);
-                startResult();
+                myFrame.setResultScreen();
+                myRoomsDiscovered = 0;
                 return true;
             }
         } else {
@@ -142,26 +147,20 @@ public class GameController implements GameListener {
             } catch (Exception theE) {
                 throw new RuntimeException(theE);
             }
-            myPlayer.setHealthCount(myPlayer.getHealthCount() - 1);
-            myFrame.setPlayer(myPlayer);
+            myPlayer.setHealth(myPlayer.getHealth() - 1);
+            myFrame.setPlayer(myPlayer.getHealth(), myPlayer.getHints());
         }
         // TODO merge result screen for win or loss into one method.
-        if (myPlayer.getHealthCount() == 0) {
+        if (myPlayer.getHealth() == 0) {
             myFrame.updatePlayerResult(false);
             myFrame.setResultScreen();
 
         } else {
             saveGame();
-
             myFrame.setMaze(myMaze);
         }
 
         return correct;
-    }
-
-    @Override
-    public void startResult() {
-        myFrame.setResultScreen();
     }
 
     @Override
@@ -176,20 +175,13 @@ public class GameController implements GameListener {
     }
 
     @Override
-    public String[] getPlayerStatistics() {
-        String[] playerStats = new String[4]; // four main stats
-        playerStats[0] = "Player name: " + myPlayer.getName();
-        playerStats[1] = "Health left: " + myPlayer.getHealthCount() + " out of " + myPlayer.getMaxHealthCount();
-        playerStats[2] = "Hints used: " + myPlayer.getHintsUsed() + " out of " + myPlayer.getMaxHintCount();
-        playerStats[3] = "Rooms discovered: " + myPlayer.getRoomsDiscovered();
-        return playerStats;
-    }
+    public String[] playerStatistics() { return myPlayer.getPlayerStatistics(); }
 
     @Override
     public void useHint() {
         if (myPlayer.getHints() > 0) {
             myPlayer.setHints(myPlayer.getHints() - 1);
-            myFrame.setPlayer(myPlayer);
+            myFrame.setPlayer(myPlayer.getHealth(), myPlayer.getHints());
             checkAnswer(myMaze.getCurrentlySelectedRoom().getQuestion().getAnswer());
         }
         myFrame.setHintEnabled(false);

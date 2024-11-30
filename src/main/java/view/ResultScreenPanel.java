@@ -135,7 +135,7 @@ public class ResultScreenPanel extends JPanel {
      * Sets up the inner panel with the appropriate text and statistics based on the result.
      */
     private void setupInnerPanel() {
-        String[] playerStats = myGameListener.getPlayerStatistics();
+        String[] playerStats = myGameListener.playerStatistics();
         if (myResult) {
             addText(new String[]{"Victory!"}, 55);
             addText(VICTORY_TEXT, 15);

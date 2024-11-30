@@ -147,12 +147,13 @@ public class MazeViewFrame extends JFrame {
     }
 
     /**
-     * Sets the player object on the maze screen.
+     * Updates the maze screen with the player's current health and hints.
      *
-     * @param thePlayer the player object to be displayed on the maze screen.
+     * @param theHealth the player's current health to display on the maze screen.
+     * @param theHints  the player's remaining hints to display on the maze screen.
      */
-    public void setPlayer(final Player thePlayer) {
-        myMazeScreenPanel.setPlayer(thePlayer);
+    public void setPlayer(final int theHealth, final int theHints) {
+        myMazeScreenPanel.setPlayer(theHealth, theHints);
     }
 
     /**

@@ -18,8 +18,8 @@ public final class Player implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /** The maximum number of hints a player can use. */
-    private final static int MAX_HINT_COUNT = 3;
+    /** The player's name. */
+    private final String myName;
 
     /** The maximum health of the player. */
     private final int myMaxHealth;
@@ -27,17 +27,14 @@ public final class Player implements Serializable {
     /** The maximum number of hints the player can have. */
     private final int myMaxHints;
 
-    /** The number of rooms discovered by the player. */
-    private final int myRoomsDiscovered;
-
-    /** The player's name. */
-    private final String myName;
-
     /** The player's current health count. */
-    private int myHealthCount;
+    private int myHealth;
 
     /** The number of hints remaining for the player. */
     private int myHints;
+
+    /** The number of rooms discovered by the player. */
+    private int myRoomsDiscovered;
 
     /**
      * Constructs a new player with the specified name, maximum health, and maximum hints.
@@ -49,18 +46,11 @@ public final class Player implements Serializable {
     public Player(final String theName, final int theMaxHealth, final int theMaxHints) {
         myName = theName;
         myMaxHealth = theMaxHealth;
-        myHealthCount = theMaxHealth;
+        myHealth = theMaxHealth;
         myMaxHints = theMaxHints;
         myHints = theMaxHints;
         myRoomsDiscovered = 0;
     }
-
-    /**
-     * Gets the maximum number of hints allowed for a player.
-     *
-     * @return the maximum hint count.
-     */
-    public int getMaxHintCount() { return MAX_HINT_COUNT; }
 
     /**
      * Gets the player's name.
@@ -70,18 +60,18 @@ public final class Player implements Serializable {
     public String getName() { return myName; }
 
     /**
-     * Gets the player's maximum health count.
+     * Gets the player's maximum health.
      *
      * @return the maximum health of the player.
      */
-    public int getMaxHealthCount() { return myMaxHealth; }
+    public int getMaxHealth() { return myMaxHealth; }
 
     /**
-     * Gets the player's current health count.
+     * Gets the player's current health.
      *
      * @return the current health of the player.
      */
-    public int getHealthCount() { return myHealthCount; }
+    public int getHealth() { return myHealth; }
 
     /**
      * Sets the player's current health count.
@@ -90,13 +80,20 @@ public final class Player implements Serializable {
      * @throws IllegalArgumentException if the health count is not between 0 and the player's
      *                                  maximum health.
      */
-    public void setHealthCount(final int theHealthCount) {
+    public void setHealth(final int theHealthCount) {
         if (theHealthCount < 0 || theHealthCount > myMaxHealth) {
             throw new IllegalArgumentException("Player health must be between 0 and " + myMaxHealth);
         } else {
-            myHealthCount = theHealthCount;
+            myHealth = theHealthCount;
         }
     }
+
+    /**
+     * Gets the maximum number of hints the player can have.
+     *
+     * @return the maximum number of hints.
+     */
+    public int getMaxHints() { return myMaxHints; }
 
     /**
      * Gets the number of hints the player currently has.
@@ -123,11 +120,35 @@ public final class Player implements Serializable {
      */
     public int getHintsUsed() { return myMaxHints - myHints; }
 
-    // TODO most likely not needed after implementing functionality elsewhere
     /**
      * Gets the number of rooms the player has discovered.
      *
      * @return the number of rooms discovered.
      */
     public int getRoomsDiscovered() { return myRoomsDiscovered; }
+
+
+    /**
+     * Sets the number of rooms the player has discovered.
+     *
+     * @param theRoomsDiscovered the new number of rooms discovered.
+     */
+    public void setRoomsDiscovered(final int theRoomsDiscovered) {
+        myRoomsDiscovered = theRoomsDiscovered;
+    }
+
+    /**
+     * Retrieves an array of the player's current statistics, including name, health, hints used,
+     * and rooms discovered.
+     *
+     * @return a String array containing the player's statistics.
+     */
+    public String[] getPlayerStatistics() {
+        String[] playerStats = new String[4];
+        playerStats[0] = "Player name: " + getName();
+        playerStats[1] = "Health left: " + getHealth() + " out of " + getMaxHealth();
+        playerStats[2] = "Hints used: " + getHintsUsed() + " out of " + getMaxHints();
+        playerStats[3] = "Rooms discovered: " + getRoomsDiscovered();
+        return playerStats;
+    }
 }
