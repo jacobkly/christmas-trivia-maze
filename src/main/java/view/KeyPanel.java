@@ -82,9 +82,9 @@ public class KeyPanel extends JPanel {
             discRoomImages[0] = ImageIO.read(Objects.requireNonNull(getClass().getResource(
                     "/roomFiles/fillRoom/lndscFillRoom.png")));
             discRoomImages[1] = ImageIO.read(Objects.requireNonNull(getClass().getResource(
-                    "/roomFiles/fillRoom/santaFillRoom.png")));
+                    "/roomFiles/fillRoom/moonFillRoom.png")));
             discRoomImages[2] = ImageIO.read(Objects.requireNonNull(getClass().getResource(
-                    "/roomFiles/fillRoom/treeFillRoom.png")));
+                    "/roomFiles/fillRoom/giftsFillRoom.png")));
         } catch (final Exception theError) {
             throw new RuntimeException("Problem with discovered room image initialization: " + theError);
         }

@@ -99,11 +99,7 @@ public final class Room implements Serializable {
      * @param theDoor the state of the door.
      */
     public void setDoor(final DoorDirection theNESW, final boolean theDoor) {
-        int result = theNESW.ordinal() * 2;
-        if (!theDoor) {
-            result ++;
-        }
-        myNESWRoom[theNESW.ordinal()] = ROOM_INFOS[result];
+        myNESWRoom[RoomEnums.doorDirToArrayVal(theNESW)] = RoomEnums.doorDirToRoomInfo(theNESW, theDoor);
     }
 
 
@@ -113,9 +109,9 @@ public final class Room implements Serializable {
      * @return the value of if there is a door.
      */
     public boolean getHasNESWDoor(DoorDirection theNESW) {
-        RoomInfo result = ROOM_INFOS[theNESW.ordinal() * 2];
+        RoomInfo result = RoomEnums.doorDirToRoomInfo(theNESW, true);
 
-        return myNESWRoom[theNESW.ordinal()] == result;
+        return myNESWRoom[RoomEnums.doorDirToArrayVal(theNESW)] == result;
     }
 
     /**
@@ -191,7 +187,7 @@ public final class Room implements Serializable {
         for(int i = 0; i < 4; i++) {
             setDoor(DOOR_DIRECTIONS[i], false);
         }
-        myNESWRoom[4] = RoomInfo.PERM_LOCKED;
+        myNESWRoom[ROOM_FILL.ordinal()] = RoomInfo.PERM_LOCKED;
     }
 
     /**
@@ -203,6 +199,11 @@ public final class Room implements Serializable {
         return myIsEndpoint;
     }
 
+    /**
+     * Returns the question of this room.
+     *
+     * @return the question contained in the room.
+     */
     public Question getQuestion() {
         return myQuestion;
     }

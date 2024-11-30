@@ -68,7 +68,7 @@ public final class MenuBar extends JMenuBar {
     private void addSaveMenuItem(final JMenu theFileMenu) {
         JMenuItem saveMenuItem = new JMenuItem("Save");
         theFileMenu.add(saveMenuItem);
-        saveMenuItem.addActionListener(theEvent -> { /* save game action here */ } );
+        saveMenuItem.addActionListener(theEvent -> { myGameListener.saveGame();} );
     }
 
     /**
@@ -79,7 +79,7 @@ public final class MenuBar extends JMenuBar {
     private void addLoadMenuItem(final JMenu theFileMenu) {
         JMenuItem loadMenuItem = new JMenuItem("Load");
         theFileMenu.add(loadMenuItem);
-        loadMenuItem.addActionListener(theEvent -> { /* load game directory action here */ });
+        loadMenuItem.addActionListener(theEvent -> { myGameListener.loadGame(); });
     }
 
     /**
