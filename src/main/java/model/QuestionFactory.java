@@ -1,9 +1,4 @@
-package controller;
-
-import model.BooleanQuestion;
-import model.MultipleChoiceQuestion;
-import model.Question;
-import model.TextInputQuestion;
+package model;
 
 import java.sql.*;
 import java.util.ArrayList;

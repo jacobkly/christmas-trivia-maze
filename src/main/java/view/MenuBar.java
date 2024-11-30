@@ -129,9 +129,9 @@ public final class MenuBar extends JMenuBar {
         theSettingsMenu.add(debugMenuItem);
         debugMenuItem.addActionListener(theEvent -> {
            if (debugMenuItem.isSelected()) {
-               /* enable debug mode action here */
+               myGameListener.debugIsSelected(true);
            } else {
-               /* disable debug mode action here */
+               myGameListener.debugIsSelected(false);
            }
         });
     }
