@@ -169,7 +169,7 @@ public class GameController implements GameListener {
             myPlayer.setHealth(myPlayer.getHealth() - 1);
             myFrame.setPlayer(myPlayer);
         }
-        // TODO merge result screen for win or loss into one method.
+
         if (myPlayer.getHealth() == 0) {
             myFrame.setResult(false, myPlayer.getPlayerStatistics());
 
