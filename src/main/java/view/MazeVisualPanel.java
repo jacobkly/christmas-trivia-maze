@@ -2,7 +2,6 @@ package view;
 
 import controller.GameListener;
 import model.Maze;
-import model.Room;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,9 +26,7 @@ public class MazeVisualPanel extends JPanel {
                 button.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        informRoomWasClicked(theMaze, button.getRow(), button.getCol());
                         myGameListener.onRoomClicked(room);
-                        updateVisualInfo(theMaze);
                     }
                 });
 
@@ -40,17 +37,6 @@ public class MazeVisualPanel extends JPanel {
 
         updateVisualInfo(theMaze);
         setVisible(true);
-    }
-
-
-    /**
-     * Tells the maze to update the highlighting of the images.
-     *
-     * @param theRow the row that was clicked.
-     * @param theCol the col that was clicked.
-     */
-    private void informRoomWasClicked(final Maze theMaze, final int theRow, final int theCol) {
-        theMaze.setRoomHigLig(theRow, theCol);
     }
 
     /**
@@ -67,13 +53,4 @@ public class MazeVisualPanel extends JPanel {
             }
         }
     }
-//
-//    /**
-//     * Gets the currently selected room.
-//     *
-//     * @return the currently selected room.
-//     */
-//    public Room getCurrentlySelectedRoom() {
-//        return myMaze.getCurrentlySelectedRoom();
-//    }
 }

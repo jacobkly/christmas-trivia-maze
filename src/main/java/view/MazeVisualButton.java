@@ -39,7 +39,6 @@ public class MazeVisualButton extends JButton {
         Image img = RoomImageMerger.MergeImage(myRoom.getRoomInfo());
         setIcon(new ImageIcon(img.getScaledInstance( dimension, dimension, Image.SCALE_SMOOTH)));
         setDisabledIcon(new ImageIcon(img.getScaledInstance( dimension, dimension, Image.SCALE_SMOOTH)));
-        setEnabled(myRoom.isAnswerable());
     }
 
     /**

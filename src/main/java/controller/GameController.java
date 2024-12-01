@@ -20,20 +20,30 @@ import java.util.List;
  */
 public class GameController implements GameListener {
 
-    /** The list of questions used in the game, fetched from the database. */
+    /**
+     * The list of questions used in the game, fetched from the database.
+     */
     private final List<Question> myQuestionList =
             new ArrayList<>(QuestionFactory.getQuestionsFromDatabase());
 
-    /** The view frame used to display the maze and other UI components. */
+    /**
+     * The view frame used to display the maze and other UI components.
+     */
     private MazeViewFrame myFrame;
 
-    /** The maze representation of the game. */
+    /**
+     * The maze representation of the game.
+     */
     private Maze myMaze;
 
-    /** The player instance representing the user's character and stats. */
+    /**
+     * The player instance representing the user's character and stats.
+     */
     private Player myPlayer;
 
-    /** Tracks the number of rooms the player has discovered.  */
+    /**
+     * Tracks the number of rooms the player has discovered.
+     */
     private int myRoomsDiscovered;
 
     /**
@@ -41,7 +51,9 @@ public class GameController implements GameListener {
      */
     public GameController() { /* do nothing */ }
 
-    /** Filechooser to choose locations to save and load files */
+    /**
+     * Filechooser to choose locations to save and load files
+     */
     private final JFileChooser myFileChooser = new JFileChooser("./src/main/resources/saveFiles");
 
 
@@ -159,7 +171,7 @@ public class GameController implements GameListener {
                 return true;
             }
         } else {
-            try{
+            try {
                 myFrame.playSoundEffect(false);
             } catch (Exception theE) {
                 throw new RuntimeException(theE);
@@ -181,12 +193,23 @@ public class GameController implements GameListener {
 
     @Override
     public void onRoomClicked(final Room theRoom) {
+        // Don't allow selecting mystery rooms
+        if (theRoom.isMystery()) {
+            return;
+        }
+
+        // Clear existing selected room
         Room selectedRoom = myMaze.getCurrentlySelectedRoom();
-        myFrame.setHintEnabled(myPlayer.getHints() > 0 && selectedRoom.getQuestion() != null);
         if (selectedRoom != null) {
             selectedRoom.setHigLig(false);
         }
+
+        // Set the newly selected room
         theRoom.setHigLig(true);
+        myMaze.setSelectedRoom(theRoom);
+
+//      // Update the UI
+        myFrame.setHintEnabled(myPlayer.getHints() > 0 && theRoom.isAnswerable() && theRoom.getQuestion() != null);
         myFrame.setMaze(myMaze);
     }
 
