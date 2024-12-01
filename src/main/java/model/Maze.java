@@ -202,26 +202,19 @@ public final class Maze implements Serializable {
     }
 
     /**
-     * sets the highlight status of the room.
-     *
-     * @param theRow the row of the room.
-     * @param theCol the col of the room.
-     */
-    public void setRoomHigLig(final int theRow, final int theCol) {
-        if (mySelectedRoom != null) {
-            mySelectedRoom.setHigLig(false);
-        }
-        mySelectedRoom = this.getRoom(theRow, theCol);
-        mySelectedRoom.setHigLig(true);
-    }
-
-    /**
      * Gets the currently selected room.
      *
      * @return the currently selected room.
      */
     public Room getCurrentlySelectedRoom() {
         return mySelectedRoom;
+    }
+
+    /**
+     * Updates the selected room
+     */
+    public void setSelectedRoom(Room theSelectedRoom) {
+        mySelectedRoom = theSelectedRoom;
     }
 
     /**

@@ -207,4 +207,8 @@ public final class Room implements Serializable {
     public Question getQuestion() {
         return myQuestion;
     }
+
+    public boolean isMystery() {
+        return myVisibility == Visibility.MYSTERY;
+    }
 }
