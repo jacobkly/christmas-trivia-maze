@@ -128,9 +128,9 @@ class MazeBlackBoxTest {
      */
     @Test
     public void testRoomSelectionCapabilities() {
-        myMaze.setRoomHigLig(0, 0);
+        myMaze.setSelectedRoom(myMaze.getRoom(0, 0));
         assertEquals(myMaze.getCurrentlySelectedRoom().getQuestion(), myRooms[0].getQuestion());
-        myMaze.setRoomHigLig(0, 1);
+        myMaze.setSelectedRoom(myMaze.getRoom(0, 1));
         assertNotEquals(myMaze.getCurrentlySelectedRoom().getQuestion(), myRooms[0].getQuestion());
         assertEquals(myMaze.getCurrentlySelectedRoom().getQuestion(), myRooms[1].getQuestion());
     }
