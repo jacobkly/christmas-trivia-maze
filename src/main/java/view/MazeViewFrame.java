@@ -159,30 +159,36 @@ public class MazeViewFrame extends JFrame {
         myMazeScreenPanel.setHintEnabled(theEnabled);
     }
 
-    // TODO kinda looks like controller code
     /**
-     * Plays a sound effect based on the result of an action.
+     * Plays a sound effect corresponding to the outcome of an action.
      *
-     * @param theResult true to play the "correct answer" sound effect, false to play the
+     * @param theResult true to play the "correct answer" sound effect; false to play the
      *                  "wrong answer" sound effect.
      * @throws UnsupportedAudioFileException if the audio file format is unsupported.
-     * @throws IOException if an I/O error occurs during sound file reading.
-     * @throws LineUnavailableException if the audio line cannot be opened.
+     * @throws IOException if an I/O error occurs during audio file processing.
+     * @throws LineUnavailableException if the audio line cannot be opened for playback.
      */
     public void playSoundEffect(final boolean theResult)
             throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         AudioInputStream audio;
-
-        if (theResult) {
-             audio = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass()
-                     .getResourceAsStream("/soundEffects/RightAnswer.wav")));
-        } else {
-             audio = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass()
-                     .getResourceAsStream("/soundEffects/WrongAnswer.wav")));
-        }
-
         Clip clip = AudioSystem.getClip();
+
+        audio = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass()
+                .getResourceAsStream(theResult ? "/soundEffects/RightAnswer.wav" :
+                                                 "/soundEffects/WrongAnswer.wav")));
+
         clip.open(audio);
+
+        if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+            FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            volumeControl.setValue(myMusicController.getDefaultVolume());
+
+            float currentVolume = myMusicController.getCurrentVolume();
+            // right answer sound is sharper than wrong answer
+            volumeControl.setValue(currentVolume + (theResult ? 4 : 9));
+        } else {
+            System.out.println("Sound Effects: Clip does NOT support MASTER_GAIN");
+        }
         clip.start();
     }
 }
