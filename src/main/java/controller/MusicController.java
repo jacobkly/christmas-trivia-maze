@@ -95,6 +95,13 @@ public class MusicController {
     }
 
     /**
+     * Retrieves the current volume level from the volume control.
+     *
+     * @return the current volume level as a float.
+     */
+    public float getCurrentVolume() { return myVolumeControl.getValue(); }
+
+    /**
      * Gets the default volume level.
      *
      * @return the default volume, as a normalized value between 0.0 and 1.0.
