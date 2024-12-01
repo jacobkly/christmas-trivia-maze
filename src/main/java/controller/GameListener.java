@@ -66,4 +66,6 @@ public interface GameListener {
     * Uses a hint to reveal the answer to the current question.
     */
    void useHint();
+
+   void debugIsSelected(final boolean theB);
 }

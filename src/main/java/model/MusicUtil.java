@@ -36,6 +36,8 @@ public final class MusicUtil {
             } catch (IOException e) {
                 throw new IOException("Directory does not exist or not a valid directory: " + theMusicDirectory);
             }
+        } else {
+            throw new IOException("Directory does not exist or not a valid directory: " + theMusicDirectory);
         }
         return songList;
     }

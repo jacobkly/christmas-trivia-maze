@@ -46,6 +46,8 @@ public class GameController implements GameListener {
      */
     private int myRoomsDiscovered;
 
+    private boolean myDebugSelected;
+
     /**
      * Constructs a new GameController and does not perform any initialization.
      */
@@ -179,7 +181,7 @@ public class GameController implements GameListener {
             myPlayer.setHealth(myPlayer.getHealth() - 1);
             myFrame.setPlayer(myPlayer);
         }
-        // TODO merge result screen for win or loss into one method.
+
         if (myPlayer.getHealth() == 0) {
             myFrame.setResult(false, myPlayer.getPlayerStatistics());
 
@@ -215,12 +217,21 @@ public class GameController implements GameListener {
 
     @Override
     public void useHint() {
-        if (myPlayer.getHints() > 0) {
-            myPlayer.setHints(myPlayer.getHints() - 1);
-            myFrame.setPlayer(myPlayer);
+        if (myDebugSelected) {
             checkAnswer(myMaze.getCurrentlySelectedRoom().getQuestion().getAnswer());
+        } else {
+            if (myPlayer.getHints() > 0) {
+                myPlayer.setHints(myPlayer.getHints() - 1);
+                myFrame.setPlayer(myPlayer);
+                checkAnswer(myMaze.getCurrentlySelectedRoom().getQuestion().getAnswer());
+            }
+            myFrame.setHintEnabled(false);
         }
-        myFrame.setHintEnabled(false);
+    }
+
+    @Override
+    public void debugIsSelected(final boolean theBoolean) {
+        myDebugSelected = theBoolean;
     }
 
 }
