@@ -105,7 +105,17 @@ public class GameController implements GameListener {
         final int result = myFileChooser.showSaveDialog(null);
         if (result == JFileChooser.APPROVE_OPTION) {
             try {
-                FileOutputStream fileOut = new FileOutputStream(myFileChooser.getSelectedFile());
+                File file = myFileChooser.getSelectedFile();
+                String fname = file.getAbsolutePath();
+                if(fname.contains(".") && !fname.endsWith(".ser")) {
+                    fname = fname.substring(0, fname.lastIndexOf('.'));
+                }
+
+                if(!fname.endsWith(".ser") ) {
+                    file = new File(fname + ".ser");
+                }
+
+                FileOutputStream fileOut = new FileOutputStream(file);
                 ObjectOutputStream out = new ObjectOutputStream(fileOut);
                 out.writeObject(wrapper);
                 out.close();
