@@ -39,12 +39,14 @@ public final class RoomEnums {
      * The location of each location of room info, to be mapped to a array value.
      */
     public enum RoomArrayValues {
+
+        ROOM_FILL,
+
         NORTH_DOOR,
         EAST_DOOR,
         SOUTH_DOOR,
         WEST_DOOR,
 
-        ROOM_FILL,
 
         ROOM_HIGHLIGHT
     }
@@ -114,5 +116,49 @@ public final class RoomEnums {
             case WEST -> DoorDirection.EAST;
         };
     }
+
+    /**
+     * Gets the correct array location from the door direction
+     *
+     * @param theNESW the door direction
+     * @return the correct array location
+     */
+    public static int doorDirToArrayVal(DoorDirection theNESW) {
+        return switch (theNESW) {
+            case NORTH -> RoomArrayValues.NORTH_DOOR.ordinal();
+            case EAST -> RoomArrayValues.EAST_DOOR.ordinal();
+            case SOUTH -> RoomArrayValues.SOUTH_DOOR.ordinal();
+            case WEST -> RoomArrayValues.WEST_DOOR.ordinal();
+        };
+    }
+
+    /**
+     * Returns teh correct roomInfo based off of the DoorDirection
+     * and whether there is a door
+     *
+     * @param theNESW the door direction
+     * @param theDoor whether there is a door
+     * @return the correct RoomInfo
+     */
+    public static RoomInfo doorDirToRoomInfo(DoorDirection theNESW, boolean theDoor) {
+        if (theDoor) {
+            return switch (theNESW) {
+                case NORTH -> RoomInfo.NORTH_OPEN;
+                case EAST -> RoomInfo.EAST_OPEN;
+                case SOUTH -> RoomInfo.SOUTH_OPEN;
+                case WEST -> RoomInfo.WEST_OPEN;
+            };
+        } else {
+            return switch (theNESW) {
+                case NORTH -> RoomInfo.NORTH_CLOSED;
+                case EAST -> RoomInfo.EAST_CLOSED;
+                case SOUTH -> RoomInfo.SOUTH_CLOSED;
+                case WEST -> RoomInfo.WEST_CLOSED;
+            };
+        }
+
+    }
+
+
 
 }
