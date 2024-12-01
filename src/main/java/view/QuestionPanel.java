@@ -26,8 +26,8 @@ public class QuestionPanel extends JPanel {
     private static JButton confirmButton;
     private final JTextArea myInstructions = createInstructionText();
 
-    public QuestionPanel(GameListener myGameListener) {
-        this.myGameListener = myGameListener;
+    public QuestionPanel(final GameListener theGameListener) {
+        this.myGameListener = theGameListener;
         myQuestionPrompt.setEditable(false);
         myQuestionPrompt.setLineWrap(true);
         myQuestionPrompt.setWrapStyleWord(true);
@@ -51,7 +51,7 @@ public class QuestionPanel extends JPanel {
      *  The setQuestion method creates a new answer panel depending on the question attached to
      *  the currently selected room. This method also displays the game instructions and a prompt
      *  asking the user to select a room when there is no question currently displayed.
-     * @param theQuestion represents the question assigned to the curretly selected room.
+     * @param theQuestion represents the question assigned to the currently selected room.
      */
     public void setQuestion(final Question theQuestion) {
 
@@ -65,7 +65,9 @@ public class QuestionPanel extends JPanel {
 
         if (theQuestion == null) {
             myQuestionPrompt.setText("Please select a room");
-            add(myInstructions, BorderLayout.AFTER_LAST_LINE);
+            if (myInstructions != null) {
+                add(myInstructions, BorderLayout.AFTER_LAST_LINE);
+            }
         } else {
             myQuestionPrompt.setText(theQuestion.getPrompt());
             switch (theQuestion) {
@@ -119,13 +121,16 @@ public class QuestionPanel extends JPanel {
     /**
      * Creates a JButton for the user to interact with for the purposes of gameplay.
      * @param theGameListener game related event handling
-     * @param bg the button group for the true/false and multiple choice questions
+     * @param theBg the button group for the true/false and multiple choice questions
      * @return returns a JButton to confirm answer choice and check correctness
      */
-    private static JButton createConfirmButton(final GameListener theGameListener, final ButtonGroup bg) {
+    private static JButton createConfirmButton(
+            final GameListener theGameListener,
+            final ButtonGroup theBg
+    ) {
         setConfirmButton();
         confirmButton.addActionListener(e -> {
-            var elements = bg.getElements();
+            var elements = theBg.getElements();
             elements.asIterator().forEachRemaining(element -> {
                 JRadioButton button = (JRadioButton) element;
                 if (button.isSelected()) {
@@ -140,13 +145,12 @@ public class QuestionPanel extends JPanel {
     /**
      * An alternative method for creating a confirm button for use with a text input type
      * question as there are no associated button groups or labels for this type of question.
-     * @param theGameListener
-     * @param input A JTextField that represents a users response to a question.
+     * @param theInput A JTextField that represents a users response to a question.
      * @return returns a confirm button for use with text input type questions.
      */
-    private static JButton createInputConfirmButton(final GameListener theGameListener, final JTextField input) {
+    private static JButton createInputConfirmButton(final GameListener theGameListener, final JTextField theInput) {
         setConfirmButton();
-        confirmButton.addActionListener(e -> theGameListener.checkAnswer(input.getText()));
+        confirmButton.addActionListener(e -> theGameListener.checkAnswer(theInput.getText()));
         return confirmButton;
     }
 
@@ -167,7 +171,10 @@ public class QuestionPanel extends JPanel {
      *  This class represents a panel for displaying multiple choice type questions.
      */
     private static class MultipleChoiceQuestionPanel extends JPanel {
-        public MultipleChoiceQuestionPanel(GameListener theGameListener, MultipleChoiceQuestion theQuestion) {
+        public MultipleChoiceQuestionPanel(
+                final GameListener theGameListener,
+                final MultipleChoiceQuestion theQuestion)
+        {
             setBackground(Color.BLACK);
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             List<String> answers = theQuestion.getPossibleAnswers();
@@ -227,7 +234,10 @@ public class QuestionPanel extends JPanel {
      */
     private static class BooleanQuestionPanel extends JPanel {
 
-        public BooleanQuestionPanel(GameListener theGameListener, BooleanQuestion theQuestion) {
+        public BooleanQuestionPanel(
+                final GameListener theGameListener,
+                final BooleanQuestion theQuestion
+        ) {
 
             setBackground(Color.BLACK);
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -275,12 +285,16 @@ public class QuestionPanel extends JPanel {
      */
     private static class TextInputQuestionPanel extends JPanel {
 
-        public TextInputQuestionPanel(GameListener theGameListener, TextInputQuestion theQuestion) {
+        public TextInputQuestionPanel(
+                final GameListener theGameListener,
+                final TextInputQuestion theQuestion
+        ) {
 
             setBackground(Color.BLACK);
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            Box wrapper = Box.createVerticalBox();
-            Box horizontalWrapper = Box.createHorizontalBox();
+            Box.createVerticalBox();
+            Box wrapper;
+            Box.createHorizontalBox();
 
             add(Box.createVerticalGlue());
 
