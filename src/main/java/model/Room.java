@@ -181,16 +181,6 @@ public final class Room implements Serializable {
     }
 
     /**
-     * Sets this room to be permanently inaccessible
-     */
-    public void setInaccessible() {
-        for(int i = 0; i < 4; i++) {
-            setDoor(DOOR_DIRECTIONS[i], false);
-        }
-        myNESWRoom[ROOM_FILL.ordinal()] = RoomInfo.PERM_LOCKED;
-    }
-
-    /**
      * Returns if this is an endpoint or not.
      *
      * @return whether this room is an endpoint.

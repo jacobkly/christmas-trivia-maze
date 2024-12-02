@@ -23,10 +23,7 @@ class RoomBlackBoxTest {
     private Question[] myQuestions;
     /** The rooms to be tested. */
     private Room[] myRooms;
-    /** The maze to be tested. */
-    private Maze myMaze;
-    /** The player to be tested. */
-    private Player myPlayer;
+
 
     /**
      * To be run before each test to set up the objects.
@@ -60,103 +57,6 @@ class RoomBlackBoxTest {
 
     }
 
-    /**
-     * Tests the getRows and getCols methods.
-     */
-    @Test
-    public void testGetRowsGetCols() {
-        assertEquals(2, myMaze.getRows());
-        assertEquals(2, myMaze.getCols());
-
-        assertNotEquals(1, myMaze.getRows());
-        assertNotEquals(3, myMaze.getCols());
-    }
-
-    /**
-     * Tests the setRoomHigLig functionality.
-     * Also tests the getCurrentlySelectedRoom functionality.
-     */
-    @Test
-    public void testRoomSelectionCapabilities() {
-        myMaze.setSelectedRoom(myMaze.getRoom(0, 0));
-        assertEquals(myMaze.getCurrentlySelectedRoom().getQuestion(), myRooms[0].getQuestion());
-        myMaze.setSelectedRoom(myMaze.getRoom(0, 1));
-        assertNotEquals(myMaze.getCurrentlySelectedRoom().getQuestion(), myRooms[0].getQuestion());
-        assertEquals(myMaze.getCurrentlySelectedRoom().getQuestion(), myRooms[1].getQuestion());
-    }
-
-    /**
-     * Tests the getRoom method of the maze.
-     */
-    @Test
-    public void testGetRoom() {
-        // uses the question located in the room to test equivalence
-        assertEquals(myMaze.getRoom(0, 0).getQuestion(), myQuestions[0]);
-        assertNotEquals(myMaze.getRoom(0, 0).getQuestion(), myQuestions[1]);
-
-    }
-
-    /**
-     * Tests that the maze constructor works correctly.
-     */
-    @Test
-    public void testMazeConstructor() {
-        // test that each room exists through the contained questions
-        assertEquals(myMaze.getRoom(0, 0).getQuestion(), myQuestions[0]);
-        assertEquals(myMaze.getRoom(0, 1).getQuestion(), myQuestions[1]);
-        assertEquals(myMaze.getRoom(1, 0).getQuestion(), myQuestions[2]);
-        assertEquals(myMaze.getRoom(1, 1).getQuestion(), myQuestions[3]);
-
-        // test that a starting position exists (there is a landscape somewhere)
-        // verify there is only one
-        boolean isStart = false;
-        boolean isMoreThanOneStart = false;
-        for(int i = 0; i < 2; i++) {
-            for(int j = 0; j < 2; j++) {
-                if(myMaze.getRoom(i, j).isVisible()) {
-                    if(isStart) {
-                        isMoreThanOneStart = true;
-                    }
-                    isStart = true;
-                }
-            }
-        }
-        assertTrue(isStart);
-        assertFalse(isMoreThanOneStart);
-
-        // test that an ending position exists (iterate through the rooms)
-        boolean isEndpoint = false;
-        for(int i = 0; i < 2; i++) {
-            for(int j = 0; j < 2; j++) {
-                if(myMaze.getRoom(i, j).isEndpoint()) {
-                    isEndpoint = true;
-                }
-            }
-        }
-        assertTrue(isEndpoint);
-
-        // test that borders of rooms are made properly
-        RoomInfo[] topLeft = makeDefaultRoomInfo();
-        topLeft[DoorDirection.NORTH.ordinal()] = RoomInfo.NORTH_CLOSED;
-        topLeft[DoorDirection.WEST.ordinal()] = RoomInfo.WEST_CLOSED;
-        compareRoomInfoMinusFill(myMaze.getRoom(0, 0).getRoomInfo(), topLeft);
-
-        RoomInfo[] topRight = makeDefaultRoomInfo();
-        topRight[DoorDirection.NORTH.ordinal()] = RoomInfo.NORTH_CLOSED;
-        topRight[DoorDirection.EAST.ordinal()] = RoomInfo.EAST_CLOSED;
-        compareRoomInfoMinusFill(myMaze.getRoom(0, 1).getRoomInfo(), topRight);
-
-        RoomInfo[] bottomLeft = makeDefaultRoomInfo();
-        bottomLeft[DoorDirection.SOUTH.ordinal()] = RoomInfo.SOUTH_CLOSED;
-        bottomLeft[DoorDirection.WEST.ordinal()] = RoomInfo.WEST_CLOSED;
-        compareRoomInfoMinusFill(myMaze.getRoom(1, 0).getRoomInfo(), bottomLeft);
-
-        RoomInfo[] bottomRight = makeDefaultRoomInfo();
-        bottomRight[DoorDirection.SOUTH.ordinal()] = RoomInfo.SOUTH_CLOSED;
-        bottomRight[DoorDirection.EAST.ordinal()] = RoomInfo.EAST_CLOSED;
-        compareRoomInfoMinusFill(myMaze.getRoom(1, 1).getRoomInfo(), bottomRight);
-
-    }
 
     /**
      * Tests the door information capabilities of RoomInfo.
@@ -445,27 +345,5 @@ class RoomBlackBoxTest {
         assertFalse(myRooms[2].checkAnswer("sorta"));
     }
 
-    /**
-     * Tests the SerialWrapper class
-     */
-    @Test
-    public void testSerialWrapper() {
-        SerialWrapper wrapper = new SerialWrapper(myPlayer, myMaze);
-        assertEquals(myPlayer, wrapper.getPlayer());
-        assertEquals(myMaze, wrapper.getMaze());
-    }
-
-    // player tests do not yet test anything marked as "maybe change"
-    /**
-     * Tests the Player class
-     */
-    @Test
-    public void testPlayerConstructor() {
-        assertEquals("name", myPlayer.getName());
-        assertEquals(3, myPlayer.getMaxHealth());
-        assertEquals(3, myPlayer.getHealth());
-        assertEquals(2, myPlayer.getHints());
-
-    }
 
 }
