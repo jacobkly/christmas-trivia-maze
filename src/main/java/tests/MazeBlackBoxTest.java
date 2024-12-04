@@ -13,7 +13,7 @@ import model.RoomEnums.*;
 /**
  * Tests the model class through black box testing.
  */
-class MazeBlackBoxTest {
+public final class MazeBlackBoxTest {
 
     /** The questions to be tested. */
     private Question[] myQuestions;
@@ -28,7 +28,7 @@ class MazeBlackBoxTest {
      * To be run before each test to set up the objects.
      */
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         // Question setup
         myQuestions = new Question[4];
         // the boolean question

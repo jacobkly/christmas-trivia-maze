@@ -11,7 +11,7 @@ import model.Player;
  * @author Jacob Klymenko
  * @version 1.0
  */
-public class PlayerTest {
+public final class PlayerTest {
 
     /**
      * Tests the Player constructor for correct initialization.

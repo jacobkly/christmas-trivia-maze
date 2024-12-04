@@ -18,7 +18,7 @@ import java.util.List;
  * @author Jacob Klymenko
  * @version 1.0
  */
-public class GameController implements GameListener {
+public final class GameController implements GameListener {
 
     /**
      * The list of questions used in the game, fetched from the database.
@@ -220,7 +220,7 @@ public class GameController implements GameListener {
         theRoom.setHigLig(true);
         myMaze.setSelectedRoom(theRoom);
 
-//      // Update the UI
+        // Update the UI
         myFrame.setHintEnabled(myPlayer.getHints() > 0 && theRoom.isAnswerable() && theRoom.getQuestion() != null);
         myFrame.setMaze(myMaze);
     }

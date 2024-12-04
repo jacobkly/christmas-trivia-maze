@@ -6,9 +6,10 @@ import model.Maze;
 import javax.swing.*;
 import java.awt.*;
 
-public class GamePanel extends JPanel {
+public final class GamePanel extends JPanel {
 
     private final GameListener myGameListener;
+
     private MazeVisualPanel myMazeVisualPanel;
 
     public GamePanel(GameListener theGameListener) {
@@ -17,10 +18,7 @@ public class GamePanel extends JPanel {
         setBorder(new RoundedBorder(40));
         //add(new MazeVisualPanel(5, 8));
         setVisible(true);
-
-
     }
-
 
     public void setMaze(final Maze theMaze) {
         if (myMazeVisualPanel != null) {
@@ -32,6 +30,4 @@ public class GamePanel extends JPanel {
         revalidate();
         repaint();
     }
-
-
 }

@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @author Jacob Klymenko
  * @version 1.0
  */
-public class MazeApplication {
+public final class MazeApplication {
 
     /**
      * The entry point for the Maze application. It sets the look and feel, initializes the game

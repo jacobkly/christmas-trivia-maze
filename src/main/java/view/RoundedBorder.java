@@ -3,8 +3,10 @@ package view;
 import javax.swing.border.Border;
 import java.awt.*;
 
-public class RoundedBorder implements Border {
+public final class RoundedBorder implements Border {
+
     private final int myRadius;
+
     private Insets myAdditionalMargin = new Insets(0, 0, 0, 0);
 
     public RoundedBorder(int radius) {
@@ -23,7 +25,6 @@ public class RoundedBorder implements Border {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setStroke(new BasicStroke(6));
         g2.drawRoundRect(x + 3, y + 3, width - 6, height - 6, myRadius, myRadius);
-//        g2.drawRoundRect(x - 10, y - 10, width + 20, height+20, radius, radius);
     }
 
     @Override

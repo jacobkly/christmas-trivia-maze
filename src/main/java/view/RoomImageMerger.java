@@ -12,9 +12,10 @@ import model.RoomEnums.*;
 /**
  * A class that merges 128x128 images together
  */
-public class RoomImageMerger {
+public final class RoomImageMerger {
 
     private static final Image[] ROOM_IMAGES = new Image[20];
+
     static {
         try {
             // door values
@@ -68,7 +69,6 @@ public class RoomImageMerger {
                     (RoomImageMerger.class.getResource("/roomFiles/fillRoom/giftsFillRoom.png"))).getImage();
             ROOM_IMAGES[19] = new ImageIcon(Objects.requireNonNull
                     (RoomImageMerger.class.getResource("/roomFiles/fillRoom/moonFillRoom.png"))).getImage();
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -77,11 +77,7 @@ public class RoomImageMerger {
     /**
      * Creates the RoomImageMerger.
      */
-    private RoomImageMerger() {
-
-    }
-
-
+    private RoomImageMerger() { /* do nothing */ }
 
     /**
      * Merges a 16x16 set of images together.
@@ -107,5 +103,4 @@ public class RoomImageMerger {
 
         return mergedImage;
     }
-
 }

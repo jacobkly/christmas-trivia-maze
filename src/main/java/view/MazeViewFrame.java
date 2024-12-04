@@ -22,7 +22,7 @@ import java.util.Objects;
  * @author Jacob Klymenko
  * @version 1.0
  */
-public class MazeViewFrame extends JFrame {
+public final class MazeViewFrame extends JFrame {
 
     /** The listener responsible for handling game events. */
     private final GameListener myGameListener;

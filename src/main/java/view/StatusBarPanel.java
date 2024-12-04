@@ -16,11 +16,11 @@ import java.io.IOException;
  * A panel displaying the player's status, including health and hints. It also contains a button to
  * use a hint, updating the display based on the player's current state.
  *
- * @author Mathew Miller
  * @author Jacob Klymenko
+ * @author Mathew Miller
  * @version 1.0
  */
-public class StatusBarPanel extends JPanel {
+public final class StatusBarPanel extends JPanel {
 
     /** The height of the status bar panel in pixels. */
     private static final int PANEL_HEIGHT = 150;

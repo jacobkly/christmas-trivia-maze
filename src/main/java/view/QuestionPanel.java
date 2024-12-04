@@ -18,12 +18,16 @@ import java.util.List;
  *  The QuestionPanel class represents a panel that displays a question and a different
  *  answer type depending on the type of question being asked.
  */
-public class QuestionPanel extends JPanel {
+public final class QuestionPanel extends JPanel {
 
     private final GameListener myGameListener;
+
     private final JTextArea myQuestionPrompt = new JTextArea();
+
     private JPanel myAnswerPanel;
+
     private static JButton confirmButton;
+
     private final JTextArea myInstructions = createInstructionText();
 
     public QuestionPanel(final GameListener theGameListener) {
@@ -44,7 +48,6 @@ public class QuestionPanel extends JPanel {
 
         myQuestionPrompt.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(myQuestionPrompt, BorderLayout.NORTH);
-
     }
 
     /**
@@ -166,6 +169,8 @@ public class QuestionPanel extends JPanel {
         confirmButton.setPreferredSize(new Dimension(150, 100));
 
     }
+
+    /* Inner Classes *//////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      *  This class represents a panel for displaying multiple choice type questions.

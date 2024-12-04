@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionFactory {
+public final class QuestionFactory {
 
     public static List<Question> getQuestionsFromDatabase() {
         List<Question> questionList = new ArrayList<>();

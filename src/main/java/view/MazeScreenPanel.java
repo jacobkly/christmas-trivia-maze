@@ -10,33 +10,29 @@ import java.awt.*;
 
 import static java.awt.GridBagConstraints.*;
 
-public class MazeScreenPanel extends JPanel {
+public final class MazeScreenPanel extends JPanel {
 
     private final GamePanel myGamePanel;
+
     private final QuestionPanel myQuestionPanel;
-    private StatusBarPanel myStatusBarPanel;
-    private final KeyPanel myKeyPanel;
-    private GameListener myGameListener;
 
+    private final StatusBarPanel myStatusBarPanel;
 
-    public MazeScreenPanel(GameListener theGameListener) {
-        this.myGameListener = theGameListener;
-
+    public MazeScreenPanel(final GameListener theGameListener) {
         setSize(1200, 700);
         setLayout(new GridBagLayout());
         setBackground(Color.BLACK);
         setVisible(false);
-
 
         GridBagConstraints c = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
         GridBagConstraints c3 = new GridBagConstraints();
         GridBagConstraints c4 = new GridBagConstraints();
 
-        myGamePanel = new GamePanel(myGameListener);
-        myQuestionPanel = new QuestionPanel(myGameListener);
-        myStatusBarPanel = new StatusBarPanel(myGameListener);
-        myKeyPanel = new KeyPanel();
+        myQuestionPanel = new QuestionPanel(theGameListener);
+        myStatusBarPanel = new StatusBarPanel(theGameListener);
+        myGamePanel = new GamePanel(theGameListener);
+        KeyPanel keyPanel = new KeyPanel();
 
 
         c.gridx = 1;
@@ -64,7 +60,7 @@ public class MazeScreenPanel extends JPanel {
         c3.weightx = 1.0;
         c3.weighty = 1.0;
         c3.fill = GridBagConstraints.BOTH;
-        add(myKeyPanel, c3);
+        add(keyPanel, c3);
 
         c4.gridx = 0;
         c4.gridy = 0;

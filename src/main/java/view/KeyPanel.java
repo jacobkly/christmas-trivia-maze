@@ -19,7 +19,7 @@ import static java.awt.GridBagConstraints.RELATIVE;
  * @author Mathew Miller
  * @version 1.0
  */
-public class KeyPanel extends JPanel {
+public final class KeyPanel extends JPanel {
 
     /** An array of descriptions for the different keys and room types. */
     private static final String[] KEY_DESCRIPTIONS = {

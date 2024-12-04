@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MazeVisualPanel extends JPanel {
+public final class MazeVisualPanel extends JPanel {
 
     private final GameListener myGameListener;
 
@@ -20,21 +20,11 @@ public class MazeVisualPanel extends JPanel {
         for (int i = 0; i < theMaze.getRows(); i++) {
             for (int j = 0; j < theMaze.getCols(); j++) {
                 var room = theMaze.getRoom(i, j);
-
                 MazeVisualButton button = new MazeVisualButton(room, i, j);
-
-                button.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        myGameListener.onRoomClicked(room);
-                    }
-                });
-
-
+                button.addActionListener(e -> myGameListener.onRoomClicked(room));
                 add(button);
             }
         }
-
         updateVisualInfo(theMaze);
         setVisible(true);
     }

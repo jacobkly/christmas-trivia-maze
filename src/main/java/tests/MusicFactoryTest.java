@@ -23,7 +23,7 @@ import model.MusicFactory;
  * @author Jacob Klymenko
  * @version 1.0
  */
-public class MusicFactoryTest {
+public final class MusicFactoryTest {
 
     private MusicFactory myMusicFactory;
 

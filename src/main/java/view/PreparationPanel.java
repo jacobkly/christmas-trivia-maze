@@ -16,7 +16,7 @@ import java.util.Enumeration;
  * @author Jacob Klymenko
  * @version 1.0
  */
-public class PreparationPanel extends JPanel {
+public final class PreparationPanel extends JPanel {
 
     /** Array containing dialogue messages displayed to the user during the preparation phase. */
     private final static String[] DIALOGUE = {

@@ -17,17 +17,16 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Tests the model class through black box testing.
  */
-class QuestionBlackBoxTest {
+public final class QuestionBlackBoxTest {
 
     /** The questions to be tested. */
     private Question[] myQuestions;
-
 
     /**
      * To be run before each test to set up the objects.
      */
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         // Question setup
         myQuestions = new Question[4];
         // the boolean question
@@ -78,8 +77,4 @@ class QuestionBlackBoxTest {
 
         assertEquals(cust, test);
     }
-
-
-
-
 }
