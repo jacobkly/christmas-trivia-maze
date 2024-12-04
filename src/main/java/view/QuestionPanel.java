@@ -19,20 +19,25 @@ import java.util.List;
  * answer options based on the type of question (e.g., multiple choice, boolean, text input).
  *
  * @author Mathew Miller
- * @author Jacob Klymenko (Javadoc)
+ * @author Jacob Klymenko (Javadoc and refactor)
  * @version 1.0
  */
 public final class QuestionPanel extends JPanel {
 
+    /** The button to confirm an answer. */
+    private static JButton myConfirmButton;
+
+    /** The listener for game-related events. */
     private final GameListener myGameListener;
 
-    private final JTextArea myQuestionPrompt = new JTextArea();
+    /** The text area to display the question prompt. */
+    private final JTextArea myQuestionPrompt;
 
+    /** The text area displaying the instructions. */
+    private final JTextArea myInstructions;
+
+    /** The panel containing the answer options. */
     private JPanel myAnswerPanel;
-
-    private static JButton confirmButton;
-
-    private final JTextArea myInstructions = createInstructionText();
 
     /**
      * Constructs a QuestionPanel to display a question and its associated answer options.
@@ -40,14 +45,11 @@ public final class QuestionPanel extends JPanel {
      * @param theGameListener the listener for game-related events
      */
     public QuestionPanel(final GameListener theGameListener) {
-        this.myGameListener = theGameListener;
-        myQuestionPrompt.setEditable(false);
-        myQuestionPrompt.setLineWrap(true);
-        myQuestionPrompt.setWrapStyleWord(true);
-        myQuestionPrompt.setBorder(new RoundedBorder(20, new Insets(10, 10, 10, 10)));
-        myQuestionPrompt.setBackground(Color.BLACK);
-        myQuestionPrompt.setFont(Fonts.getPixelFont(16));
-        myQuestionPrompt.setForeground(Color.WHITE);
+        myGameListener = theGameListener;
+        myQuestionPrompt = new JTextArea();
+        myInstructions = createInstructionText();
+
+        setupQuestionPrompt();
 
         setSize(400, 400);
         setLayout(new BorderLayout());
@@ -57,6 +59,20 @@ public final class QuestionPanel extends JPanel {
 
         myQuestionPrompt.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(myQuestionPrompt, BorderLayout.NORTH);
+    }
+
+    /**
+     * Configures the properties of the question prompt text area. This includes setting it as
+     * non-editable, enabling line wrap, and applying a border, background color, font, and text color.
+     */
+    public void setupQuestionPrompt() {
+        myQuestionPrompt.setEditable(false);
+        myQuestionPrompt.setLineWrap(true);
+        myQuestionPrompt.setWrapStyleWord(true);
+        myQuestionPrompt.setBorder(new RoundedBorder(20, new Insets(10, 10, 10, 10)));
+        myQuestionPrompt.setBackground(Color.BLACK);
+        myQuestionPrompt.setFont(Fonts.getPixelFont(16));
+        myQuestionPrompt.setForeground(Color.WHITE);
     }
 
     /**
@@ -82,11 +98,10 @@ public final class QuestionPanel extends JPanel {
             myQuestionPrompt.setText(theQuestion.getPrompt());
             switch (theQuestion) {
                 case MultipleChoiceQuestion m -> myAnswerPanel = new MultipleChoiceQuestionPanel(myGameListener, m);
-                case BooleanQuestion bq -> myAnswerPanel = new BooleanQuestionPanel(myGameListener, bq);
-                case TextInputQuestion tiq -> myAnswerPanel = new TextInputQuestionPanel(myGameListener, tiq);
+                case BooleanQuestion ignored -> myAnswerPanel = new BooleanQuestionPanel(myGameListener);
+                case TextInputQuestion ignored -> myAnswerPanel = new TextInputQuestionPanel(myGameListener);
                 default -> throw new IllegalStateException("Unexpected question type");
             }
-
             myAnswerPanel.setPreferredSize(new Dimension(300, 300));
             this.add(myAnswerPanel);
         }
@@ -141,7 +156,7 @@ public final class QuestionPanel extends JPanel {
             final ButtonGroup theBg
     ) {
         setConfirmButton();
-        confirmButton.addActionListener(e -> {
+        myConfirmButton.addActionListener(e -> {
             var elements = theBg.getElements();
             elements.asIterator().forEachRemaining(element -> {
                 JRadioButton button = (JRadioButton) element;
@@ -151,7 +166,7 @@ public final class QuestionPanel extends JPanel {
                 }
             });
         });
-        return confirmButton;
+        return myConfirmButton;
     }
 
     /**
@@ -165,21 +180,20 @@ public final class QuestionPanel extends JPanel {
     private static JButton createInputConfirmButton(final GameListener theGameListener,
                                                     final JTextField theInput) {
         setConfirmButton();
-        confirmButton.addActionListener(e -> theGameListener.checkAnswer(theInput.getText()));
-        return confirmButton;
+        myConfirmButton.addActionListener(e -> theGameListener.checkAnswer(theInput.getText()));
+        return myConfirmButton;
     }
 
     /**
      *  Sets the visual properties of a confirm button,
      */
     private static void setConfirmButton() {
-        confirmButton = new JButton("Confirm");
-        confirmButton.setBackground(Color.BLACK);
-        confirmButton.setForeground(Color.WHITE);
-        confirmButton.setFont(Fonts.getPixelFont(12));
-        confirmButton.setBorder(new RoundedBorder(20, new Insets(10, 0, 10, 0)));
-        confirmButton.setPreferredSize(new Dimension(150, 100));
-
+        myConfirmButton = new JButton("Confirm");
+        myConfirmButton.setBackground(Color.BLACK);
+        myConfirmButton.setForeground(Color.WHITE);
+        myConfirmButton.setFont(Fonts.getPixelFont(12));
+        myConfirmButton.setBorder(new RoundedBorder(20, new Insets(10, 0, 10, 0)));
+        myConfirmButton.setPreferredSize(new Dimension(150, 100));
     }
 
     /* Inner Classes *//////////////////////////////////////////////////////////////////////////////
@@ -270,10 +284,8 @@ public final class QuestionPanel extends JPanel {
          * confirm button.
          *
          * @param theGameListener The game listener that handles the user's response to the question.
-         * @param theQuestion The boolean question to be displayed.
          */
-        public BooleanQuestionPanel(final GameListener theGameListener,
-                                    final BooleanQuestion theQuestion) {
+        public BooleanQuestionPanel(final GameListener theGameListener) {
 
             setBackground(Color.BLACK);
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -322,10 +334,8 @@ public final class QuestionPanel extends JPanel {
          * It sets up the UI with a text field for the user to type their answer, and a confirm button.
          *
          * @param theGameListener The game listener that handles the user's response to the question.
-         * @param theQuestion The text input question to be displayed.
          */
-        public TextInputQuestionPanel(final GameListener theGameListener,
-                                      final TextInputQuestion theQuestion) {
+        public TextInputQuestionPanel(final GameListener theGameListener) {
             setBackground(Color.BLACK);
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             Box.createVerticalBox();
