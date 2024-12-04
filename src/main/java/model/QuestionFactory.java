@@ -4,8 +4,22 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionFactory {
+/**
+ * A factory class for creating and retrieving questions from a database. Supports multiple-choice,
+ * boolean, and text-input question types.
+ *
+ * @author Mathew Miller
+ * @author Jacob Klymenko (Javadoc)
+ * @version 1.0
+ */
+public final class QuestionFactory {
 
+    /**
+     * Retrieves a list of questions from the database. The questions include multiple-choice,
+     * boolean, and text-input types.
+     *
+     * @return a list of questions retrieved from the database
+     */
     public static List<Question> getQuestionsFromDatabase() {
         List<Question> questionList = new ArrayList<>();
 

@@ -3,17 +3,40 @@ package view;
 import javax.swing.border.Border;
 import java.awt.*;
 
-public class RoundedBorder implements Border {
+/**
+ * A custom border with rounded corners. Implements the Border interface to provide a rounded
+ * rectangle border.
+ *
+ * @author Mathew Miller
+ * @author Jacob Klymenko (Javadoc)
+ * @version 1.0
+ */
+public final class RoundedBorder implements Border {
+
+    /** The radius of the rounded corners. */
     private final int myRadius;
+
+    /** Additional margin for the border. */
     private Insets myAdditionalMargin = new Insets(0, 0, 0, 0);
 
-    public RoundedBorder(int radius) {
-        this.myRadius = radius;
+    /**
+     * Creates a rounded border with the specified radius.
+     *
+     * @param theRadius the radius of the rounded corners.
+     */
+    public RoundedBorder(final int theRadius) {
+        myRadius = theRadius;
     }
 
-    public RoundedBorder(int radius, Insets additionalMargin) {
-        this(radius);
-        myAdditionalMargin = additionalMargin;
+    /**
+     * Creates a rounded border with the specified radius and additional margin.
+     *
+     * @param theRadius the radius of the rounded corners.
+     * @param theAdditionalMargin    the additional margin for the border.
+     */
+    public RoundedBorder(final int theRadius, final Insets theAdditionalMargin) {
+        myRadius = theRadius;
+        myAdditionalMargin = theAdditionalMargin;
     }
 
     @Override
@@ -23,7 +46,6 @@ public class RoundedBorder implements Border {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setStroke(new BasicStroke(6));
         g2.drawRoundRect(x + 3, y + 3, width - 6, height - 6, myRadius, myRadius);
-//        g2.drawRoundRect(x - 10, y - 10, width + 20, height+20, radius, radius);
     }
 
     @Override

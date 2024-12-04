@@ -8,42 +8,47 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MazeVisualPanel extends JPanel {
+/**
+ * A panel for visually representing the maze in the game.
+ *
+ * @author Cai Spidel
+ * @author Mathew Miller
+ * @version 1.0
+ */
+public final class MazeVisualPanel extends JPanel {
 
+    /** Listener for game-related events. */
     private final GameListener myGameListener;
 
-    public MazeVisualPanel(final GameListener theGameListener, Maze theMaze) {
+    /**
+     * Constructs a MazeVisualPanel to display the given maze.
+     *
+     * @param theGameListener the listener for room click events
+     * @param theMaze the maze to be displayed
+     */
+    public MazeVisualPanel(final GameListener theGameListener, final Maze theMaze) {
         myGameListener = theGameListener;
-
         setLayout(new GridLayout(theMaze.getRows(), theMaze.getCols()));
 
         for (int i = 0; i < theMaze.getRows(); i++) {
             for (int j = 0; j < theMaze.getCols(); j++) {
                 var room = theMaze.getRoom(i, j);
-
                 MazeVisualButton button = new MazeVisualButton(room, i, j);
-
-                button.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        myGameListener.onRoomClicked(room);
-                    }
-                });
-
-
+                button.addActionListener(e -> myGameListener.onRoomClicked(room));
                 add(button);
             }
         }
-
         updateVisualInfo(theMaze);
         setVisible(true);
     }
 
     /**
-     * Updates the visuals of all components.
-     * Must be called when any visual change occurs in the maze.
+     * Updates the visuals of all maze components. Should be called to refresh the UI after any
+     * changes to the maze's state.
+     *
+     * @param theMaze the maze whose state is reflected in the visuals
      */
-    private void updateVisualInfo(Maze theMaze) {
+    private void updateVisualInfo(final Maze theMaze) {
         theMaze.updateRoomVisibility();
         Component[] components = this.getComponents();
         for (Component component : components) {

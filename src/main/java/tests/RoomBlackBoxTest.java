@@ -16,20 +16,22 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests the model class through black box testing.
+ *
+ * @author Cai Spidel
+ * @version 1.0
  */
-class RoomBlackBoxTest {
+public final class RoomBlackBoxTest {
 
     /** The questions to be tested. */
     private Question[] myQuestions;
     /** The rooms to be tested. */
     private Room[] myRooms;
 
-
     /**
      * To be run before each test to set up the objects.
      */
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         // Question setup
         myQuestions = new Question[4];
         // the boolean question
@@ -344,6 +346,4 @@ class RoomBlackBoxTest {
         assertFalse(myRooms[1].checkAnswer("c"));
         assertFalse(myRooms[2].checkAnswer("sorta"));
     }
-
-
 }

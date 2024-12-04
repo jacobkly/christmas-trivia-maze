@@ -3,7 +3,6 @@ package view;
 import controller.MusicController;
 
 import javax.swing.*;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 /**
@@ -13,7 +12,7 @@ import java.awt.*;
  * @author Jacob Klymenko
  * @version 1.0
  */
-public class VolumeSliderPanel extends JPanel{
+public final class VolumeSliderPanel extends JPanel{
 
     /** The music controller used to set and get the volume. */
     private final MusicController myMusicController;
@@ -34,7 +33,6 @@ public class VolumeSliderPanel extends JPanel{
         // get default slider position according to music controllers volume gain range
         mySliderPosition = (int) (((myMusicController.getDefaultVolume() - myMusicController.getMinVolume()) /
                 (myMusicController.getMaxVolume() - myMusicController.getMinVolume())) * 100);
-
         setupPanel();
     }
 

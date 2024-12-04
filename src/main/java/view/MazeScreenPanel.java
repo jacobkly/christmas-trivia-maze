@@ -10,34 +10,45 @@ import java.awt.*;
 
 import static java.awt.GridBagConstraints.*;
 
-public class MazeScreenPanel extends JPanel {
+/**
+ * A panel that represents the main screen of the maze game. It includes components for the game
+ * display, questions, status bar, and key panel.
+ *
+ * @author Mathew Miller
+ * @author Jacob Klymenko (Javadoc)
+ * @version 1.0
+ */
+public final class MazeScreenPanel extends JPanel {
 
+    /** Panel for rendering the game visuals. */
     private final GamePanel myGamePanel;
+
+    /** Panel for displaying questions to the player. */
     private final QuestionPanel myQuestionPanel;
-    private StatusBarPanel myStatusBarPanel;
-    private final KeyPanel myKeyPanel;
-    private GameListener myGameListener;
 
+    /** Panel for showing the player's status and other game details. */
+    private final StatusBarPanel myStatusBarPanel;
 
-    public MazeScreenPanel(GameListener theGameListener) {
-        this.myGameListener = theGameListener;
-
+    /**
+     * Constructs a maze screen panel with the specified game listener.
+     *
+     * @param theGameListener the listener for game events
+     */
+    public MazeScreenPanel(final GameListener theGameListener) {
         setSize(1200, 700);
         setLayout(new GridBagLayout());
         setBackground(Color.BLACK);
         setVisible(false);
-
 
         GridBagConstraints c = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
         GridBagConstraints c3 = new GridBagConstraints();
         GridBagConstraints c4 = new GridBagConstraints();
 
-        myGamePanel = new GamePanel(myGameListener);
-        myQuestionPanel = new QuestionPanel(myGameListener);
-        myStatusBarPanel = new StatusBarPanel(myGameListener);
-        myKeyPanel = new KeyPanel();
-
+        myQuestionPanel = new QuestionPanel(theGameListener);
+        myStatusBarPanel = new StatusBarPanel(theGameListener);
+        myGamePanel = new GamePanel(theGameListener);
+        KeyPanel keyPanel = new KeyPanel();
 
         c.gridx = 1;
         c.gridy = 0;
@@ -64,7 +75,7 @@ public class MazeScreenPanel extends JPanel {
         c3.weightx = 1.0;
         c3.weighty = 1.0;
         c3.fill = GridBagConstraints.BOTH;
-        add(myKeyPanel, c3);
+        add(keyPanel, c3);
 
         c4.gridx = 0;
         c4.gridy = 0;
@@ -76,6 +87,11 @@ public class MazeScreenPanel extends JPanel {
         add(myGamePanel, c4);
     }
 
+    /**
+     * Updates the panel to display the given maze and its current state.
+     *
+     * @param theMaze the maze to be displayed
+     */
     public void setMaze(final Maze theMaze) {
         Room selectedRoom = theMaze.getCurrentlySelectedRoom();
         if (selectedRoom != null) {
@@ -91,12 +107,22 @@ public class MazeScreenPanel extends JPanel {
         myGamePanel.setMaze(theMaze);
     }
 
+    /**
+     * Updates the status bar with the given player's information.
+     *
+     * @param thePlayer the player whose information is displayed
+     */
     public void setPlayer(final Player thePlayer){
         myStatusBarPanel.setPlayerInfo(thePlayer);
     }
 
-    public void setHintEnabled(boolean enabled){
-        myStatusBarPanel.setHintEnabled(enabled);
+    /**
+     * Enables or disables the hint functionality in the status bar.
+     *
+     * @param theEnabled true to enable hints, false to disable
+     */
+    public void setHintEnabled(final boolean theEnabled){
+        myStatusBarPanel.setHintEnabled(theEnabled);
     }
 
 }

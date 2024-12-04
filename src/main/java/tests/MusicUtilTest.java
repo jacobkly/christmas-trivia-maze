@@ -21,7 +21,7 @@ import model.MusicUtil;
  * @author Jacob Klymenko
  * @version 1.0
  */
-public class MusicUtilTest {
+public final class MusicUtilTest {
 
     /** Temporary directory used for testing music file operations. */
     private Path myTempMusicDir;

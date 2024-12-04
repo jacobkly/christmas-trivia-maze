@@ -198,6 +198,11 @@ public final class Room implements Serializable {
         return myQuestion;
     }
 
+    /**
+     * Checks if the current visibility is set to MYSTERY.
+     *
+     * @return true if the visibility is MYSTERY, false otherwise
+     */
     public boolean isMystery() {
         return myVisibility == Visibility.MYSTERY;
     }

@@ -5,7 +5,10 @@
 package model;
 
 /**
- * holds enums used to manage the room class.
+ * Holds enums used to manage the room class.
+ *
+ * @author Cai Spidel
+ * @version 1.0
  */
 public final class RoomEnums {
 
@@ -156,9 +159,5 @@ public final class RoomEnums {
                 case WEST -> RoomInfo.WEST_CLOSED;
             };
         }
-
     }
-
-
-
 }

@@ -14,7 +14,7 @@ import java.util.Objects;
  * @author Mathew Miller
  * @version 1.0
  */
-public class MainMenuPanel extends JPanel {
+public final class MainMenuPanel extends JPanel {
 
     /** The listener responsible for handling game events. */
     private final GameListener myGameListener;

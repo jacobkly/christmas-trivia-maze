@@ -11,7 +11,7 @@ import javax.sound.sampled.*;
  * @author Jacob Klymenko
  * @version 1.0
  */
-public class MusicController {
+public final class MusicController {
 
     /** Default music volume (70% of the range). */
     private static final float DEFAULT_VOLUME = 0.70f;

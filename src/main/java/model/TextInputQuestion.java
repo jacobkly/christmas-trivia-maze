@@ -12,6 +12,7 @@ package model;
  * @version 1.0
  */
 public final class TextInputQuestion extends Question {
+
     /** The correct answer */
     private final String myAnswer;
 

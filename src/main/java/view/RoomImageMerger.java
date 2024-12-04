@@ -1,7 +1,5 @@
 package view;
 
-import model.Room;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -10,11 +8,21 @@ import java.util.Objects;
 import model.RoomEnums.*;
 
 /**
- * A class that merges 128x128 images together
+ * A class that merges 128x128 images together to create a visual representation of a room. This
+ * class loads a set of predefined images and provides functionality to merge the based on the
+ * room's data.
+ *
+ * @author Cai Spidel
+ * @version 1.0
  */
-public class RoomImageMerger {
+public final class RoomImageMerger {
 
+    /**
+     * A static array of images representing different room elements and their statuses. The images
+     * are loaded from resource files.
+     */
     private static final Image[] ROOM_IMAGES = new Image[20];
+
     static {
         try {
             // door values
@@ -68,25 +76,19 @@ public class RoomImageMerger {
                     (RoomImageMerger.class.getResource("/roomFiles/fillRoom/giftsFillRoom.png"))).getImage();
             ROOM_IMAGES[19] = new ImageIcon(Objects.requireNonNull
                     (RoomImageMerger.class.getResource("/roomFiles/fillRoom/moonFillRoom.png"))).getImage();
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     /**
-     * Creates the RoomImageMerger.
+     * Private constructor to prevent instantiation of this utility class.
      */
-    private RoomImageMerger() {
-
-    }
-
-
+    private RoomImageMerger() { /* do nothing */ }
 
     /**
-     * Merges a 16x16 set of images together.
-     * The images are obtained from the string representations of file locations.
-     * This is the visual representation of a room.
+     * Merges a 16x16 set of images together. The images are obtained from the string
+     * representations of file locations. This is the visual representation of a room.
      *
      * @param theRoomInfo the images to be merged, in render order.
      * @return the merged image.
@@ -107,5 +109,4 @@ public class RoomImageMerger {
 
         return mergedImage;
     }
-
 }

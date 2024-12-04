@@ -18,7 +18,7 @@ import java.util.List;
  * @author Jacob Klymenko
  * @version 1.0
  */
-public class GameController implements GameListener {
+public final class GameController implements GameListener {
 
     /**
      * The list of questions used in the game, fetched from the database.
@@ -64,7 +64,7 @@ public class GameController implements GameListener {
      *
      * @param theFrame the view frame to set.
      */
-    public void setView(MazeViewFrame theFrame) {
+    public void setView(final MazeViewFrame theFrame) {
         this.myFrame = theFrame;
         startMainMenu();
     }
@@ -170,7 +170,6 @@ public class GameController implements GameListener {
 
         if (correct) {
             myPlayer.setRoomsDiscovered(++myRoomsDiscovered);
-
             try {
                 myFrame.playSoundEffect(true);
             } catch (Exception theE) {
@@ -194,21 +193,16 @@ public class GameController implements GameListener {
 
         if (myPlayer.getHealth() == 0) {
             myFrame.setResult(false, myPlayer.getPlayerStatistics());
-
         } else {
-
             myFrame.setMaze(myMaze);
         }
-
         return correct;
     }
 
     @Override
     public void onRoomClicked(final Room theRoom) {
         // Don't allow selecting mystery rooms
-        if (theRoom.isMystery()) {
-            return;
-        }
+        if (theRoom.isMystery()) { return; }
 
         // Clear existing selected room
         Room selectedRoom = myMaze.getCurrentlySelectedRoom();
@@ -220,7 +214,7 @@ public class GameController implements GameListener {
         theRoom.setHigLig(true);
         myMaze.setSelectedRoom(theRoom);
 
-//      // Update the UI
+        // Update the UI
         myFrame.setHintEnabled(myPlayer.getHints() > 0 && theRoom.isAnswerable() && theRoom.getQuestion() != null);
         myFrame.setMaze(myMaze);
     }
@@ -243,5 +237,4 @@ public class GameController implements GameListener {
     public void debugIsSelected(final boolean theBoolean) {
         myDebugSelected = theBoolean;
     }
-
 }

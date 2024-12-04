@@ -7,14 +7,14 @@ import java.awt.*;
 
 /**
  * A button that represents a grid on the maze.
+ *
+ * @author Cai Spidel
+ * @version 1.0
  */
-public class MazeVisualButton extends JButton {
+public final class MazeVisualButton extends JButton {
+
     /** The room that this button represents. */
-    private Room myRoom;
-    /** The row that this room is located on. */
-    private int myRow;
-    /** The col that this room is located on. */
-    private int myCol;
+    private final Room myRoom;
 
     /**
      * Creates a MazeVisualButton.
@@ -23,12 +23,8 @@ public class MazeVisualButton extends JButton {
      */
     public MazeVisualButton(Room room, final int theRow, final int theCol) {
         myRoom = room;
-        myRow = theRow;
-        myCol = theCol;
         updateVisualImage();
-
         setBorder(null);
-
     }
 
     /**
@@ -40,25 +36,4 @@ public class MazeVisualButton extends JButton {
         setIcon(new ImageIcon(img.getScaledInstance( dimension, dimension, Image.SCALE_SMOOTH)));
         setDisabledIcon(new ImageIcon(img.getScaledInstance( dimension, dimension, Image.SCALE_SMOOTH)));
     }
-
-    /**
-     * Gets the row this room is on.
-     *
-     * @return the row of this room.
-     */
-    public int getRow() {
-        return myRow;
-    }
-
-    /**
-     * Gets the col this room is on.
-     *
-     * @return the col of this room.
-     */
-    public int getCol() {
-        return myCol;
-    }
-
-    // button should tell the panel it has been clicked
-
 }

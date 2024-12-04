@@ -18,6 +18,7 @@ import model.RoomEnums.*;
  * @version 1.0
  */
 public final class Maze implements Serializable {
+
     /** The serialVersionUID for this object. */
     @Serial
     private static final long serialVersionUID = 1L;

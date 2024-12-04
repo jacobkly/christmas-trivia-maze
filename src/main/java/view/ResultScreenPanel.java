@@ -18,7 +18,7 @@ import java.util.Objects;
  * @author Jacob Klymenko
  * @version 1.0
  */
-public class ResultScreenPanel extends JPanel {
+public final class ResultScreenPanel extends JPanel {
 
     /**
      * Array of text for the victory message.
