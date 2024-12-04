@@ -15,8 +15,10 @@ import java.util.List;
  * @version 1.0
  */
 public final class MultipleChoiceQuestion extends Question {
+
     /** The correct answer */
     private final String myAnswer;
+
     /** The list of possible answers */
     private final List<String> myPossibleAnswers; // myWrongAnswers + myAnswer
 
@@ -44,12 +46,7 @@ public final class MultipleChoiceQuestion extends Question {
      *
      * @return all the possible answers
      */
-    public List<String> getPossibleAnswers() {
-        // List<String> result = new ArrayList<>();
-        // result.add(myAnswer);
-        // result.addAll(myPossibleAnswers);
-        return myPossibleAnswers;
-    }
+    public List<String> getPossibleAnswers() { return myPossibleAnswers; }
 
     @Override
     public boolean checkAnswer(String theAnswer) {

@@ -12,15 +12,21 @@ import model.RoomEnums.*;
 
 /**
  * Tests the model class through black box testing.
+ *
+ * @author Cai Spidel
+ * @version 1.0
  */
 public final class MazeBlackBoxTest {
 
     /** The questions to be tested. */
     private Question[] myQuestions;
+
     /** The rooms to be tested. */
     private Room[] myRooms;
+
     /** The maze to be tested. */
     private Maze myMaze;
+
     /** The player to be tested. */
     private Player myPlayer;
 
@@ -65,7 +71,6 @@ public final class MazeBlackBoxTest {
         // player setup
         myPlayer = new Player("name", 3, 2);
     }
-
 
     /**
      * Tests the updateRoomVisibility method.
@@ -208,7 +213,6 @@ public final class MazeBlackBoxTest {
 
     }
 
-
     /**
      * Makes a default array of room information.
      *
@@ -224,7 +228,6 @@ public final class MazeBlackBoxTest {
         result[RoomArrayValues.ROOM_HIGHLIGHT.ordinal()] = RoomInfo.NO_HIGHLIGHT;
         return result;
     }
-
 
     /**
      * Compares the room info of two seperate room info arrays.
@@ -252,7 +255,6 @@ public final class MazeBlackBoxTest {
         assertEquals(myMaze, wrapper.getMaze());
     }
 
-    // player tests do not yet test anything marked as "maybe change"
     /**
      * Tests the Player class
      */
@@ -262,7 +264,5 @@ public final class MazeBlackBoxTest {
         assertEquals(3, myPlayer.getMaxHealth());
         assertEquals(3, myPlayer.getHealth());
         assertEquals(2, myPlayer.getHints());
-
     }
-
 }

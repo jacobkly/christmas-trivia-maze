@@ -7,6 +7,9 @@ import java.awt.*;
 
 /**
  * A button that represents a grid on the maze.
+ *
+ * @author Cai Spidel
+ * @version 1.0
  */
 public final class MazeVisualButton extends JButton {
 

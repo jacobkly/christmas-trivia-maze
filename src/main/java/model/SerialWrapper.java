@@ -14,6 +14,7 @@ import java.io.Serializable;
  * @version 1.0
  */
 public final class SerialWrapper implements Serializable {
+
     /** The serialVersionUID for this object. */
     @Serial
     private static final long serialVersionUID = 1L;

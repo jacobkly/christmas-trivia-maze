@@ -16,6 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests the model class through black box testing.
+ *
+ * @author Cai Spidel
+ * @version 1.0
  */
 public final class RoomBlackBoxTest {
 

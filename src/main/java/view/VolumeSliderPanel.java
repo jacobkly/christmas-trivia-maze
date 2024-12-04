@@ -3,7 +3,6 @@ package view;
 import controller.MusicController;
 
 import javax.swing.*;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 /**

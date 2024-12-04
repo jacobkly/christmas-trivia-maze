@@ -28,11 +28,11 @@ public interface GameListener {
     * @param thePlayerMaxHints  the maximum number of hints the player can use.
     */
    void startGame(
-           int theNumRows,
-           int theNumCols,
-           String thePlayerName,
-           int thePlayerMaxHealth,
-           int thePlayerMaxHints
+           final int theNumRows,
+           final int theNumCols,
+           final String thePlayerName,
+           final int thePlayerMaxHealth,
+           final int thePlayerMaxHints
    );
 
    /**
@@ -53,19 +53,24 @@ public interface GameListener {
     * @param theAnswer the player's answer.
     * @return true if the answer is correct, false otherwise.
     */
-   boolean checkAnswer(String theAnswer);
+   boolean checkAnswer(final String theAnswer);
 
    /**
     * Handles a room click event.
     *
     * @param theRoom the room that was clicked.
     */
-   void onRoomClicked(Room theRoom);
+   void onRoomClicked(final Room theRoom);
 
    /**
     * Uses a hint to reveal the answer to the current question.
     */
    void useHint();
 
-   void debugIsSelected(final boolean theB);
+   /**
+    * Handles the debug status based on the provided boolean value.
+    *
+    * @param theBoolean the boolean value indicating whether debug mode is selected
+    */
+   void debugIsSelected(final boolean theBoolean);
 }

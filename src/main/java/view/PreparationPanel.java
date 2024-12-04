@@ -201,10 +201,14 @@ public final class PreparationPanel extends JPanel {
         String playerName = theNameField.getText().trim();
         if (playerName.isEmpty()) {
             JOptionPane.showMessageDialog(
-                    this, "Please enter a name to continue.", "Missing Name", JOptionPane.WARNING_MESSAGE);
+                    this,
+                    "Please enter a name to continue.",
+                    "Missing Name",
+                    JOptionPane.WARNING_MESSAGE);
         } else {
             int[] difficulty = getChosenDifficulty();
-            myGameListener.startGame(5, 7, playerName, difficulty[0], difficulty[1]);
+            myGameListener.startGame(5, 7, playerName,
+                                        difficulty[0], difficulty[1]);
         }
     }
 
@@ -234,7 +238,9 @@ public final class PreparationPanel extends JPanel {
      */
     private int[] getChosenDifficulty() {
         int index = 0;
-        for (Enumeration<AbstractButton> buttons = myDifficultyGroup.getElements(); buttons.hasMoreElements(); index++) {
+        for (Enumeration<AbstractButton> buttons = myDifficultyGroup.getElements();
+             buttons.hasMoreElements();
+             index++) {
             AbstractButton button = buttons.nextElement();
             if (button.isSelected()) {
                 return switch (index) {
@@ -255,7 +261,7 @@ public final class PreparationPanel extends JPanel {
      * @param theIsSelected Whether the button is selected by default.
      * @return The formatted JRadioButton.
      */
-    private JRadioButton createDifficultyButton(final String theText, boolean theIsSelected) {
+    private JRadioButton createDifficultyButton(final String theText, final boolean theIsSelected) {
         JRadioButton button = new JRadioButton(theText);
         button.setForeground(Color.WHITE);
         button.setFont(Fonts.getPixelFont(10));
