@@ -28,6 +28,15 @@ public final class MenuBar extends JMenuBar {
     /** The parent component that hosts this menu bar. */
     private final Component myParentComponent;
 
+    /** A menu item for saving. */
+    private JMenuItem mySaveMenuItem;
+
+    /** A menu item for exiting the application. */
+    private JMenuItem myExitMenuItem;
+
+    /** A checkbox menu item for enabling or disabling debug mode. */
+    private JCheckBoxMenuItem myDebugCheckBoxMenuItem;
+
     /**
      * Constructs a MenuBar with the specified game listener, volume slider panel, and parent component.
      *
@@ -45,6 +54,21 @@ public final class MenuBar extends JMenuBar {
         addFileMenu();
         addSettingsMenu();
         addInformationMenu();
+    }
+
+    /**
+     * Updates the enabled state of the menu items based on the given usability flag.
+     * This method affects the following menu items:
+     * - Save Menu Item
+     * - Exit Menu Item
+     * - Debug Checkbox Menu Item
+     *
+     * @param theUsability true to enable the menu items, false to disable them.
+     */
+    public void updateMenuBarUsability(final boolean theUsability) {
+        mySaveMenuItem.setEnabled(theUsability);
+        myExitMenuItem.setEnabled(theUsability);
+        myDebugCheckBoxMenuItem.setEnabled(theUsability);
     }
 
     /**
@@ -66,9 +90,9 @@ public final class MenuBar extends JMenuBar {
      * @param theFileMenu the file menu to which the save menu item is added
      */
     private void addSaveMenuItem(final JMenu theFileMenu) {
-        JMenuItem saveMenuItem = new JMenuItem("Save");
-        theFileMenu.add(saveMenuItem);
-        saveMenuItem.addActionListener(theEvent -> { myGameListener.saveGame();} );
+        mySaveMenuItem = new JMenuItem("Save");
+        theFileMenu.add(mySaveMenuItem);
+        mySaveMenuItem.addActionListener(theEvent -> { myGameListener.saveGame();} );
     }
 
     /**
@@ -88,9 +112,9 @@ public final class MenuBar extends JMenuBar {
      * @param theFileMenu the file menu to which the exit game menu item is added
      */
     private void addExitGameMenuItem(final JMenu theFileMenu) {
-        JMenuItem exitGameMenuItem = new JMenuItem("Exit Game");
-        theFileMenu.add(exitGameMenuItem);
-        exitGameMenuItem.addActionListener(theEvent -> myGameListener.startMainMenu());
+        myExitMenuItem = new JMenuItem("Exit Game");
+        theFileMenu.add(myExitMenuItem);
+        myExitMenuItem.addActionListener(theEvent -> myGameListener.startMainMenu());
     }
 
     /**
@@ -124,15 +148,11 @@ public final class MenuBar extends JMenuBar {
      * @param theSettingsMenu the settings menu to which the debug mode menu item is added
      */
     private void addDebugModeMenuItem(final JMenu theSettingsMenu) {
-        JCheckBoxMenuItem debugMenuItem = new JCheckBoxMenuItem("Debug Mode");
-        debugMenuItem.setSelected(false);
-        theSettingsMenu.add(debugMenuItem);
-        debugMenuItem.addActionListener(theEvent -> {
-           if (debugMenuItem.isSelected()) {
-               myGameListener.debugIsSelected(true);
-           } else {
-               myGameListener.debugIsSelected(false);
-           }
+        myDebugCheckBoxMenuItem = new JCheckBoxMenuItem("Debug Mode");
+        myDebugCheckBoxMenuItem.setSelected(false);
+        theSettingsMenu.add(myDebugCheckBoxMenuItem);
+        myDebugCheckBoxMenuItem.addActionListener(theEvent -> {
+            myGameListener.debugIsSelected(myDebugCheckBoxMenuItem.isSelected());
         });
     }
 
