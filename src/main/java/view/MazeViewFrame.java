@@ -30,6 +30,9 @@ public final class MazeViewFrame extends JFrame {
     /** The music controller used to control the background music. */
     private final MusicController myMusicController;
 
+    /** The menu bar for the application. */
+    private final MenuBar myMenuBar;
+
     /** The main menu panel displayed when the game starts. */
     private MainMenuPanel myMainMenuPanel;
 
@@ -57,7 +60,9 @@ public final class MazeViewFrame extends JFrame {
 
         initializeFrame();
         initializePanels();
-        setJMenuBar(new MenuBar(myGameListener, myVolumeSliderPanel, this));
+        // must initialize panels before setting menu bar
+        myMenuBar = new MenuBar(myGameListener, myVolumeSliderPanel, this);
+        setJMenuBar(myMenuBar);
         addPanelsToFrame();
     }
 
@@ -100,6 +105,7 @@ public final class MazeViewFrame extends JFrame {
      * @param theMaze the maze object to be displayed.
      */
     public void setMaze(final Maze theMaze) {
+        myMenuBar.updateMenuBarUsability(true);
         myMainMenuPanel.setVisible(false);
         myResultScreenPanel.setVisible(false);
         myPreparationPanel.setVisible(false);
@@ -111,6 +117,7 @@ public final class MazeViewFrame extends JFrame {
      * Sets the preparation screen visible and hides other panels.
      */
     public void setPreparation() {
+        myMenuBar.updateMenuBarUsability(false);
         myMainMenuPanel.setVisible(false);
         myMazeScreenPanel.setVisible(false);
         myResultScreenPanel.setVisible(false);
@@ -121,6 +128,7 @@ public final class MazeViewFrame extends JFrame {
      * Sets the main menu screen visible and hides other panels.
      */
     public void setMainMenu() {
+        myMenuBar.updateMenuBarUsability(false);
         myMazeScreenPanel.setVisible(false);
         myPreparationPanel.setVisible(false);
         myResultScreenPanel.setVisible(false);
@@ -129,14 +137,16 @@ public final class MazeViewFrame extends JFrame {
 
     /**
      * Shows the results UI for a win / loss and associated player statistics.
+     *
      * @param theResult Indicates if this was a win or a loss.
      * @param thePlayerStatistics Strings describing various statistics about the players game session.
      */
     public void setResult(final boolean theResult, final String[] thePlayerStatistics) {
-        myResultScreenPanel.setResult(theResult, thePlayerStatistics);
+        myMenuBar.updateMenuBarUsability(false);
         myMainMenuPanel.setVisible(false);
         myPreparationPanel.setVisible(false);
         myMazeScreenPanel.setVisible(false);
+        myResultScreenPanel.setResult(theResult, thePlayerStatistics);
         myResultScreenPanel.setVisible(true);
 
     }
