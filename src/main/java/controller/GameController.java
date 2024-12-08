@@ -107,11 +107,11 @@ public final class GameController implements GameListener {
             try {
                 File file = myFileChooser.getSelectedFile();
                 String fname = file.getAbsolutePath();
-                if(fname.contains(".") && !fname.endsWith(".ser")) {
+                if (fname.contains(".") && !fname.endsWith(".ser")) {
                     fname = fname.substring(0, fname.lastIndexOf('.'));
                 }
 
-                if(!fname.endsWith(".ser") ) {
+                if (!fname.endsWith(".ser")) {
                     file = new File(fname + ".ser");
                 }
 
@@ -202,7 +202,9 @@ public final class GameController implements GameListener {
     @Override
     public void onRoomClicked(final Room theRoom) {
         // Don't allow selecting mystery rooms
-        if (theRoom.isMystery()) { return; }
+        if (theRoom.isMystery()) {
+            return;
+        }
 
         // Clear existing selected room
         Room selectedRoom = myMaze.getCurrentlySelectedRoom();
@@ -215,7 +217,12 @@ public final class GameController implements GameListener {
         myMaze.setSelectedRoom(theRoom);
 
         // Update the UI
-        myFrame.setHintEnabled(myPlayer.getHints() > 0 && theRoom.isAnswerable() && theRoom.getQuestion() != null);
+        if (!myDebugSelected) {
+            myFrame.setHintEnabled(myPlayer.getHints() > 0 && theRoom.isAnswerable() && theRoom.getQuestion() != null);
+
+        } else {
+            myFrame.setHintEnabled(theRoom.isAnswerable() && theRoom.getQuestion() != null);
+        }
         myFrame.setMaze(myMaze);
     }
 
