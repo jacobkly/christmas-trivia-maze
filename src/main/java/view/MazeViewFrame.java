@@ -196,7 +196,7 @@ public final class MazeViewFrame extends JFrame {
 
                 float currentVolume = myMusicController.getCurrentVolume();
                 // right answer sound is sharper than wrong answer
-                volumeControl.setValue(currentVolume + (theResult ? 4 : 9));
+                volumeControl.setValue(currentVolume + (theResult ? 1 : 4));
             } else {
                 System.out.println("Sound Effects: Clip does NOT support MASTER_GAIN");
             }

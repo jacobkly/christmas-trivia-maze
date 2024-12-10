@@ -166,6 +166,7 @@ public final class MenuBar extends JMenuBar {
 
         addAboutMenuItem(informationMenu);
         addInstructionsMenuItem(informationMenu);
+        addCreditsMenuItem(informationMenu);
     }
 
     /**
@@ -216,6 +217,40 @@ public final class MenuBar extends JMenuBar {
                 
                     Now play and try to find Santa!
                     """);
+        });
+    }
+
+    /**
+     * Adds the "Credits" menu item to the specified information menu. When selected, a dialog box
+     * is displayed that credits the background music used in the program, including links to the
+     * respective YouTube channels. The content in the dialog is displayed in a non-editable,
+     * scrollable text area.
+     *
+     * @param theInfoMenu the information menu to which the credits menu item is added
+     */
+    private void addCreditsMenuItem(final JMenu theInfoMenu) {
+        JMenuItem creditsMenuItem = new JMenuItem("Credits");
+        theInfoMenu.add(creditsMenuItem);
+        creditsMenuItem.addActionListener(theEvent -> {
+            JTextArea textArea = new JTextArea();
+            textArea.setText(
+                    "We would like to credit the following YouTube channels for the\n" +
+                            "background music used in our program. This music was not created\n" +
+                            "by us, but we are grateful for their contributions.\n\n" +
+                            "1. chefelf - https://www.youtube.com/watch?v=2intQ4OTv10\n" +
+                            "2. Iwasbored - https://www.youtube.com/watch?v=YwwHBXESTSk\n\n" +
+                            "All rights to the music are owned by the respective creators."
+            );
+            textArea.setEditable(false);
+            textArea.setCaretPosition(0);
+            JScrollPane scrollPane = new JScrollPane(textArea);
+
+            JOptionPane.showMessageDialog(
+                    myParentComponent,
+                    scrollPane,
+                    "Music Credits",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
         });
     }
 
