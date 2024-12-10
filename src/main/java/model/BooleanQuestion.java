@@ -1,7 +1,3 @@
-/*
- * TCSS 360 Autumn 2024
- * Course Project
- */
 package model;
 
 /**

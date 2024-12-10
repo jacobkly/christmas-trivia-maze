@@ -4,7 +4,6 @@ import controller.GameListener;
 import controller.MusicController;
 import model.Maze;
 import model.Player;
-import model.Room;
 
 import javax.sound.sampled.*;
 import javax.swing.*;

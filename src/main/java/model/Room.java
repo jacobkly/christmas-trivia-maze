@@ -1,7 +1,3 @@
-/*
- * TCSS 360 Autumn 2024
- * Course Project
- */
 package model;
 
 import java.io.Serial;
@@ -10,7 +6,6 @@ import java.util.*;
 import static model.RoomEnums.*;
 import static model.RoomEnums.RoomArrayValues.ROOM_FILL;
 import static model.RoomEnums.RoomArrayValues.ROOM_HIGHLIGHT;
-
 
 /**
  * Class that models functionality of the rooms of a maze.

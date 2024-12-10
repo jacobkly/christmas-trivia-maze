@@ -1,7 +1,3 @@
-/*
- * TCSS 360 Autumn 2024
- * Course Project
- */
 package model;
 
 import java.io.Serial;
@@ -80,9 +76,6 @@ public final class Maze implements Serializable {
             randomCol2 = random.nextInt(myRooms[randomRow1].length);
         } while (Math.abs(randomRow1 - randomRow2) + Math.abs(randomCol1 - randomCol2) < minDistance);
         int[] endingRowCol = new int[]{randomRow2, randomCol2};
-
-        System.out.println("Maze Exit: " + randomRow2 + "," + randomCol2);
-
         mazeFirstSetup(endingRowCol);
     }
 

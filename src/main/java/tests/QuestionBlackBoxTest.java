@@ -1,17 +1,12 @@
 package tests;
 
 import model.*;
-import model.RoomEnums.DoorDirection;
-import model.RoomEnums.RoomArrayValues;
-import model.RoomEnums.RoomInfo;
-import model.RoomEnums.Visibility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static model.RoomEnums.ROOM_ARRAY_VALUES;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
