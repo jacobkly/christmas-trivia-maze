@@ -3,6 +3,7 @@ package tests;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.*;
 import java.util.List;
 
@@ -60,7 +61,7 @@ public final class MusicUtilTest {
      * @throws IOException If an I/O error occurs while fetching the song list.
      */
     @Test
-    public void testGetSongListEmptyDirectory() throws IOException {
+    public void testGetSongListEmptyDirectory() throws IOException, URISyntaxException {
         List<String> songList = MusicUtil.getSongList(myTempMusicDir.toString());
         assertNotNull(songList, "Song list should not be null");
         assertTrue(songList.isEmpty(), "Song list should be empty for an empty directory");
@@ -73,7 +74,7 @@ public final class MusicUtilTest {
      * @throws IOException If an I/O error occurs while fetching the song list.
      */
     @Test
-    public void testGetSongListWithFiles() throws IOException {
+    public void testGetSongListWithFiles() throws IOException, URISyntaxException {
         Files.createFile(myTempMusicDir.resolve("song1.wav"));
         Files.createFile(myTempMusicDir.resolve("song2.wav"));
 
@@ -105,7 +106,7 @@ public final class MusicUtilTest {
      * @throws IOException If an I/O error occurs while fetching the song list.
      */
     @Test
-    public void testGetSongListNonMusicFiles() throws IOException {
+    public void testGetSongListNonMusicFiles() throws IOException, URISyntaxException {
         Files.createFile(myTempMusicDir.resolve("song1.wav"));
         Files.createFile(myTempMusicDir.resolve("song2.wav"));
         Files.createFile(myTempMusicDir.resolve("song3.txt"));  // Non-music file

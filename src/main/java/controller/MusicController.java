@@ -14,7 +14,7 @@ import javax.sound.sampled.*;
 public final class MusicController {
 
     /** Default music volume (70% of the range). */
-    private static final float DEFAULT_VOLUME = 0.70f;
+    private static final float DEFAULT_VOLUME = 0.7f;
 
     /** Minimum music volume before muting. */
     private static final float MIN_VOLUME = 0.5f;

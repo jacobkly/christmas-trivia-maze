@@ -1,5 +1,9 @@
 package model;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +32,22 @@ public final class QuestionFactory {
         String selectBoolean = "SELECT question, answer FROM boolean_question";
         String selectTextInput = "SELECT question, answer FROM text_input_question";
 
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:questions.sqlite");
+        File dbFile = new File("questions.sqlite");
+        if (!dbFile.exists()) {
+            try (InputStream in = QuestionFactory.class.getResourceAsStream("/questions.sqlite")) {
+                if (in != null) {
+                    Files.copy(in, dbFile.toPath());
+                } else {
+                    System.out.println("Database resource not found in JAR!");
+                    return questionList;
+                }
+            } catch (final IOException theException) {
+                theException.printStackTrace();
+                return questionList;
+            }
+        }
+
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath());
              Statement stmt = conn.createStatement()) {
 
             ResultSet rs = stmt.executeQuery(selectMultipleChoice);
@@ -46,7 +65,6 @@ public final class QuestionFactory {
 
                 MultipleChoiceQuestion question = new MultipleChoiceQuestion(prompt, answer, wrongAnswers);
                 questionList.add(question);
-
             }
             rs.close();
 
@@ -70,8 +88,8 @@ public final class QuestionFactory {
             }
             rs.close();
 
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (final SQLException theException) {
+            System.out.println(theException.getMessage());
         }
         return questionList;
     }
