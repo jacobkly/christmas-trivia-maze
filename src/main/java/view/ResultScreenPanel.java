@@ -1,15 +1,12 @@
 package view;
 
 import controller.GameListener;
-import model.Player;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.util.Objects;
 
 /**
  * A JPanel subclass that displays the result screen after the game ends, showing either a victory

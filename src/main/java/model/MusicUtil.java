@@ -3,10 +3,9 @@ package model;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 /**
@@ -18,26 +17,39 @@ import java.util.stream.Stream;
 public final class MusicUtil {
 
     /**
-     * Retrieves a list of all songs in the "backgroundMusic" directory.
+     * Retrieves a list of all songs in the "backgroundMusic" directory from the resources directory.
      *
      * @param theMusicDirectory the directory containing music files.
      * @return an {@link ArrayList} of song file names found in the directory.
      * @throws IOException if an error occurs while accessing the files in the directory.
      */
-    public static ArrayList<String> getSongList(final String theMusicDirectory) throws IOException {
+    public static ArrayList<String> getSongList(final String theMusicDirectory)
+            throws IOException, URISyntaxException {
         ArrayList<String> songList = new ArrayList<>();
-        Path musicPath = Paths.get(theMusicDirectory);
+        URL resourceUrl = MusicUtil.class.getResource(theMusicDirectory);
 
-        if (Files.exists(musicPath) && Files.isDirectory(musicPath)) {
-            try (Stream<Path> files = Files.walk(musicPath)) {
+        if (resourceUrl == null) {
+            throw new IOException("Resource directory not found: " + theMusicDirectory);
+        }
+
+        if (resourceUrl.getProtocol().equals("jar")) {
+            try (FileSystem fs = FileSystems.newFileSystem(resourceUrl.toURI(), Collections.emptyMap())) {
+                Path path = fs.getPath(theMusicDirectory);
+                try (Stream<Path> files = Files.walk(path)) {
+                    files.filter(Files::isRegularFile)
+                            .filter(file -> file.toString().endsWith(".wav"))
+                            .forEach(file -> songList.add(file.getFileName().toString()));
+                }
+            } catch (URISyntaxException e) {
+                throw new IOException("Error accessing resource: " + theMusicDirectory, e);
+            }
+        } else {
+            Path path = Paths.get(resourceUrl.toURI());
+            try (Stream<Path> files = Files.walk(path)) {
                 files.filter(Files::isRegularFile)
                         .filter(file -> file.toString().endsWith(".wav"))
                         .forEach(file -> songList.add(file.getFileName().toString()));
-            } catch (IOException e) {
-                throw new IOException("Directory does not exist or not a valid directory: " + theMusicDirectory);
             }
-        } else {
-            throw new IOException("Directory does not exist or not a valid directory: " + theMusicDirectory);
         }
         return songList;
     }

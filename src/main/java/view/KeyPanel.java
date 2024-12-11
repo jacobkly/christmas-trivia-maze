@@ -1,14 +1,10 @@
 package view;
 
-import controller.GameListener;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
-
-import static java.awt.GridBagConstraints.RELATIVE;
 
 /**
  * Represents a key panel in the user interface that displays various room types and status

@@ -5,8 +5,6 @@ import model.Maze;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * A panel for visually representing the maze in the game.

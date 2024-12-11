@@ -73,7 +73,6 @@ public final class VolumeSliderPanel extends JPanel{
             // converts from [0, 100] scale to [minVolume, maxVolume]
             float newVolume = minVolume + ((maxVolume - minVolume) * sliderVolumeLevel);
             myMusicController.setVolume(newVolume);
-            System.out.println("Vol: " + newVolume + ", Pos: " + mySliderPosition);
         }
     }
 }

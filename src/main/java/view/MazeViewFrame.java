@@ -4,12 +4,13 @@ import controller.GameListener;
 import controller.MusicController;
 import model.Maze;
 import model.Player;
-import model.Room;
 
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 
 /**
@@ -180,26 +181,25 @@ public final class MazeViewFrame extends JFrame {
      */
     public void playSoundEffect(final boolean theResult)
             throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        AudioInputStream audio;
-        Clip clip = AudioSystem.getClip();
+        InputStream inputStream = Objects.requireNonNull(getClass()
+                .getResourceAsStream(theResult ? "/soundEffects/RightAnswer.wav" : "/soundEffects/WrongAnswer.wav"));
 
-        audio = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass()
-                .getResourceAsStream(theResult ? "/soundEffects/RightAnswer.wav" :
-                                                 "/soundEffects/WrongAnswer.wav")));
+        try (BufferedInputStream bufferedStream = new BufferedInputStream(inputStream)) {
+            AudioInputStream audio = AudioSystem.getAudioInputStream(bufferedStream);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audio);
 
-        clip.open(audio);
+            if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+                FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                volumeControl.setValue(myMusicController.getDefaultVolume());
 
-        if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
-            FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            volumeControl.setValue(myMusicController.getDefaultVolume());
-
-            float currentVolume = myMusicController.getCurrentVolume();
-            // right answer sound is sharper than wrong answer
-            volumeControl.setValue(currentVolume + (theResult ? 4 : 9));
-        } else {
-            System.out.println("Sound Effects: Clip does NOT support MASTER_GAIN");
+                float currentVolume = myMusicController.getCurrentVolume();
+                // right answer sound is sharper than wrong answer
+                volumeControl.setValue(currentVolume + (theResult ? 2 : 7));
+            } else {
+                System.out.println("Sound Effects: Clip does NOT support MASTER_GAIN");
+            }
+            clip.start();
         }
-        clip.start();
     }
 }
-
